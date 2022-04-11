@@ -1,0 +1,67 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Simple Table</h4>
+                        <p class="card-category"> Here is a subtitle for this table</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Model
+                                    </th>
+                                    <th>
+                                        License plate
+                                    </th>
+                                    <th>
+                                        Serial number
+                                    </th>
+                                    <th>
+                                        Manufacturer
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let vehicule of vehicules">
+                                        <td>
+                                          {{vehicule?.vehiculeId}}
+                                        </td>
+                                        <td>
+                                          {{vehicule?.model}}
+                                        </td>
+                                        <td>
+                                          {{vehicule?.licensePlate}}
+                                        </td>
+                                        <td>
+                                          {{vehicule?.serialNumber}}
+                                        </td>
+                                        <td class="text-primary">
+                                          {{vehicule?.manufacturer}}
+                                        </td>
+                                        <td>
+                                            <div class="card-body">
+                                                <div class="float-right btn-group btn-group-sm">
+                                                    <a (click)="onOpenModal( 'edit' , vehicule)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                    <a (click)="onOpenModal( 'delete', vehicule)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                                  
+                                                </div>
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button (click)="onOpenModal('add')" mat-raised-button type="submit" class="btn btn-danger pull-right">Add Vehicule</button>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    </div>
+  </div>
+  
