@@ -18,6 +18,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
+import { AffectationComponent } from 'app/affectation/affectation.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   imports: [
@@ -31,6 +34,9 @@ import { VehiculeComponent } from 'app/vehicule/vehicule.component';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    NgxPaginationModule,
+    Ng2SearchPipeModule,
+
   ],
   declarations: [
     DashboardComponent,
@@ -42,6 +48,7 @@ import { VehiculeComponent } from 'app/vehicule/vehicule.component';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    AffectationComponent,
   ]
 })
 

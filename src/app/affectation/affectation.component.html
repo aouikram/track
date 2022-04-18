@@ -1,0 +1,45 @@
+<div class="main-content" id="main-container">  
+  
+    <!--list vehicules-->
+       <div class="container-fluid">
+           <div class="row">
+               <div class="col-md-12">
+                   <div class="card">
+                           <div class="card-header ">
+                               <div class="row">
+                                    <div class="col-md-4">
+                                   <h4 class="card-title p-3">Liste des affectations</h4> 
+                                    </div>
+                                   
+                            </div>
+                       <div class="card-body">
+                           <div class="table-responsive">
+                               <table class="table table-sm table-condensed">
+                                   <thead class=" text-primary">
+                                       <th>
+                                           Identification
+                                       </th>
+                                       <th>
+                                           vehiculeId
+                                       </th>
+                                       
+                                   </thead>
+                                   <tbody>
+                                       <tr class="clickable" *ngFor="let affectation of affectations ">
+                                           <td >
+                                             {{affectation?.affectationId}}
+                                           </td>
+                                           <td>
+                                             {{affectation?.vehicule?.vehiculeId}}
+                                           </td>
+                                           
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               
+                           </div>
+                       </div>
+                   </div>
+               </div>          
+           </div>
+       </div>

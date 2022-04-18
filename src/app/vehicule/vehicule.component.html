@@ -1,35 +1,57 @@
-<div class="main-content">
+<div class="main-content" id="main-container">  
+  
+ <!--list vehicules-->
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-danger">
-                        <h4 class="card-title ">Simple Table</h4>
-                        <p class="card-category"> Here is a subtitle for this table</p>
-                    </div>
+                        <div class="card-header ">
+                            <div class="row">
+                                 <div class="col-md-4">
+                                <h4 class="card-title p-3">Liste des véhicules</h4> 
+                                 </div>
+                                 <div class="col-md-5 p-3">
+                                      <!-- search bar -->
+                                        <form class="form-inline my-2 my-lg-0 search" >
+                                          <input type="search" (ngModelChange)="searchVehicules(key.value)" 
+                                          #key="ngModel" ngModel
+                                          name="key" id="searchName" class="form-control col-md-12 "  
+                                          placeholder="Search..." autofocus required>
+                                       </form> 
+                                       </div>
+                                <!--add vehicule-->
+                                <div class="col-md-3 float-right p-3">
+                                    <button (click)="onOpenModal('add')" mat-raised-button class=" btnadd pull-right">
+                                        <i class="fa fa-plus"></i> Ajouter véhicule
+                                        </button>
+                                </div>
+                            </div>
+                         </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-condensed">
                                 <thead class=" text-primary">
                                     <th>
-                                        ID
+                                        Identification
                                     </th>
                                     <th>
-                                        Model
+                                        Modèle
                                     </th>
                                     <th>
-                                        License plate
+                                        Plaque d'immatriculation
                                     </th>
                                     <th>
-                                        Serial number
+                                        Numéro de châssis
                                     </th>
                                     <th>
-                                        Manufacturer
+                                        Fabricant
                                     </th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let vehicule of vehicules">
-                                        <td>
+                                    <tr class="clickable" (click)="onOpenModal('view', vehicule)" *ngFor="let vehicule of vehicules | paginate: {itemsPerPage: tableSize,
+                                        currentPage: page,
+                                        totalItems: count};   let i = index">
+                                        <td >
                                           {{vehicule?.vehiculeId}}
                                         </td>
                                         <td>
@@ -41,27 +63,555 @@
                                         <td>
                                           {{vehicule?.serialNumber}}
                                         </td>
-                                        <td class="text-primary">
+                                        <td>
                                           {{vehicule?.manufacturer}}
                                         </td>
                                         <td>
                                             <div class="card-body">
                                                 <div class="float-right btn-group btn-group-sm">
-                                                    <a (click)="onOpenModal( 'edit' , vehicule)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-                                                    <a (click)="onOpenModal( 'delete', vehicule)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
-                                                  
+                                                    <a (click)="$event.stopPropagation(); onOpenModal( 'edit' , vehicule)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                    <a (click)="$event.stopPropagation(); onOpenModal( 'delete', vehicule)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a> 
                                                 </div>
                                                 </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button (click)="onOpenModal('add')" mat-raised-button type="submit" class="btn btn-danger pull-right">Add Vehicule</button>
+                            <div class="d-flex justify-content-center">
+                                <pagination-controls
+                                  previousLabel="Précédent"
+                                  nextLabel="Suivant"
+                                  responsive="true"
+                                  (pageChange)="onTableDataChange($event)"
+                                >
+                                </pagination-controls>
+                              </div>
                         </div>
                     </div>
                 </div>
             </div>          
         </div>
     </div>
+
+<!--Add vehicule modal-->
+<div class="modal fade col-md-12"  id="addVehiculeModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"  role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter véhicule</h5>
+        </div>       
+        <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddVehicule(addForm)">
+                <div class="row block">
+                    <div class="col-md-3">
+                        <label>Fabricant</label>
+                      <mat-form-field class="example-full-width">
+                          <input type="text" ngModel name="manufacturer" matInput id="Fabricant" placeholder="Fabricant" required >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Modèle</label>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="model"  id="model" placeholder="modèle" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Plaque d'immatriculation</label>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="licensePlate"  id="licensePlate" placeholder="Plaque d'immatriculation" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Numéro de châssis</label>
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="serialNumber"  id="serialNumber" placeholder="Numéro de châssis" required >
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-md-12" >
+                    <div class="row col-md-4 engine" >
+                    <table>
+                        <tr><h6>Moteur</h6></tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput ngModel type="text" name="fuelCapacity"  id="fuelCapacity" placeholder="Capacité de carburant" >
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="maximumSpeed"  id="maximumSpeed" placeholder="Vitesse maximale">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="fuelConsumption"  id="fuelConsumption" placeholder="Consommation de carburant">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="fuelType"  id="fuelType" placeholder="Type de carburant">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="power"  id="power" placeholder="Puissance  ">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                     </div>
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Modèle</h6></tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput ngModel  list="types" name="equipmentType"  id="equipmentType" placeholder="Type d'équipement" >
+                                    <datalist id="types">
+                                        <option value="camion">
+                                        <option value="voiture">
+                                        <option value="moto">
+                                      </datalist>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="modelYear"  id="modelYear" placeholder="Année du modèle">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="color"  id="color" placeholder="Couleur">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="number" name="numberOfSeats"  id="numberOfSeats" placeholder="Nombre de sièges">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="number" name="numberOfDoors"  id="numberOfDoors" placeholder="Nombre de portes">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>   
+                </div>
+
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Véhicule</h6></tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput ngModel type="date" name="location"  id="location" placeholder="Lieu" >
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="date" name="immatriculationDate"  id="immatriculationDate" placeholder="Date d'immatriculation">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="cancellationDate"  id="cancellationDate" placeholder="Date d'annulation">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="lastOdometre"  id="lastOdometre" placeholder="Dernier odomètre">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel type="text" name="numberIMEI"  id="numberIMEI" placeholder="nombre IMEI">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                          
+                
+                    
+                </div>
+                </div>
+                <div class="modal-footer col-md-12">
+                    <a data-dismiss="modal" type="button" id="add-vehicule-form" class="btn btn-warning pull-right col-md-2" >Annuler</a>
+                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-success pull-right col-md-2">Sauvegarder</button>
+                 </div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+<!--Edit vehicule modal-->
+<div class="modal fade col-md-12" id="updateVehiculeModal" tabindex="-1" role="dialog" aria-labelledby="vehiculeEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="updateVehiculeModalLabel">Modifier votre véhicule </h5> 
+          </div>
+          <div class="modal-body">
+             <form #editForm="ngForm">
+                <input type="hidden" ngModel="{{editVehicule?.vehiculeId}}" name="vehiculeId" class="form-control" id="vehiculeId" >
+                <input type="hidden" ngModel="{{editVehicule?.vehiculeCode}}" name="vehiculeCode" class="form-control" id="vehiculeCode">
+                <div class="row block">
+
+                  <div class="col-md-3"> 
+                   <label for="manufacturer">Fabricant</label>
+                   <mat-form-field class="example-full-width">
+                   <input matInput type="text" ngModel="{{editVehicule?.manufacturer}}" name="manufacturer"  id="manufacturer" class="form-control" >
+                </mat-form-field>
+                </div>
+            <div class="col-md-3">
+               <label for="model">Modèle</label>
+               <mat-form-field class="example-full-width">
+                 
+               <input matInput type="text" ngModel="{{editVehicule?.model}}" name="model" class="form-control" id="model" >
+            </mat-form-field>
+            </div>
+            <div class="col-md-3">
+               <label for="licensePlate">Plaque d'immatriculation</label>
+               <mat-form-field class="example-full-width">
+                   
+               <input matInput type="text" ngModel="{{editVehicule?.equipmentType}}" name="licensePlate" class="form-control" id="equipmentType" >
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+               <label for="serialNumber">Numéro de châssis</label>
+               <mat-form-field class="example-full-width">
+               <input matInput type="text" ngModel="{{editVehicule?.licensePlate}}" name="serialNumber" class="form-control" id="licensePlate"  >
+            </mat-form-field>
+            </div>
+
+            </div>
+            <div class="row col-md-12">
+                <div class="row col-md-4 engine">
+                     <table>
+                         <tr><h6>Moteur</h6></tr>
+                         <tr>
+                             <td>
+                                 <mat-form-field class="example-full-width">
+                                    <input matInput ngModel="{{editVehicule?.fuelCapacity}}" type="text" name="fuelCapacity"  id="fuelCapacity" placeholder="Capacité de carburant" >
+                                 </mat-form-field>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td>
+                                 <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.maximumSpeed}}" type="text" name="maximumSpeed"  id="maximumSpeed" placeholder="Vitesse maximale" >
+                                 </mat-form-field>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.fuelConsumption}}" type="text" name="fuelConsumption"  id="fuelConsumption" placeholder="Consommation de carburant" >
+                                 </mat-form-field> 
+                             </td>
+                         </tr>
+                         <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.fuelType}}" type="text" name="fuelType"  id="fuelType" placeholder="Type de carburant">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.power}}" type="text" name="power"  id="power" placeholder="Puissance">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                     </table>
+                </div>
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Modèle</h6></tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput ngModel="{{editVehicule?.equipmentType}}" list="types" name="equipmentType" id="equipmentType" placeholder="Type d'équipement">
+                                    <datalist id="types">
+                                        <option value="camion">
+                                        <option value="voiture">
+                                        <option value="moto">
+                                      </datalist>
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.modelYear}}" type="text" name="modelYear"  id="modelYear" placeholder="Année du modèle">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.color}}" type="text" name="color"  id="color" placeholder="Couleur">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.numberOfSeats}}" type="number" name="numberOfSeats"  id="numberOfSeats" placeholder="Nombre de sièges">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.numberOfDoors}}" type="number" name="numberOfDoors"  id="numberOfDoors" placeholder="Nombre de portes">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>  
+                </div>
+
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Véhicule</h6></tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput ngModel="{{editVehicule?.location}}" type="text" name="location"  id="location" placeholder="Lieu" >
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.immatriculationDate}}" type="date" value="2022-01-01" name="immatriculationDate"  id="immatriculationDate" placeholder="Date d'immatriculation">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.cancellationDate}}"  type="date"  value="2022-01-01" name="cancellationDate"  id="cancellationDate" placeholder="Date d'annulation">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.lastOdometre}}" type="number" name="lastOdometre"  id="lastOdometre" placeholder="Dernier odomètre">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input  matInput ngModel="{{editVehicule?.numberIMEI}}" type="text" name="numberIMEI"  id="numberIMEI" placeholder="nombre IMEI">
+                                  </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>  
+                </div>
+</div>
+                <div class="modal-footer col-md-12">
+                   <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
+                   <button  (click)="onUpdateVehicule(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+                </div>
+                <div class="clearfix"></div>
+             </form>
+          </div>
+       </div>
+    </div>
   </div>
-  
+
+<!-- Delete Modal -->
+  <div class="modal fade" id="deleteVehiculeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="Modal-header delete">
+             <h5 class="modal-title" id="deleteModelLabel">Delete Vehicule</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Êtes-vous sûr de vouloir supprimer le véhicule {{deleteVehicule?.vehiculeId}}  avec le numéro de châssis {{deleteVehicule?.serialNumber}} ?</p>
+             <div class="col-md-12 buttons">
+              
+                <button (click)="onDeleteVehicule(deleteVehicule!.vehiculeId)" class="btn btn1 btn-danger mr-auto" data-dismiss="modal">Oui</button>
+                <div class="space">
+                </div>
+                <button type="button" class="btn " data-dismiss="modal">Non</button>
+                 
+             </div>
+          </div>
+       </div>
+
+    </div>
+  </div>
+
+<!-- view vehicule modal -->
+<div class="modal fade col-md-12" id="viewVehiculeModal" tabindex="-1" role="dialog" aria-labelledby="vehiculeViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+       <div class="modal-content">
+          <div class="modal-header view">
+             <h5 class="modal-title titleView" id="updateVehiculeModalLabel">Votre véhicule </h5> 
+          </div>
+          
+          <div class="modal-body">
+                <div class="row block">
+                    <div class="col-md-2">
+                        <p>Identification: {{viewVehicule?.vehiculeId}} </p>
+                     
+                    </div>
+                  <div class="col-md-3"> 
+                      <p>Fabricant: {{viewVehicule?.manufacturer}}</p>
+                 </div>
+                  <div class="col-md-2">
+                      <p>Modèle: {{viewVehicule?.model}}</p>
+                  </div>
+                  <div class="col-md-3">
+                      <p >Plaque d'immatriculation: {{viewVehicule?.licensePlate}}</p>
+               
+                  </div>
+                  <div class="col-md-3">
+                     <p >Numéro de châssis: {{viewVehicule?.serialNumber}} </p>
+                  
+                 </div>
+                 
+               </div>
+           
+               <div class="row col-md-12">
+                <div class="row col-md-4 engine">
+                     <table>
+                         <tr><h6>Moteur</h6></tr>
+                         <tr>
+                             <td>
+                                <p >Capacité de carburant: {{viewVehicule?.fuelCapacity}} </p>  
+                             </td>
+                         </tr>
+                         <tr>
+                             <td>
+                                <p >Vitesse maximale: {{viewVehicule?.maximumSpeed}} </p>  
+                             </td>
+                         </tr>
+                         <tr>
+                             <td>
+                                <p >Consommation de carburant: {{viewVehicule?.fuelConsumption}} </p>
+                             </td>
+                         </tr>
+                         <tr>
+                            <td>
+                                <p >Type de carburant: {{viewVehicule?.fuelType}} </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Puissance: {{viewVehicule?.power}} </p>
+                            </td>
+                        </tr>
+                     </table>
+                </div>
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Modèle</h6></tr>
+                        <tr>
+                            <td>
+                                <p >Type d'équipement: {{viewVehicule?.equipmentType}} </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Année du modèle: {{viewVehicule?.modelYear}} </p> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Couleur: {{viewVehicule?.color}} </p> 
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Nombre de sièges: {{viewVehicule?.numberOfSeats}} </p> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Nombre de portes: {{viewVehicule?.numberOfDoors}} </p> 
+                            </td>
+                        </tr>
+                    </table>  
+                </div>
+
+                <div class="col-md-4 engine" >
+                    <table>
+                        <tr><h6>Véhicule</h6></tr>
+                        <tr>
+                            <td>
+                                <p >Lieu: {{viewVehicule?.location}} </p> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Date d'immatriculation: {{viewVehicule?.immatriculationDate | date : "dd.MM.y"}} </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Date d'annulation: {{viewVehicule?.cancellationDate}} </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >Dernier odomètre: {{viewVehicule?.lastOdometre}} </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p >nombre IMEI: {{viewVehicule?.numberIMEI}} </p>
+                            </td>
+                        </tr>
+                    </table>  
+                </div>
+</div>
+                <div class="modal-footer col-md-12">
+                   <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
+                            </div>
+                <div class="clearfix"></div>
+          
+          </div>
+       </div>
+    </div>
+  </div>
+
+      
+    

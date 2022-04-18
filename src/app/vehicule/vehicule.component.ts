@@ -3,18 +3,31 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Vehicule } from './vehicule';
 import { VehiculeService } from './vehicule.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { NgxPaginationModule } from 'ngx-pagination';
+
+
 
 @Component({
   selector: 'app-vehicule',
   templateUrl: './vehicule.component.html',
-  styleUrls: ['./vehicule.component.scss']
+  styleUrls: ['./vehicule.component.css']
 })
-export class VehiculeComponent implements OnInit {
+export class VehiculeComponent implements OnInit{
 
   title = 'geolocalisation';
   vehicules: Vehicule[] = [];
   editVehicule: Vehicule | undefined;
   deleteVehicule: Vehicule | undefined;
+  viewVehicule : Vehicule | undefined;
+
+
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 4;
+  tableSizes: any = [3, 6, 9, 12];
+
+
 
  constructor(private vehiculeService: VehiculeService) {}
 
@@ -27,28 +40,45 @@ export class VehiculeComponent implements OnInit {
    this.vehiculeService.getVehicules().subscribe(
      (response : Vehicule[]) => {
        this.vehicules = response;
+   
      },
      (error :HttpErrorResponse) => {
        alert(error.message);
      }
    );
  }
- // search vehicule by vehicule code or serial number
- public searchVehicules(key: string):void {
-   console.log(key);
-   const results: Vehicule[] = []; // array that stores all the vehicules that match the key : results
-   for (const vehicule of this.vehicules) { // loop over all the vehicules in the app
-     if ( vehicule.vehiculeCode.toLowerCase().indexOf(key.toLowerCase()) !== -1
-     || vehicule.serialNumber.toLowerCase().indexOf(key.toLowerCase()) !== -1 
-     || vehicule.manufacturer?.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
-       results.push(vehicule);
-     }
-   }
-   this.vehicules = results; //list the results
-   if (results.length === 0 || !key) {
-     this.getVehicules();
-   }
- }
+
+onTableDataChange(event: any) {
+  this.page = event;
+  this.getVehicules();
+}
+
+onTableSizeChange(event: any): void {
+  this.tableSize = event.target.value;
+  this.page = 1;
+  this.getVehicules();
+}
+
+  // search vehicule by manufacturer or serial number
+  public searchVehicules(key: string):void {
+    console.log(key);
+    const results: Vehicule[] = []; // array that stores all the vehicules that match the key : results
+    for (const vehicule of this.vehicules) { // loop over all the vehicules in the app
+      if ( vehicule.serialNumber.toLowerCase().indexOf(key.toLowerCase()) !== -1 
+      || vehicule.manufacturer.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || vehicule.licensePlate.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || vehicule.model.toLowerCase().indexOf(key.toLowerCase()) !== -1
+      || vehicule.equipmentType.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        
+        results.push(vehicule);
+      }
+    }
+    this.vehicules = results; //list the results
+    if (results.length === 0 || !key) {
+      this.getVehicules();
+    }
+  }
+ 
  // controls the modal of the html that will be displayed 
  public onOpenModal( mode: string ,vehicule?: Vehicule ): void {
    const container = document.getElementById('main-container');
@@ -67,6 +97,10 @@ export class VehiculeComponent implements OnInit {
      this.deleteVehicule = vehicule;
      button.setAttribute('data-target', '#deleteVehiculeModal');
    }
+   else if (mode === 'view') {
+    this.viewVehicule = vehicule;
+    button.setAttribute('data-target', '#viewVehiculeModal');
+  }
    container?.appendChild(button);
    button.click();
  }
@@ -112,3 +146,15 @@ export class VehiculeComponent implements OnInit {
      }
  
 }
+function MdbTablePaginationComponent(MdbTablePaginationComponent: any, arg1: { static: boolean; }) {
+  throw new Error('Function not implemented.');
+}
+
+function ViewChild(MdbTablePaginationComponent: (MdbTablePaginationComponent: any, arg1: { static: boolean; }) => void, arg1: { static: boolean; }) {
+  throw new Error('Function not implemented.');
+}
+
+function MdbTableDirective(MdbTableDirective: any, arg1: { static: boolean; }) {
+  throw new Error('Function not implemented.');
+}
+
