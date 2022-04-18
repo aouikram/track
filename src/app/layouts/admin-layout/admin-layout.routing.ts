@@ -10,6 +10,8 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
 import { AffectationComponent } from 'app/affectation/affectation.component';
+import { MissionsComponent } from 'app/missions/missions.component';
+import { ConducteurComponent } from 'app/conducteur/conducteur.component';
 export const AdminLayoutRoutes: Routes = [
     // {
     //   path: '',
@@ -63,5 +65,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'upgrade',        component: UpgradeComponent },
     { path:'vehicule',        component: VehiculeComponent},
     { path:'affectation',        component: AffectationComponent},
-
+    { path: 'missions',        component: MissionsComponent },
+    { path: 'conducteur',        component: ConducteurComponent }
 ];

@@ -19,9 +19,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
 import { AffectationComponent } from 'app/affectation/affectation.component';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-
+import { MissionsComponent } from 'app/missions/missions.component';
+import { ConducteurComponent } from 'app/conducteur/conducteur.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   imports: [
     CommonModule,
@@ -42,6 +43,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    ConducteurComponent,
+    MissionsComponent,
     VehiculeComponent,
     TypographyComponent,
     IconsComponent,

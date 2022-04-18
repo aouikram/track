@@ -23,6 +23,8 @@ import { AffectationComponent } from './affectation/affectation.component';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    
+    
 
 
 

@@ -34,6 +34,7 @@
     background-color: #ffb94d;
     border-color: #ffb94d;
     color: #FBFDFF;
+    padding: 0.6875rem 1.125rem;
     border-radius: 0.25rem;
 }
 .modal-header
@@ -46,6 +47,9 @@
     -moz-border-radius-topright: 6px;
     background-color: #0D8A72;
     color: #FBFDFF;
+}
+.card-header{
+  background-color: #0D8A72;
 }
 .card-title{
   color: #FBFDFF;
@@ -130,11 +134,10 @@ hr:after {
   .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
     padding: 2px 4px;
   }
-
   .search{
     background:#fff;
     
     padding: 0 1.6rem;
     border-radius:.7rem;
-    
+    width: 30rem;
   }
