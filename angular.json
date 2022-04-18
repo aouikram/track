@@ -23,7 +23,10 @@
             "styles": [
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "src/assets/scss/material-dashboard.scss",
-              "src/assets/css/demo.css"
+              "src/assets/css/demo.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css"
+           
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
@@ -180,4 +183,5 @@
   "cli": {
     "analytics": false
   }
+
 }

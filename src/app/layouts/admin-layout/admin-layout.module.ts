@@ -18,7 +18,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
-
+import { MissionsComponent } from 'app/missions/missions.component';
+import { ConducteurComponent } from 'app/conducteur/conducteur.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,11 +33,14 @@ import { VehiculeComponent } from 'app/vehicule/vehicule.component';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    NgxPaginationModule,
   ],
   declarations: [
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    ConducteurComponent,
+    MissionsComponent,
     VehiculeComponent,
     TypographyComponent,
     IconsComponent,

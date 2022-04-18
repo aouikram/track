@@ -1,0 +1,60 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title ">Liste des missions</h4>
+                        <p class="card-category"> Vous pouvez ajouter, modifier, supprimer et chercher des missions  </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Nom
+                                    </th>
+                                    <th>
+                                        Date Début
+                                    </th>
+                                    <th>
+                                        Date Fin
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let mission of missions">
+                                        <td>
+                                          {{mission?.id}}
+                                        </td>
+                                        <td>
+                                          {{mission?.nom}}
+                                        </td>
+                                        <td>
+                                          {{mission?.dateDebut}}
+                                        </td>
+                                        <td class="text-primary">
+                                          {{mission?.dateFin}}
+                                        </td>
+                                        <td>
+                                            <div class="card-body">
+                                                <div class="float-right btn-group btn-group-sm">
+                                                    <a (click)="onOpenModal( 'edit' , mission)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                    <a (click)="onOpenModal( 'delete', mission)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                                  
+                                                </div>
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+           

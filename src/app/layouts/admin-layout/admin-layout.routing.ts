@@ -9,7 +9,8 @@ import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
-
+import { MissionsComponent } from 'app/missions/missions.component';
+import { ConducteurComponent } from 'app/conducteur/conducteur.component';
 export const AdminLayoutRoutes: Routes = [
     // {
     //   path: '',
@@ -61,5 +62,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
-    { path:'vehicule',        component: VehiculeComponent}
+    { path:'vehicule',        component: VehiculeComponent},
+    { path: 'missions',        component: MissionsComponent },
+    { path: 'conducteur',        component: ConducteurComponent }
 ];

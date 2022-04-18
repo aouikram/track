@@ -1,0 +1,314 @@
+<div class="main-content" id="main-container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <div class="row">
+                            <div class="col-md-4">
+                              <h4 class="card-title  p-3">liste des véhicules</h4>                   
+                            </div> 
+                              <!-- search bar -->
+                                  
+                            
+                                <div class="col-md-5 p-3">
+                        
+                                    <div class="row col-md-12">
+                                        <div class="row col-md-10">
+                                            <form class="form-inline my-2 my-lg-0 search" >
+                                                <input type="search" (ngModelChange)="searchConducteurs(key.value)" 
+                                                #key="ngModel" ngModel
+                                                name="key" id="searchName" class="form-control form-input col-md-11"  
+                                                placeholder="Search..." autofocus required>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            <div class="col-md-3 float-right p-3">
+                                <button  (click)="onOpenModal('add')" mat-raised-button class="btn btn-danger pull-right" >
+                                    <i class="fa fa-plus"></i> Ajouter véhicule
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Nom
+                                    </th>
+                                    <th>
+                                        Prenom
+                                    </th>
+                                    <th>
+                                        numTel 
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Gender
+                                    </th>
+                                    <th>
+                                        CategoriePermis
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr class="clickable" (click)="onOpenModal('view',conducteur)" *ngFor="let conducteur of conducteurs | paginate
+                                    : {
+                                        itemsPerPage: tableSize,
+                                        currentPage: page,
+                                        totalItems: count
+                                      };
+                                let i = index">
+                                        <td>
+                                          {{conducteur?.userId}}
+                                        </td>
+                                        <td>
+                                          {{conducteur?.nom}}
+                                        </td>
+                                        <td>
+                                          {{conducteur?.prenom}}
+                                        </td>
+                                        <td>
+                                          {{conducteur?.numTel}}
+                                        </td>
+                                        <td>
+                                          {{conducteur?.contactEmail}}
+                                        </td>
+                                        <td>
+                                          {{conducteur?.gender}}
+                                        </td>
+                                        <td class="text-primary">
+                                          {{conducteur?.categoriePermis}}
+                                        </td>
+                                        <td>
+                                            <div class="card-body">
+                                                <div class="float-right btn-group btn-group-sm">
+                                                    <a (click)="$event.stopPropagation();  onOpenModal( 'edit' , conducteur)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                    <a (click)="$event.stopPropagation(); onOpenModal( 'delete', conducteur)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                                  
+                                                </div>
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center">
+                                <pagination-controls
+                                  previousLabel="Prev"
+                                  nextLabel="Next"
+                                  (pageChange)="onTableDataChange($event)"
+                                >
+                                </pagination-controls>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    </div>
+    <!--Add conducteur modal-->
+    <div class="modal fade col-md-12"  id="addConducteurModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl"  role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter conducteur</h5>
+            </div>       
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddConducteur(addForm)">
+                    <div class="row block">
+                        <div class="col-md-3">
+                           
+
+                          <mat-form-field class="example-full-width">
+                              <input type="text" ngModel name="nom" matInput id="Nom" placeholder="Nom" required >
+                            </mat-form-field>
+                        </div> <br> <br>
+                        <div class="col-md-3">
+                            
+                            <mat-form-field class="example-full-width">
+                              <input matInput type="text" ngModel name="prenom"  id="Prenom" placeholder="Prenom" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                           
+                            <mat-form-field class="example-full-width">
+                              <input matInput type="text" ngModel name="numTel"  id="Telephone" placeholder="Telephone" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <mat-form-field class="example-full-width">
+                              <input matInput type="text" ngModel name="contactEmail"  id="contactEmail" placeholder="Email" required >
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <mat-form-field class="example-full-width">
+                              <input matInput type="text" ngModel name="gender"  id="gender" placeholder="Gender" required >
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <mat-form-field class="example-full-width">
+                              <input matInput type="text" ngModel name="categoriePermis"  id="Permis" placeholder="CategoriePermis" required >
+                            </mat-form-field>
+                        </div>
+                    </div>
+                   
+                    <div class="modal-footer col-md-12">
+                        <a data-dismiss="modal" type="button" id="add-conducteur-form" class="btn btn-warning pull-right col-md-2" >Annuler</a>
+                        <button [disabled]="addForm.invalid" type="submit" class="btn btn-success pull-right col-md-2">Sauvegarder</button>
+                     </div>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+    
+        </div>
+        </div>
+    </div>
+    <!--Edit conducteur modal-->
+    <div class="modal fade col-md-12" id="updateConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+           <div class="modal-content">
+              <div class="modal-header">
+                 <h5 class="modal-title" id="updateConducteurModalLabel">Modifier conducteur </h5> 
+              </div>
+              <div class="modal-body">
+                 <form #editForm="ngForm">
+                    <input type="hidden" ngModel="{{editConducteur?.userId}}" name="userId" class="form-control" id="userId" >
+                    <div class="row block">
+    
+                      <div class="col-md-3"> 
+                       
+                       <mat-form-field class="example-full-width">
+                       <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom"  id="nom" class="form-control" >
+                    </mat-form-field>
+                    </div>
+                <div class="col-md-3">
+                  
+                   <mat-form-field class="example-full-width">
+                     
+                   <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" class="form-control" id="prenom" >
+                </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                 
+                   <mat-form-field class="example-full-width">
+                       
+                   <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" class="form-control" id="numTel" >
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+            
+                   <mat-form-field class="example-full-width">
+                   <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" class="form-control" id="contactEmail"  >
+                </mat-form-field>
+                </div>
+                <div class="col-md-3">
+            
+                    <mat-form-field class="example-full-width">
+                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" class="form-control" id="gender"  >
+                 </mat-form-field>
+                 </div>
+                 <div class="col-md-3">
+            
+                    <mat-form-field class="example-full-width">
+                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
+                 </mat-form-field>
+                 </div>
+    
+                </div>
+              
+                    <div class="modal-footer col-md-12">
+                       <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
+                       <button  (click)="onUpdateConducteur(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+                    </div>
+                    <div class="clearfix"></div>
+                 </form>
+              </div>
+           </div>
+        </div>
+      </div>
+    
+      <!-- Delete Modal -->
+  <div class="modal fade" id="deleteConducteurModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="Modal-header delete">
+             <h5 class="modal-title" id="deleteModelLabel">Delete conducteur</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Êtes-vous sûr de vouloir supprimer le conducteur {{deleteConducteur?.userId}}?</p>
+             <div class="col-md-12 buttons">
+              
+                <button (click)="onDeleteConducteur(deleteConducteur!.userId)" class="btn btn1 btn-danger mr-auto" data-dismiss="modal">Oui</button>
+                <div class="space">
+                </div>
+                <button type="button" class="btn " data-dismiss="modal">Non</button>
+                 
+             </div>
+          </div>
+       </div>
+
+    </div>
+    </div>
+  <!-- View-->
+  <div class="modal fade col-md-12" id="viewConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+       <div class="modal-content">
+          <div class="modal-header view">
+             <h5 class="modal-title titleView" id="updateConducteurModalLabel">Conducteur </h5> 
+          </div>
+          
+          <div class="modal-body">
+                <div class="row block">
+                    <div class="col-md-2">
+                        <p>Identification: {{viewConducteur?.userId}} </p>
+                     
+                    </div>
+                  <div class="col-md-3"> 
+                      <p>Nom: {{viewConducteur?.nom}}</p>
+                 </div>
+                  <div class="col-md-2">
+                      <p>Prenom: {{viewConducteur?.prenom}}</p>
+                  </div>
+                  <div class="col-md-3">
+                      <p >Telephone: {{viewConducteur?.numTel}}</p>
+               
+                  </div>
+                  <div class="col-md-3">
+                     <p >Email: {{viewConducteur?.contactEmail}} </p>
+                  
+                 </div>
+                 <div class="col-md-3">
+                    <p >Gender: {{viewConducteur?.gender}} </p>
+                 
+                </div>
+                <div class="col-md-3">
+                    <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
+                 
+                </div>
+                 
+               </div>
+           
+                <div class="modal-footer col-md-12">
+                   <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
+                            </div>
+                <div class="clearfix"></div>
+          
+          </div>
+       </div>
+    </div>
+  </div>
+</div>
+  
