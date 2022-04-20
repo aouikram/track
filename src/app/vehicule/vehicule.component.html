@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-info">
                             <div class="row">
                                  <div class="col-md-4">
                                 <h4 class="card-title p-3">Liste des véhicules</h4> 
@@ -457,10 +457,8 @@
     <div class="modal-dialog" role="document">
        <div class="modal-content">
           <div class="Modal-header delete">
-             <h5 class="modal-title" id="deleteModelLabel">Delete Vehicule</h5>
-             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-             <span aria-hidden="true">&times;</span>
-             </button>
+             <h5 class="modal-title titleView" id="deleteModelLabel">Delete Vehicule</h5>
+            
           </div>
           <div class="modal-body">
              <p>Êtes-vous sûr de vouloir supprimer le véhicule {{deleteVehicule?.vehiculeId}}  avec le numéro de châssis {{deleteVehicule?.serialNumber}} ?</p>
@@ -488,6 +486,8 @@
           
           <div class="modal-body">
                 <div class="row block">
+                    <div class="row">
+
                     <div class="col-md-2">
                         <p>Identification: {{viewVehicule?.vehiculeId}} </p>
                      
@@ -500,14 +500,25 @@
                   </div>
                   <div class="col-md-3">
                       <p >Plaque d'immatriculation: {{viewVehicule?.licensePlate}}</p>
-               
+                       </div>
+
+                    </div>
+                       <div class="row">
+                        <div class="col-md-5">
+                            <p >Numéro de châssis: {{viewVehicule?.serialNumber}} </p>
+                         
+                        </div>
+                        <div class="col-md-7">
+                           <p >code de l'unité mobile: {{viewVehicule?.vehiculeCode}} </p>
+                        
+                       </div>
                   </div>
-                  <div class="col-md-3">
-                     <p >Numéro de châssis: {{viewVehicule?.serialNumber}} </p>
-                  
-                 </div>
+                  </div>
                  
-               </div>
+        
+                  
+                 
+               
            
                <div class="row col-md-12">
                 <div class="row col-md-4 engine">
@@ -597,7 +608,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <p >nombre IMEI: {{viewVehicule?.numberIMEI}} </p>
+                                <p >Nombre IMEI: {{viewVehicule?.numberIMEI}} </p>
                             </td>
                         </tr>
                     </table>  

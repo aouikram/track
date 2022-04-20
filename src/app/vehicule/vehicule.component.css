@@ -29,6 +29,7 @@
     -moz-border-radius-topleft: 6px;
     -moz-border-radius-topright: 6px;
     background-color: #ef6454;
+    color: #FBFDFF;
 }
 .btnadd{
     background-color: #ffb94d;
@@ -62,7 +63,7 @@ h4 {
     border-right: 1px dashed rgba(0,0,0,.2);
     flex-basis: 100%;
     padding: 25px 50px;
-    text-align: center;
+
 }
 .heading{
     border-bottom: 1px solid #000;

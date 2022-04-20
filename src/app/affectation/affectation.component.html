@@ -1,45 +1,266 @@
 <div class="main-content" id="main-container">  
   
-    <!--list vehicules-->
+<!--list affectations-->
        <div class="container-fluid">
            <div class="row">
                <div class="col-md-12">
                    <div class="card">
-                           <div class="card-header ">
+                           <div class="card-header card-header-info">
                                <div class="row">
                                     <div class="col-md-4">
                                    <h4 class="card-title p-3">Liste des affectations</h4> 
                                     </div>
                                    
                             </div>
+                            </div>
                        <div class="card-body">
-                           <div class="table-responsive">
-                               <table class="table table-sm table-condensed">
-                                   <thead class=" text-primary">
-                                       <th>
-                                           Identification
-                                       </th>
-                                       <th>
-                                           vehiculeId
-                                       </th>
-                                       
-                                   </thead>
-                                   <tbody>
-                                       <tr class="clickable" *ngFor="let affectation of affectations ">
-                                           <td >
-                                             {{affectation?.affectationId}}
-                                           </td>
-                                           <td>
-                                             {{affectation?.vehicule?.vehiculeId}}
-                                           </td>
-                                           
-                                       </tr>
-                                   </tbody>
-                               </table>
-                               
-                           </div>
+                           <mat-list>
+
+    <mat-list-item>
+      <mat-select placeholder="groupe par " [(ngModel)]="groupingColumn" name="item" (ngModelChange)="buildDataSource()">
+
+        <mat-option *ngFor="let item of displayedColumns" [value]="item">
+          {{item}}
+        </mat-option>
+      </mat-select>
+    </mat-list-item>
+  </mat-list>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!--- 
+  <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+    <th mat-header-cell *matHeaderCellDef>{{ col }} </th>
+    <td mat-cell *matCellDef="let row" class="clickableRow"(click)="getAffectationById('view', row.AffectationId)" >{{ row[col] }}   
+    </td>
+  </ng-container> -->
+
+    <!-- mobile unit Column -->
+    <ng-container matColumnDef="UniteMobile">
+      <th mat-header-cell *matHeaderCellDef> Unité mobile </th>
+      <td mat-cell *matCellDef="let element" class="clickableRow"(click)="getAffectationById('view', element.AffectationId)"> {{element.UniteMobile}} </td>
+    </ng-container>
+    <!-- Conducteur Column -->
+    <ng-container matColumnDef="Conducteur">
+      <th mat-header-cell *matHeaderCellDef> Conducteur </th>
+      <td mat-cell *matCellDef="let element" class="clickableRow"(click)="getAffectationById('view', element.AffectationId)"> {{element.Conducteur}} </td>
+    </ng-container>
+    <!-- DateDebut Column -->
+    <ng-container matColumnDef="DateDebut">
+      <th mat-header-cell *matHeaderCellDef> Date début </th>
+      <td mat-cell *matCellDef="let element" class="clickableRow"(click)="getAffectationById('view', element.AffectationId)"> {{element.DateDebut}} </td>
+    </ng-container>
+    <!-- DateFin Column -->
+    <ng-container matColumnDef="DateFin">
+      <th mat-header-cell *matHeaderCellDef> Date fin </th>
+      <td mat-cell *matCellDef="let element" class="clickableRow"(click)="getAffectationById('view', element.AffectationId)"> {{element.DateFin}} </td>
+    </ng-container>
+    <!-- Action Column -->
+    <ng-container matColumnDef="Action">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let element" class="action-link"> 
+      <mat-icon class="clickableRow" (click)="getAffectationById('edit', element.AffectationId)">edit</mat-icon> 
+      <mat-icon class="clickableRow" (click)="getAffectationById('delete', element.AffectationId)">delete</mat-icon>
+    </td>
+  </ng-container>
+  
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> 
+
+  <!-- Group header cells-->
+  <ng-container matColumnDef="groupHeader">
+    <td colspan="999" mat-cell *matCellDef="let group">
+      <strong>{{group.groupName}}</strong>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="groupReducer">
+    <td colspan="1" mat-cell *matCellDef="let group">
+      <div fxFill fxLayoutAlign="center center">
+        <mat-icon *ngIf="!group.reduced">expand_less</mat-icon>
+        <mat-icon *ngIf="group.reduced">expand_more</mat-icon>
+      </div>
+    </td>
+  </ng-container>
+
+  <!-- Group line -->
+  <tr mat-row  class="clickable"
+      *matRowDef="let row; columns: ['groupReducer','groupHeader']; when: isGroup" 
+      (click)="reduceGroup(row)" > 
+  </tr>
+
+</table>
+
                        </div>
                    </div>
                </div>          
            </div>
-       </div>
+           </div>
+     
+<!-- view affectation modal -->
+<div class="modal fade col-md-12" id="viewAffectationModal" tabindex="-1" role="dialog" aria-labelledby="affectationViewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+     <div class="modal-content">
+        <div class="modal-header view">
+           <h5 class="modal-title titleView" id="updateAffectationModalLabel">Affectation </h5> 
+        </div>
+        <div class="modal-body">
+          <div class="row block">
+              <div class="row">
+              
+              <div class="col-md-4">
+                  <h6>Identification: {{viewAffectation?.affectationId}} </h6>
+              </div>
+            <div class="col-md-4"> 
+               <h6>Numéro de châssis: {{viewAffectation?.vehicule.serialNumber}}</h6>
+           </div>
+            <div class="col-md-4">
+                <h6>Conducteur : {{viewAffectation?.conducteur.nom}} {{viewAffectation?.conducteur.prenom}}</h6>
+            </div>
+            
+              </div>
+                
+           
+            </div>
+           
+  
+            
+           
+         
+     
+         <div class="row col-md-12">
+          <div class="row col-md-4 engine">
+               <table>
+                   <tr class="text-left"><h6>Unité mobile {{viewAffectation?.vehicule.manufacturer}} {{viewAffectation?.vehicule.model}}</h6></tr>
+                   <tr>
+                       <td class="text-left">
+                          <p >Type d'équipement: {{viewAffectation?.vehicule.equipmentType}} </p>  
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="text-left">
+                          <p >Nombre IMEI: {{viewAffectation?.vehicule.numberIMEI}} </p>  
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="text-left">
+                          <p >Plaque d'immatriculation: {{viewAffectation?.vehicule.licensePlate}} </p>
+                       </td>
+                   </tr>
+                   <tr>
+                      <td class="text-left">
+                          <p >Type de carburant: {{viewAffectation?.vehicule.fuelType}} </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Identification: {{viewAffectation?.vehicule.vehiculeId}}</p>
+                      </td>
+                  </tr>
+               </table>
+          </div>
+          <div class="col-md-4 engine" >
+              <table>
+                  <tr class="text-left"><h6>Conducteur {{viewAffectation?.conducteur.nom}} {{viewAffectation?.conducteur.prenom}}</h6></tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Identification: {{viewAffectation?.conducteur.equipmentType}} </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Telephone: {{viewAffectation?.conducteur.numTel}} </p> 
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Email: {{viewAffectation?.conducteur.contactEmail}} </p> 
+                          
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Categorie Permis: {{viewAffectation?.conducteur.categoriePermis}} </p> 
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Sexe: {{viewAffectation?.conducteur.gender}} </p> 
+                      </td>
+                  </tr>
+              </table>  
+          </div>
+
+          <div class="col-md-4 engine" >
+              <table>
+                  <tr class="text-left"><h6>Affectation</h6></tr>
+      
+                  <tr>
+                      <td class="text-left">
+                          <p >Date début: {{viewAffectation?.dateDebut | date : 'medium'}} </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          <p >Date fin: {{viewAffectation?.dateFin | date : 'medium'}} </p>
+                      </td>
+                  </tr>
+                 
+              </table>  
+          </div>
+</div>
+          <div class="modal-footer col-md-12">
+             <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
+                      </div>
+          <div class="clearfix"></div>
+    
+    </div>
+              
+           
+        
+        </div>
+     </div>
+  </div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteAffectationModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header delete">
+           <h5 class="modal-title titleView" id="deleteModelLabel">Delete Vehicule</h5>
+  
+        </div>
+        <div class="modal-body">
+          <p>Êtes-vous sûr de vouloir supprimer cette affectation ?</p>
+          <div class="col-md-12 buttons">
+           
+             <button  (click)="onDeleteAffectation(deleteAffectation!.affectationId)" class="btn btn1 btn-danger mr-auto" data-dismiss="modal">Oui</button>
+             <div class="space">
+             </div>
+              <button type="button " class="btn " data-dismiss="modal">Non</button>
+               
+           </div>
+        </div>
+     </div>
+
+  </div>
+</div>
+
+<!--Edit vehicule modal-->
+<div class="modal fade col-md-12" id="updateAffectationModal" tabindex="-1" role="dialog" aria-labelledby="affectationEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="updateVehiculeModalLabel">Modifier affectation </h5> 
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm">
+             
+              <div class="modal-footer col-md-12">
+                 <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
+                 <button  (click)="onUpdateAffectation(editForm.value)" data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+              </div>
+              <div class="clearfix"></div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>

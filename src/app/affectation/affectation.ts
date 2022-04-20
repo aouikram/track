@@ -1,11 +1,14 @@
+import { Conducteur } from "app/conducteur/conducteur";
 import { Vehicule } from "app/vehicule/vehicule";
 
 export interface Affectation {
+
   
-        affectationId : number;
+        affectationId? : number;
         vehicule : Vehicule;
-    	dateDebut : Date;
-	    dateFin : Date;
+        conducteur :  Conducteur;
+    	dateDebut: Date;
+	    dateFin: Date;
 
     
     }

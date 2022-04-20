@@ -20,5 +20,15 @@ export class AffectationService {
       return this.http.get<Affectation[]>(`${this.apiServerUrl}/affectation/lister_affectations`);
     }
   
-    
+    public getAffectationById(affectationId : number): Observable<Affectation> {
+      return this.http.get<Affectation>(`${this.apiServerUrl}/affectation/trouver/${affectationId}`);
+    }
+
+    public deleteAffectation(affectationId: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiServerUrl}/affectation/supprimer/${affectationId}`);
+    }
+
+    public updateAffectation(affectation: Affectation): Observable<Affectation> {
+      return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_affectation`, affectation);
+    }
 }

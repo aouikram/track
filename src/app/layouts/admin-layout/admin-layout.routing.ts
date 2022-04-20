@@ -12,6 +12,7 @@ import { VehiculeComponent } from 'app/vehicule/vehicule.component';
 import { AffectationComponent } from 'app/affectation/affectation.component';
 import { MissionsComponent } from 'app/missions/missions.component';
 import { ConducteurComponent } from 'app/conducteur/conducteur.component';
+
 export const AdminLayoutRoutes: Routes = [
     // {
     //   path: '',

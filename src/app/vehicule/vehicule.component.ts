@@ -31,16 +31,17 @@ export class VehiculeComponent implements OnInit{
 
  constructor(private vehiculeService: VehiculeService) {}
 
- ngOnInit(): void {
+  ngOnInit(): void {
          this.getVehicules();
+         console.log(this.vehicules);
  }
 
  //shows the vehicules on the UI
- public getVehicules():void {
+   getVehicules():void {
    this.vehiculeService.getVehicules().subscribe(
      (response : Vehicule[]) => {
        this.vehicules = response;
-   
+        console.log(this.vehicules);
      },
      (error :HttpErrorResponse) => {
        alert(error.message);
@@ -121,7 +122,7 @@ onTableSizeChange(event: any): void {
      );
    }
 
-   public onUpdateVehicule(vehicule:Vehicule):void{
+public onUpdateVehicule(vehicule:Vehicule):void{
        this.vehiculeService.updateVehicule(vehicule).subscribe(
          (response: Vehicule) => {
            console.log(response);
@@ -133,7 +134,7 @@ onTableSizeChange(event: any): void {
        );
      }
 
-   public onDeleteVehicule(vehiculeId: number): void {
+public onDeleteVehicule(vehiculeId: number): void {
        this.vehiculeService.deleteVehicule(vehiculeId).subscribe(
          (response: void) => {
            console.log(response);
@@ -145,16 +146,5 @@ onTableSizeChange(event: any): void {
        );
      }
  
-}
-function MdbTablePaginationComponent(MdbTablePaginationComponent: any, arg1: { static: boolean; }) {
-  throw new Error('Function not implemented.');
-}
-
-function ViewChild(MdbTablePaginationComponent: (MdbTablePaginationComponent: any, arg1: { static: boolean; }) => void, arg1: { static: boolean; }) {
-  throw new Error('Function not implemented.');
-}
-
-function MdbTableDirective(MdbTableDirective: any, arg1: { static: boolean; }) {
-  throw new Error('Function not implemented.');
 }
 

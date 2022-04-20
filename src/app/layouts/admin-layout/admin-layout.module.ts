@@ -23,6 +23,13 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MissionsComponent } from 'app/missions/missions.component';
 import { ConducteurComponent } from 'app/conducteur/conducteur.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import {MatListModule} from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table'  ;
+import {MatIconModule} from '@angular/material/icon';
+import * as moment from 'moment';
+
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -37,6 +44,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatTooltipModule,
     NgxPaginationModule,
     Ng2SearchPipeModule,
+    MatListModule,
+    MatTableModule,
+    MatIconModule,
+    
 
   ],
   declarations: [
@@ -52,6 +63,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NotificationsComponent,
     UpgradeComponent,
     AffectationComponent,
+
   ]
 })
 
