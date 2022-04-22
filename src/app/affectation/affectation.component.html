@@ -246,19 +246,41 @@
 
 <!--Edit vehicule modal-->
 <div class="modal fade col-md-12" id="updateAffectationModal" tabindex="-1" role="dialog" aria-labelledby="affectationEditModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
      <div class="modal-content">
         <div class="modal-header">
            <h5 class="modal-title" id="updateVehiculeModalLabel">Modifier affectation </h5> 
         </div>
-        <div class="modal-body">
+        <div class="modal-body" >
            <form #editForm="ngForm">
+            <input type="hidden" ngModel="{{editAffectation?.affectationId}}" name="affectationId" class="form-control" id="affectationId" >
+           
+           
+            <mat-form-field class="example-full-width">
+              
+              <mat-label>Unité mobile actuelle: {{currentAffectationVehicule}}</mat-label>
+              <mat-select  placeholder="select mobile unit" ngModel="{{editAffectation?.vehicule?.vehiculeId}}" name="vehiculeId" id="vehiculeId" >
+                    <ng-container *ngFor="let vehicule of vehiculeDropDownList">
+                      <mat-option [value]="vehicule.vehiculeId">{{vehicule.vehicule}}</mat-option>
+                    </ng-container>
              
-              <div class="modal-footer col-md-12">
-                 <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
-                 <button  (click)="onUpdateAffectation(editForm.value)" data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
-              </div>
-              <div class="clearfix"></div>
+                  </mat-select>  
+              </mat-form-field>
+              <mat-form-field>
+                
+                <mat-label>Conducteur actuel: {{currentAffectationConducteur}} </mat-label>
+                <mat-select  placeholder="select conducteur" ngModel="{{editAffectation?.conducteur?.userId}}" name="conducteurId" id="conducteurId">
+                      <ng-container *ngFor="let conducteur of conducteurDropDownList">
+                        <mat-option [value]="conducteur.conducteurId">{{conducteur.conducteur}}</mat-option>
+                      </ng-container>
+                </mat-select>  
+                </mat-form-field>
+
+                <div class="modal-footer">
+                  <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right ">Annuler</button>
+                  <button  (click)="getAffectationFromEdit(editForm.value)" type="submit" data-dismiss="modal" class="btn btn-success pull-right " >Sauvegarder</button>
+               </div>
+               <div class="clearfix"></div>
            </form>
         </div>
      </div>
