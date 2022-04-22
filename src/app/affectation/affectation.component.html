@@ -1,7 +1,7 @@
 <div class="main-content" id="main-container">  
   
 <!--list affectations-->
-       <div class="container-fluid">
+<div class="container-fluid">
            <div class="row">
                <div class="col-md-12">
                    <div class="card">
@@ -26,13 +26,6 @@
     </mat-list-item>
   </mat-list>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-  <!--- 
-  <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
-    <th mat-header-cell *matHeaderCellDef>{{ col }} </th>
-    <td mat-cell *matCellDef="let row" class="clickableRow"(click)="getAffectationById('view', row.AffectationId)" >{{ row[col] }}   
-    </td>
-  </ng-container> -->
 
     <!-- mobile unit Column -->
     <ng-container matColumnDef="UniteMobile">
@@ -244,7 +237,7 @@
   </div>
 </div>
 
-<!--Edit vehicule modal-->
+<!--Edit affectation modal-->
 <div class="modal fade col-md-12" id="updateAffectationModal" tabindex="-1" role="dialog" aria-labelledby="affectationEditModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
      <div class="modal-content">
@@ -259,6 +252,7 @@
             <mat-form-field class="example-full-width">
               
               <mat-label>Unité mobile actuelle: {{currentAffectationVehicule}}</mat-label>
+              <!-- added vehiculeId : number property to affectation component so that i can send it in form -->
               <mat-select  placeholder="select mobile unit" ngModel="{{editAffectation?.vehicule?.vehiculeId}}" name="vehiculeId" id="vehiculeId" >
                     <ng-container *ngFor="let vehicule of vehiculeDropDownList">
                       <mat-option [value]="vehicule.vehiculeId">{{vehicule.vehicule}}</mat-option>
@@ -276,6 +270,15 @@
                 </mat-select>  
                 </mat-form-field>
 
+                <mat-label>Date debut</mat-label>
+                <mat-form-field>
+                  <input matInput type="datetime-local" ngModel="{{editAffectation?.dateDebut}} " name="dateDebut" id="dateDebut">
+                </mat-form-field>
+
+                <mat-label>Date Fin</mat-label>
+                <mat-form-field>
+                  <input matInput type="datetime-local" ngModel="{{editAffectation?.dateFin}} " name="dateFin" id="dateFin">
+                </mat-form-field>
                 <div class="modal-footer">
                   <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right ">Annuler</button>
                   <button  (click)="getAffectationFromEdit(editForm.value)" type="submit" data-dismiss="modal" class="btn btn-success pull-right " >Sauvegarder</button>

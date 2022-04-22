@@ -50,12 +50,21 @@ export class AffectationService {
       return this.http.get<Conducteur[]>(`${this.apiServerUrl}/conducteur/lister_conducteurs`);
     }
 
-    public updateAffectationVehicule(vehicule: Vehicule , affectationId : number): Observable<Affectation> {
-      return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_vehicule/${affectationId}`, vehicule);
-    }
+    // public updateAffectationVehicule(vehicule: Vehicule , affectationId : number): Observable<Affectation> {
+    //   return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_vehicule/${affectationId}`, vehicule);
+    // }
 
-    public updateAffectationConducteur(conducteur: Conducteur , affectationId : number): Observable<Affectation> {
-      return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_conducteur/${affectationId}`, conducteur);
-    }
-  
+    // public updateAffectationConducteur(conducteur: Conducteur , affectationId : number): Observable<Affectation> {
+    //   return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_conducteur/${affectationId}`, conducteur);
+    // }
+
+    // public updateAffectationDateDebut(dateDebut: Date , affectationId : number): Observable<Affectation> {
+    //   return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_dateDebut/${affectationId}`, dateDebut);
+    // }
+
+ 
+
+    // public updateAffectationDateFin(dateFin: Date , affectationId : number): Observable<Affectation> {
+    //   return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_dateFin/${affectationId}`, dateFin);
+    // }
 }

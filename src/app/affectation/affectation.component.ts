@@ -37,14 +37,81 @@ export class AffectationComponent implements OnInit{
   constructor(private affectationService: AffectationService ) { }
 
    ngOnInit():void {
-      this.getAffectations(); 
-      this.getVehiculesAndConducteurs();
+      this.getAffectations();  // list of all affectations
+      this.getVehiculesAndConducteurs(); // list of all vehicules and conducteurs in database
 
       }
   
+  // vehicules = list of all vehicule in DB , conducteurs = list of all conducteurs in DB
+  public getVehiculesAndConducteurs():void {
+
+    this.affectationService.getVehicules().subscribe(
+      (response : Vehicule[]) => {
+        this.vehicules = response;
+        
+      },
+      (error :HttpErrorResponse) => {
+        alert(error.message);
+      },
+      ()=> this.makeVehiculeList()  // on finish make vehicule list to display in dropdown
+    );
+    this.affectationService.getConducteurs().subscribe(
+      (response : Conducteur[]) => {
+        this.conducteurs = response;
+         
+      },
+      (error :HttpErrorResponse) => {
+        alert(error.message);
+      },
+      ()=> this.makeConducteurList() // on finish make conducteurs list to display in dropdown
+    );
+  }
+
+  // make dropdown lists 
+  public makeVehiculeList(): void {
+
+    this.vehiculeDropDownList = this.vehicules.map((vehicule)=>{
+
+      return { 
+               vehiculeId : vehicule?.vehiculeId, 
+               vehicule : vehicule?.manufacturer+' '+vehicule?.model+' '+vehicule?.licensePlate+' avec ID: '+vehicule?.vehiculeId
+              }
+              
+    });
+ 
+  }
+  public makeConducteurList(): void {
+
+    this.conducteurDropDownList = this.conducteurs.map((conducteur)=>{
+
+      return { 
+               conducteurId : conducteur?.userId, 
+               conducteur : conducteur?.nom+' '+conducteur?.prenom+' avec ID: '+conducteur?.userId
+              }
+              
+    });
+ 
+  }
+
+  // get all affectations from database
+  public getAffectations() : void {
+    this.affectationService.getAffectations().subscribe(
+      (response : Affectation[]) => {
+        this.affectations = response; 
+      },
+      (error :HttpErrorResponse) => {
+        alert(error.message);
+      },
+     ()=> this.completed() // on finish execute function completed()
+      );     
+   
+  }
+
   public completed() : void {
   
-    let inputData =  this.affectations;
+    let inputData =  this.affectations; 
+
+    // make new array of attributes to list 
     this.newInputData = inputData.map((affectation)=>{
 
       return { 
@@ -63,67 +130,7 @@ export class AffectationComponent implements OnInit{
     this.buildDataSource();
   }
 
-  public getVehiculesAndConducteurs():void {
-    this.affectationService.getVehicules().subscribe(
-      (response : Vehicule[]) => {
-        this.vehicules = response;
-         console.log(this.vehicules);
-      },
-      (error :HttpErrorResponse) => {
-        alert(error.message);
-      },
-      ()=> this.makeVehiculeList()
-    );
-    this.affectationService.getConducteurs().subscribe(
-      (response : Conducteur[]) => {
-        this.conducteurs = response;
-         console.log(this.conducteurs);
-      },
-      (error :HttpErrorResponse) => {
-        alert(error.message);
-      },
-      ()=> this.makeConducteurList()
-    );
-  }
-  public makeVehiculeList(): void {
-
-    this.vehiculeDropDownList = this.vehicules.map((vehicule)=>{
-
-      return { 
-               vehiculeId : vehicule?.vehiculeId, 
-               vehicule : vehicule?.manufacturer+' '+vehicule?.licensePlate+' avec ID: '+vehicule?.vehiculeId
-              }
-              
-    });
-   console.log( this.vehiculeDropDownList);
-  }
-
-  public makeConducteurList(): void {
-
-    this.conducteurDropDownList = this.conducteurs.map((conducteur)=>{
-
-      return { 
-               conducteurId : conducteur?.userId, 
-               conducteur : conducteur?.nom+' '+conducteur?.prenom+' avec ID: '+conducteur?.userId
-              }
-              
-    });
-   console.log( this.conducteurDropDownList);
-  }
-
-  public getAffectations() : void {
-    this.affectationService.getAffectations().subscribe(
-      (response : Affectation[]) => {
-        this.affectations = response; 
-      },
-      (error :HttpErrorResponse) => {
-        alert(error.message);
-      },
-     ()=> this.completed()
-      );     
-   
-  }
-
+// called when delete or edit icon is clicked : gets affectation by id and sends it to onOpenModal()
   public getAffectationById(mode: string , affectationId : number) : Affectation {
     let result : Affectation 
     this.affectationService.getAffectationById(affectationId).subscribe(
@@ -137,33 +144,6 @@ export class AffectationComponent implements OnInit{
     ); return result
   }
 
-  public getAffectationFromEdit(affectation:Affectation) : Affectation {
-
-    let result : Affectation 
-    let affectationOnEdit : Affectation
-
-    this.affectationService.getAffectationById(affectation.affectationId).subscribe(
-      (response : Affectation) => {
-        affectationOnEdit = response
-      },
-      (error :HttpErrorResponse) => {
-        alert(error.message);
-      } ,
-     
-    );
-    forkJoin(
-      this.affectationService.getAffectationById(affectation.affectationId),
-      this.affectationService.getVehiculeById(affectation.vehiculeId),
-      this.affectationService.getConducteurById(affectation.conducteurId)
-    ).subscribe(
-      (res) => {
-      this.onUpdateAffectation(res[0], res[1], res[2]);
-    });
-    
-    return result;
-
-  }
-
   public onOpenModal( mode: string , affectation  :Affectation): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -173,15 +153,12 @@ export class AffectationComponent implements OnInit{
 
      if (mode === 'view') {
      this.viewAffectation  = affectation;
-
      button.setAttribute('data-target', '#viewAffectationModal');
    }
    else if (mode === 'edit') {
      this.editAffectation  = affectation;
-     this.currentAffectationVehicule = this.editAffectation.vehicule.model+" "+this.editAffectation.vehicule.licensePlate+" avec ID:"+this.editAffectation.vehicule.vehiculeId;
+     this.currentAffectationVehicule = this.editAffectation.vehicule.manufacturer+" "+this.editAffectation.vehicule.model+" "+this.editAffectation.vehicule.licensePlate+" avec ID:"+this.editAffectation.vehicule.vehiculeId;
      this.currentAffectationConducteur = this.editAffectation.conducteur.nom+" "+this.editAffectation.conducteur.prenom+" avec ID:"+this.editAffectation.conducteur.userId;
-     console.log(this.editAffectation.vehicule.vehiculeId);
-
      button.setAttribute('data-target', '#updateAffectationModal');
    }
    else if (mode === 'delete') {
@@ -192,6 +169,50 @@ export class AffectationComponent implements OnInit{
     container?.appendChild(button);
     button.click();
   }
+
+// called when edit form is submited : finds affectation to update , selected vehicule and selected conducteurs
+/* affectation {
+  affectationId : 
+  vehiculeId : 
+  conducteurId:
+  dateDebut: 
+  dateFin:
+} */
+  public getAffectationFromEdit(affectation:Affectation) : Affectation {
+console.log(affectation);
+    let result : Affectation 
+
+    forkJoin(
+      this.affectationService.getAffectationById(affectation.affectationId),
+      this.affectationService.getVehiculeById(affectation.vehiculeId),
+      this.affectationService.getConducteurById(affectation.conducteurId)
+    ).subscribe(
+      (res) => {
+      this.onUpdateAffectation(res[0], res[1], res[2],affectation.dateDebut,affectation.dateFin);
+    });
+    
+    return result;
+
+  }
+
+  public onUpdateAffectation(affectation: Affectation , vehicule : Vehicule , conducteur : Conducteur , dateDebut : Date, dateFin : Date):void{
+    affectation.dateDebut = dateDebut;
+    affectation.dateFin = dateFin;
+    affectation.vehicule = vehicule;
+    affectation.conducteur = conducteur;
+    
+    this.affectationService.updateAffectation(affectation).subscribe(
+      (response: Affectation) => {
+        this.getAffectations(); 
+        this.getVehiculesAndConducteurs();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+
+
+}
 
   public onDeleteAffectation(affectationId: number): void {
     console.log(affectationId);
@@ -206,37 +227,11 @@ export class AffectationComponent implements OnInit{
     );
   }
 
-  public onUpdateAffectation(affectation: Affectation , vehicule : Vehicule , conducteur : Conducteur):void{
-      console.log(affectation);
-      console.log(vehicule);
-      console.log(conducteur);
-
-      this.affectationService.updateAffectationVehicule(vehicule, affectation.affectationId).subscribe(
-        (response: Affectation) => {
-          console.log(response);
-          this.getAffectations(); 
-          this.getVehiculesAndConducteurs();
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      );
-
-      this.affectationService.updateAffectationConducteur(conducteur, affectation.affectationId).subscribe(
-        (response: Affectation) => {
-          console.log(response);
-          this.getAffectations(); 
-          this.getVehiculesAndConducteurs();
-        },
-        (error: HttpErrorResponse) => {
-          alert(error.message);
-        }
-      ); 
 
 
 
-  }
 
+//********************** methods for grouping */
   /**
    * Discovers columns in the data
    */
