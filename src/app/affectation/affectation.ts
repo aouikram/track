@@ -9,8 +9,8 @@ export interface Affectation {
         conducteur :  Conducteur;
     	dateDebut: Date;
 	    dateFin: Date;
-        vehiculeId : number;
-        conducteurId : number;
+        vehiculeId ? : number;
+        conducteurId ? : number;
 
     
     }

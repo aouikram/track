@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Conducteur } from 'app/conducteur/conducteur';
 import { Vehicule } from 'app/vehicule/vehicule';
 import * as moment from 'moment';
@@ -144,7 +145,7 @@ export class AffectationComponent implements OnInit{
     ); return result
   }
 
-  public onOpenModal( mode: string , affectation  :Affectation): void {
+  public onOpenModal( mode: string , affectation ? :Affectation): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
     button.type = 'button';
@@ -165,7 +166,9 @@ export class AffectationComponent implements OnInit{
      this.deleteAffectation = affectation;
      button.setAttribute('data-target', '#deleteAffectationModal');
    }
-
+   else if (mode === 'add') {
+  button.setAttribute('data-target', '#addAffectationModal');
+   }
     container?.appendChild(button);
     button.click();
   }
@@ -179,7 +182,7 @@ export class AffectationComponent implements OnInit{
   dateFin:
 } */
   public getAffectationFromEdit(affectation:Affectation) : Affectation {
-console.log(affectation);
+
     let result : Affectation 
 
     forkJoin(
@@ -193,7 +196,7 @@ console.log(affectation);
     
     return result;
 
-  }
+      }
 
   public onUpdateAffectation(affectation: Affectation , vehicule : Vehicule , conducteur : Conducteur , dateDebut : Date, dateFin : Date):void{
     affectation.dateDebut = dateDebut;
@@ -212,7 +215,7 @@ console.log(affectation);
     );
 
 
-}
+      }
 
   public onDeleteAffectation(affectationId: number): void {
     console.log(affectationId);
@@ -225,11 +228,66 @@ console.log(affectation);
         alert(error.message);
       }
     );
+      }
+
+  public getVehiculeAndConducteurFromAddForm(addForm:NgForm) : void {
+    console.log(addForm);
+    console.log(addForm.form.controls.vehiculeId.value);
+        forkJoin(
+          this.affectationService.getVehiculeById(addForm.form.controls.vehiculeId.value),
+          this.affectationService.getConducteurById(addForm.form.controls.conducteurId.value)
+        ).subscribe(
+          (res) => {
+          this.onAddAffectation(res[0], res[1],addForm.form.controls.dateDebut.value,addForm.form.controls.dateFin.value,addForm);
+          addForm.reset();
+        });
+        
+      }
+
+  public onAddAffectation( vehicule : Vehicule , conducteur : Conducteur , dateDebut : Date, dateFin : Date, addForm : NgForm):void {
+  console.log(vehicule);  console.log(conducteur);  console.log(dateDebut);  console.log(dateFin);
+  
+  let affectation : Affectation = {
+    vehicule : vehicule,
+    dateDebut : dateDebut,
+    dateFin : dateFin,
+    conducteur : conducteur
+  }; 
+
+    document.getElementById('add-affectation-form')?.click();
+    this.affectationService.addAffectation(affectation).subscribe(
+      (response: Affectation) => {
+        console.log(response);
+        this.getAffectations();
+        this.getVehiculesAndConducteurs
+        addForm.reset();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        addForm.reset();
+      }
+    );
+      }
+
+  public searchAffectations(key: string):void {
+    console.log(key);
+    const results: Affectation[] = []; 
+    for (const affectation of this.affectations) { 
+      if ( affectation.conducteur.nom.toLowerCase().indexOf(key.toLowerCase()) !== -1 
+     || affectation.conducteur.prenom.toLowerCase().indexOf(key.toLowerCase()) !== -1
+     || affectation.vehicule.manufacturer.toLowerCase().indexOf(key.toLowerCase()) !== -1
+     || affectation.vehicule.model.toLowerCase().indexOf(key.toLowerCase()) !== -1
+     || affectation.vehicule.licensePlate.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        
+        results.push(affectation);
+      }
+    }
+    this.affectations = results; 
+    this.completed();//list the results
+    if (results.length === 0 || !key) {
+      this.getAffectations();
+    }
   }
-
-
-
-
 
 //********************** methods for grouping */
   /**

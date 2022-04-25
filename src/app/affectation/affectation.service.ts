@@ -50,6 +50,10 @@ export class AffectationService {
       return this.http.get<Conducteur[]>(`${this.apiServerUrl}/conducteur/lister_conducteurs`);
     }
 
+    public addAffectation(affectation : Affectation): Observable<Affectation>{
+      return this.http.post<Affectation>(`${this.apiServerUrl}/affectation/ajouter_affectation`, affectation);
+    }
+    
     // public updateAffectationVehicule(vehicule: Vehicule , affectationId : number): Observable<Affectation> {
     //   return this.http.put<Affectation>(`${this.apiServerUrl}/affectation/modifier_vehicule/${affectationId}`, vehicule);
     // }
