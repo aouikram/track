@@ -121,7 +121,7 @@
                 <h5 class="modal-title">Ajouter conducteur</h5>
             </div>       
             <div class="modal-body">
-                <form #addForm="ngForm" (ngSubmit)="onAddConducteur(addForm)">
+                <form #addForm="ngForm" (ngSubmit)="onUpload(); onAddConducteur(addForm);">
                     <div class="row block">
                         <div class="col-md-3">
                            
@@ -160,7 +160,58 @@
                               <input matInput type="text" ngModel name="categoriePermis"  id="Permis" placeholder="CategoriePermis" required >
                             </mat-form-field>
                         </div>
+                        
+
+                        
+                        <div class="container row">
+                            <div class="col-md-12">
+                                <h1>Upload Image</h1>
+                            </div>
+                        </div>
+                        <div class="container row">
+                            <div class="col-md-6">
+                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                            </div>
+                            <!--<div *ngIf=url >
+                                <img [src]=url>
+                            </div>-->
+                         <!--   <div class="col-md-6">
+                                <input type="button" (click)="onUpload(); getImage()" value="upload">
+                
+                            </div>-->
+                          <!--  {
+                                id:;
+                                type:;
+                                picByte:;
+
+                            }
+                        -->
+                        </div>
+                        <hr />
+                        <div class="container row">
+                            <div class="col-md-12">
+                                <div *ngIf=message>{{message}}</div>
+                            </div>
+                        </div>
+                        <!--<div class="container row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="name" placeholder="image name" [(ngModel)]="imageName"
+                                    name="name" />
+                            </div>
+                            <div class="col-md-6">
+                                <input type="button" (click)="getImage()" value="Get Image">
+                            </div>
+                        </div>
+                        <div class="container row">
+                            <div class="col-md-12">
+                                <div *ngIf=url >
+                                    <img [src]=url>
+                                </div>
+                            </div>
+                        </div>-->
+                    
                     </div>
+                    
                    
                     <div class="modal-footer col-md-12">
                         <a data-dismiss="modal" type="button" id="add-conducteur-form" class="btn btn-warning pull-right col-md-2" >Annuler</a>
@@ -177,66 +228,67 @@
     <div class="modal fade col-md-12" id="updateConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurEditModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
            <div class="modal-content">
-              <div class="modal-header">
-                 <h5 class="modal-title" id="updateConducteurModalLabel">Modifier conducteur </h5> 
-              </div>
-              <div class="modal-body">
-                 <form #editForm="ngForm">
-                    <input type="hidden" ngModel="{{editConducteur?.userId}}" name="userId" class="form-control" id="userId" >
-                    <div class="row block">
-    
-                      <div class="col-md-3"> 
-                       
-                       <mat-form-field class="example-full-width">
-                       <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom"  id="nom" class="form-control" >
-                    </mat-form-field>
-                    </div>
-                <div class="col-md-3">
-                  
-                   <mat-form-field class="example-full-width">
-                     
-                   <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" class="form-control" id="prenom" >
-                </mat-form-field>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateConducteurModalLabel">Modifier conducteur </h5> 
                 </div>
-                <div class="col-md-3">
-                 
-                   <mat-form-field class="example-full-width">
-                       
-                   <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" class="form-control" id="numTel" >
-                  </mat-form-field>
+                <div class="modal-body">
+                    <form #editForm="ngForm" >
+                        <input type="hidden" ngModel="{{editConducteur?.userId}}" name="userId" class="form-control" id="userId" >
+                            <div class="row block">
+        
+                                <div class="col-md-3"> 
+                        
+                        <mat-form-field class="example-full-width">
+                        <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom"  id="nom" class="form-control" >
+                        </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                
+                                <mat-form-field class="example-full-width">
+                                    
+                                <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" class="form-control" id="prenom" >
+                                </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                
+                                <mat-form-field class="example-full-width">
+                                    
+                                <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" class="form-control" id="numTel" >
+                                </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                            
+                                <mat-form-field class="example-full-width">
+                                <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" class="form-control" id="contactEmail"  >
+                                </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                            
+                                    <mat-form-field class="example-full-width">
+                                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" class="form-control" id="gender"  >
+                                </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                            
+                                    <mat-form-field class="example-full-width">
+                                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
+                                </mat-form-field>
+                                </div>
+                               
+
+                               
+                        
+                                <div class="modal-footer col-md-12">
+                                <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
+                                <button  (click)="onUpdateConducteur(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                    </form>
                 </div>
-                <div class="col-md-3">
-            
-                   <mat-form-field class="example-full-width">
-                   <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" class="form-control" id="contactEmail"  >
-                </mat-form-field>
-                </div>
-                <div class="col-md-3">
-            
-                    <mat-form-field class="example-full-width">
-                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" class="form-control" id="gender"  >
-                 </mat-form-field>
-                 </div>
-                 <div class="col-md-3">
-            
-                    <mat-form-field class="example-full-width">
-                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
-                 </mat-form-field>
-                 </div>
-    
-                </div>
-              
-                    <div class="modal-footer col-md-12">
-                       <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
-                       <button  (click)="onUpdateConducteur(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
-                    </div>
-                    <div class="clearfix"></div>
-                 </form>
-              </div>
-           </div>
+            </div>
         </div>
-      </div>
-    
+    </div>
       <!-- Delete Modal -->
   <div class="modal fade" id="deleteConducteurModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -298,6 +350,7 @@
                     <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
                  
                 </div>
+                
                  
                </div>
            
