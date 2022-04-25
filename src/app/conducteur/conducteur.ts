@@ -1,3 +1,5 @@
+import { Image } from 'app/image/image';
+
 export interface Conducteur{
     //***********************************Identification 
 	userId?:number;
@@ -9,4 +11,6 @@ export interface Conducteur{
 	password?:String;
 	gender:String;
     categoriePermis:String;
+	image:Image;
+
 }
