@@ -231,7 +231,7 @@ export class AffectationComponent implements OnInit{
       }
 
   public getVehiculeAndConducteurFromAddForm(addForm:NgForm) : void {
-    console.log(addForm);
+ 
     console.log(addForm.form.controls.vehiculeId.value);
         forkJoin(
           this.affectationService.getVehiculeById(addForm.form.controls.vehiculeId.value),

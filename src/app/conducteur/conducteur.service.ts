@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Conducteur } from './conducteur';
 import { environment } from 'environments/environment';
+import { Image } from 'app/image/image';
 
 
 
@@ -37,4 +38,9 @@ export class ConducteurService {
     public deleteConducteur(id: number): Observable<void> {
       return this.http.delete<void>(`${this.apiServerUrl}/conducteur/supprimer/${id}`);
     }
+
+    public uploadImage(image : FormData): Observable<Image>{
+      return this.http.post<Image>(`${this.apiServerUrl}/image/upload`, image);
+    }
+ 
 }
