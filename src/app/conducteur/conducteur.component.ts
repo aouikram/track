@@ -187,5 +187,13 @@ onUpload() {
         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
       }
     );
+    console.log(this.httpClient.get('http://localhost:8095/image/get/' + this.imageName)
+    .subscribe(
+      res => {
+        this.retrieveResonse = res;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+      }
+    ));
 }
 }

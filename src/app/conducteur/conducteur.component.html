@@ -121,7 +121,7 @@
                 <h5 class="modal-title">Ajouter conducteur</h5>
             </div>       
             <div class="modal-body">
-                <form #addForm="ngForm" (ngSubmit)="onUpload(); onAddConducteur(addForm);">
+                <form #addForm="ngForm" (ngSubmit)="onUpload(); getImage(); onAddConducteur(addForm);">
                     <div class="row block">
                         <div class="col-md-3">
                            
@@ -170,7 +170,13 @@
                         </div>
                         <div class="container row">
                             <div class="col-md-6">
-                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)" value="getImage().id">
+                            </div>
+                            <div class="col-md-3">
+                            
+                                <mat-form-field class="example-full-width">
+                                  <input matInput type="hidden" ngModel name="image"  value="image.id" >
+                                </mat-form-field>
                             </div>
                             <!--<div *ngIf=url >
                                 <img [src]=url>
@@ -350,7 +356,10 @@
                     <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
                  
                 </div>
-                
+                <div class="col-md-3">
+                    <p >ImageId: {{viewConducteur?.image}} </p>
+                 
+                </div>
                  
                </div>
            
