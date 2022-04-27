@@ -5,6 +5,8 @@ import { Conducteur } from './conducteur';
 import { Image } from 'app/image/image';
 import { ConducteurService } from './conducteur.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-conducteur',
   templateUrl: './conducteur.component.html',
@@ -24,6 +26,7 @@ export class ConducteurComponent implements OnInit {
   conducteurs: Conducteur[] = [];
   editConducteur: Conducteur | undefined;
   editConducteurImage: Image | undefined;
+  editConducteurImageUrl : any ; 
   deleteConducteur: Conducteur | undefined;
   viewConducteur : Conducteur | undefined;
   viewConducteurUrl : any ;
@@ -34,12 +37,13 @@ export class ConducteurComponent implements OnInit {
   tableSizes: any = [3, 6, 9, 12];
   uploadedImage: Image;
 
-  constructor(private conducteurService: ConducteurService,private httpClient: HttpClient) { }
+  constructor(private conducteurService: ConducteurService,private httpClient: HttpClient, 
+    private _sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.getConducteurs();
-    this.getImage();
   }
+
   public getConducteurs():void {
     this.conducteurService.getConducteurs().subscribe(
       (response : Conducteur[]) => {
@@ -72,7 +76,7 @@ export class ConducteurComponent implements OnInit {
   }
   else if (mode === 'view') {
     this.viewConducteur = conducteur;
-    this.viewConducteurUrl = "data:"+this.viewConducteur.image.type+";base64," + this.viewConducteur?.image?.picByte;
+    this.viewConducteurUrl = this._sanitizer.bypassSecurityTrustResourceUrl("data:"+this.viewConducteur.image.type+";base64," + this.viewConducteur?.image?.picByte);
     console.log(this.viewConducteur);
     console.log(this.viewConducteur.image);
     console.log(this.viewConducteurUrl);
@@ -107,32 +111,47 @@ public onAddConducteur(addForm:NgForm , uploadedImage : Image ):void{
         console.log(response);
         this.getConducteurs();
         addForm.reset();
+        this.url = "";
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
         addForm.reset();
+        this.url = "";
       }
     );
   }
 
 public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
-    console.log(conducteur);
-    console.log(uploadedImage);
-    console.log(this.editConducteurImage);
+ 
     conducteur.image = uploadedImage;
-    console.log(conducteur);
 
     this.conducteurService.updateConducteur(conducteur).subscribe(
       (response: Conducteur) => {
         console.log(response);
         this.getConducteurs();
+        this.url ="";
+        console.log(" conducteur image updated");
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
-      }
+      }, ()=>this.deleteOldImage(this.editConducteurImage?.id)
     );
   }
 
+public deleteOldImage(imageId : number) {
+    if(imageId == null ){
+      return ;
+    }
+    else {
+    this.conducteurService.deleteImage(imageId).subscribe(
+        (response: void) => {
+          console.log(response);
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }, ()=>console.log(" old image deleted")
+      );   }
+  }
 public onDeleteConducteur(id: number): void {
     this.conducteurService.deleteConducteur(id).subscribe(
       (response: void) => {
@@ -155,8 +174,6 @@ onTableSizeChange(event: any): void {
     this.getConducteurs();
   }
 
-
-
 // search vehicule by manufacturer or serial number
 public searchConducteurs(key: string):void {
   console.log(key);
@@ -176,22 +193,46 @@ public searchConducteurs(key: string):void {
     this.getConducteurs();
   }
 }
-public onFileChanged(event) {
-  //Select File
-  this.selectedFile = event.target.files[0];
+// public onFileChanged(event) {
+//   //Select File
+//   this.selectedFile = event.target.files[0];
 			
-		var reader = new FileReader();
-		reader.readAsDataURL(event.target.files[0]);
+// 		var reader = new FileReader();
+// 		reader.readAsDataURL(event.target.files[0]);
 		
-		reader.onload = (_event) => {
-			this.url = reader.result; 
-      console.log(this.url);
-		}
-	}
+// 		reader.onload = (_event) => {
+// 			this.url = reader.result; 
+//       console.log(this.url);
+// 		}
+// 	}
+
+  public onFileChanged(event) {
+    //Select File
+    this.selectedFile = event.target.files[0];
+        
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      
+      reader.onload = (_event) => {
+        this.url = reader.result; 
+      }
+    }
+
+    // public onFileChangedEdit(event) {
+    //   //Select File
+    //   this.selectedFile = event.target.files[0];
+          
+    //     var reader = new FileReader();
+    //     reader.readAsDataURL(event.target.files[0]);
+        
+    //     reader.onload = (_event) => {
+    //       this.editConducteurImageUrl = reader.result; 
+    //     }
+    //   }
 
 //Gets called when the user clicks on submit to upload the image
 onUpload(addForm : NgForm ) : Image {
-  console.log(this.selectedFile);
+
   
   //FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
   const uploadImageData = new FormData();
@@ -208,35 +249,27 @@ this.conducteurService.uploadImage(uploadImageData).subscribe(
 return this.uploadedImage;
 }
 
-onEdit(conducteur : Conducteur ) : Image {
-  console.log(this.selectedFile);
-  
+onEdit(conducteur : Conducteur ) : Image {  
   if(this.selectedFile == null){
     this.onUpdateConducteur(conducteur,this.editConducteurImage); 
   }
   else {
-
-  //FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
   const uploadImageData = new FormData();
+
   uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
+
+
 
    this.conducteurService.uploadImage(uploadImageData).subscribe(
       (response : Image) => {
     this.uploadedImage = response;
+    console.log(" new image uploaded");
         },
 (error :HttpErrorResponse) => {
   alert(error.message);
 } , ()=> this.onUpdateConducteur(conducteur , this.uploadedImage)  
 );  
-console.log(this.editConducteurImage.id);
-this.conducteurService.deleteImage(this.editConducteurImage?.id).subscribe(
-  (response: void) => {
-    console.log(response);
-  },
-  (error: HttpErrorResponse) => {
-    alert(error.message);
-  }
-);
+
  }
 return this.uploadedImage;
 }
@@ -254,19 +287,4 @@ return this.uploadedImage;
     );
 }
 
-// onOpenModalView(mode : string , conducteur: Conducteur){
-//   //retrieve Image 
-//   if(conducteur.image == null){
-//     this.onOpenModal(mode,conducteur);
-//   }
-//   else {
-//   this.httpClient.get('http://localhost:8080/image/get/' + conducteur.image.name)
-//     .subscribe(
-//       res => {
-//         this.retrieveResonse = res;
-//         this.base64Data = this.retrieveResonse.picByte;
-//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-//       } , ()=> this.onOpenModal(mode,conducteur,this.retrieveResonse)
-//     );
-// } } 
 }

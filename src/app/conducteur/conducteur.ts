@@ -12,6 +12,7 @@ export interface Conducteur{
 	gender:String;
     categoriePermis:String;
 	image:Image;
+	imageUrl? : any;
 
 
 }

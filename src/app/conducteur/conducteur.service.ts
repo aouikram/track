@@ -47,4 +47,6 @@ export class ConducteurService {
       return this.http.delete<void>(`${this.apiServerUrl}/image/supprimer/${id}`);
     }
 
+
+
 }
