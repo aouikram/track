@@ -121,7 +121,7 @@
                 <h5 class="modal-title">Ajouter conducteur</h5>
             </div>       
             <div class="modal-body">
-                <form #addForm="ngForm" (ngSubmit)="onUpload(); getImage(); onAddConducteur(addForm);">
+                <form #addForm="ngForm" (ngSubmit)="onUpload(addForm);">
                     <div class="row block">
                         <div class="col-md-3">
                            
@@ -170,13 +170,8 @@
                         </div>
                         <div class="container row">
                             <div class="col-md-6">
-                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)" value="getImage().id">
-                            </div>
-                            <div class="col-md-3">
-                            
-                                <mat-form-field class="example-full-width">
-                                  <input matInput type="hidden" ngModel name="image"  value="image.id" >
-                                </mat-form-field>
+                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                <img [src]=url>
                             </div>
                             <!--<div *ngIf=url >
                                 <img [src]=url>
@@ -280,13 +275,18 @@
                                     <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
                                 </mat-form-field>
                                 </div>
-                               
+                                <div class="container row">
+                                    <div class="col-md-6">
+                                        <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                        <img [src]=url>
+                                    </div>
+                                </div>
 
                                
                         
                                 <div class="modal-footer col-md-12">
                                 <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
-                                <button  (click)="onUpdateConducteur(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+                                <button  (click)="onEdit(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -357,7 +357,7 @@
                  
                 </div>
                 <div class="col-md-3">
-                    <p >ImageId: {{viewConducteur?.image}} </p>
+                    <p >Image Id: <img src=url> </p>
                  
                 </div>
                  
@@ -373,4 +373,3 @@
     </div>
   </div>
 </div>
-  
