@@ -57,7 +57,7 @@
                                     </th>
                                 </thead>
                                 <tbody>
-                                    <tr class="clickable" (click)="onOpenModal('view',conducteur)" *ngFor="let conducteur of conducteurs | paginate
+                                    <tr class="clickable" (click)="onOpenModal('view',conducteur)"  *ngFor="let conducteur of conducteurs | paginate
                                     : {
                                         itemsPerPage: tableSize,
                                         currentPage: page,
@@ -353,9 +353,26 @@
                 </div>
                 <div class="col-md-3">
                     <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
-                    <img [src]= viewConducteurUrl>
+                    
+                    <input type="button" (click)="getImage1()" value="Voir image">
+                    <img [src]=url1>
                 </div>
-             
+                  <!--<div class="container row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="name" placeholder="image name" [(ngModel)]="imageName"
+                                    name="name" />
+                            </div>
+                            <div class="col-md-6">
+                                <input type="button" (click)="getImage()" value="Get Image">
+                            </div>
+                        </div>
+                        <div class="container row">
+                            <div class="col-md-12">
+                                <div *ngIf=url >
+                                    <img [src]=url>
+                                </div>
+                            </div>
+                        </div>-->
                </div>
            
                 <div class="modal-footer col-md-12">
@@ -368,4 +385,3 @@
     </div>
   </div>
 </div>
-  

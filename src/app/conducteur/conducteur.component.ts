@@ -21,6 +21,9 @@ export class ConducteurComponent implements OnInit {
   message: string;
   imageName: any;
   url: any;
+  url1: any;
+  image:any;
+  imagenom:any;
 
   title = 'geolocalisation';
   conducteurs: Conducteur[] = [];
@@ -36,6 +39,7 @@ export class ConducteurComponent implements OnInit {
   tableSize: number = 3;
   tableSizes: any = [3, 6, 9, 12];
   uploadedImage: Image;
+  
 
   constructor(private conducteurService: ConducteurService,private httpClient: HttpClient, 
     private _sanitizer: DomSanitizer) { }
@@ -75,12 +79,15 @@ export class ConducteurComponent implements OnInit {
     button.setAttribute('data-target', '#deleteConducteurModal');
   }
   else if (mode === 'view') {
+
     this.viewConducteur = conducteur;
-    this.viewConducteurUrl = this._sanitizer.bypassSecurityTrustResourceUrl("data:"+this.viewConducteur.image.type+";base64," + this.viewConducteur?.image?.picByte);
+    this.viewConducteurUrl = "data:"+this.viewConducteur?.image?.type+";base64,"+this.viewConducteur?.image?.picByte;
     console.log(this.viewConducteur);
     console.log(this.viewConducteur.image);
     console.log(this.viewConducteurUrl);
+    console.log(this.viewConducteur);
     button.setAttribute('data-target', '#viewConducteurModal');
+    this.url1=""
   }
   container?.appendChild(button);
   button.click();
@@ -285,6 +292,47 @@ return this.uploadedImage;
         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
       }
     );
+    console.log(this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
+    .subscribe(
+      res => {
+        this.retrieveResonse = res;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+      }
+    ));
+}
+getImage1(){
+  //Make a call to Sprinf Boot to get the Image Bytes.
+  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.name)
+    .subscribe(
+     (res: Image) => {
+        this.retrieveResonse = res;
+        this.base64Data = this.retrieveResonse.picByte;
+        this.retrievedImage = "data:"+this.viewConducteur?.image?.type+";base64," + this.base64Data;
+      },
+      (error:HttpErrorResponse)=>{
+        alert(error.message)
+      },
+     ()=> this.completed(this.retrieveResonse)
+    );
+     
+    
+   
+    return this.retrieveResonse;
+}
+public completed(image : Image) {
+  this.image = image;
+
+  this.url1="data:"+this.viewConducteur?.image?.type+";base64,"+this.image.picByte;
+  
+  console.log(this.image);
+  console.log(this.url1);
+  var reader = new FileReader();
+  reader.readAsDataURL(this.image);
+  
+  reader.onload = (_event) => {
+    this.url = reader.result; 
+  }
 }
 
 }
