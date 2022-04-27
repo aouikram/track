@@ -1,18 +1,21 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Conducteur } from './conducteur';
 import { Image } from 'app/image/image';
 import { ConducteurService } from './conducteur.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { forkJoin } from 'rxjs';
+import { ViewChild } from '@angular/core';
 @Component({
   selector: 'app-conducteur',
   templateUrl: './conducteur.component.html',
   styleUrls: ['./conducteur.component.scss']
 })
 export class ConducteurComponent implements OnInit {
+
+  @ViewChild('myInput')
+   myInputVariable: ElementRef;
 
   selectedFile: File;
   retrievedImage: any;
@@ -58,7 +61,14 @@ export class ConducteurComponent implements OnInit {
       }
     );
   }
-   
+
+  reset() {
+    console.log(this.myInputVariable.nativeElement.files);
+    this.myInputVariable.nativeElement.value = "";
+    console.log(this.myInputVariable.nativeElement.files);
+}
+
+
   // controls the modal of the html that will be displayed 
  public onOpenModal( mode: string ,conducteur?: Conducteur,conducteurImage ? : Image ): void {
   const container = document.getElementById('main-container');
@@ -72,6 +82,7 @@ export class ConducteurComponent implements OnInit {
   else if (mode === 'edit') {
    this.editConducteur  = conducteur;
    this.editConducteurImage = conducteur.image;
+   this.url=""
    button.setAttribute('data-target', '#updateConducteurModal');
   }
   else if (mode === 'delete') {
@@ -82,10 +93,6 @@ export class ConducteurComponent implements OnInit {
 
     this.viewConducteur = conducteur;
     this.viewConducteurUrl = "data:"+this.viewConducteur?.image?.type+";base64,"+this.viewConducteur?.image?.picByte;
-    console.log(this.viewConducteur);
-    console.log(this.viewConducteur.image);
-    console.log(this.viewConducteurUrl);
-    console.log(this.viewConducteur);
     button.setAttribute('data-target', '#viewConducteurModal');
     this.url1=""
   }
@@ -200,22 +207,12 @@ public searchConducteurs(key: string):void {
     this.getConducteurs();
   }
 }
-// public onFileChanged(event) {
-//   //Select File
-//   this.selectedFile = event.target.files[0];
-			
-// 		var reader = new FileReader();
-// 		reader.readAsDataURL(event.target.files[0]);
-		
-// 		reader.onload = (_event) => {
-// 			this.url = reader.result; 
-//       console.log(this.url);
-// 		}
-// 	}
+
 
   public onFileChanged(event) {
     //Select File
     this.selectedFile = event.target.files[0];
+   
         
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
@@ -225,17 +222,7 @@ public searchConducteurs(key: string):void {
       }
     }
 
-    // public onFileChangedEdit(event) {
-    //   //Select File
-    //   this.selectedFile = event.target.files[0];
-          
-    //     var reader = new FileReader();
-    //     reader.readAsDataURL(event.target.files[0]);
-        
-    //     reader.onload = (_event) => {
-    //       this.editConducteurImageUrl = reader.result; 
-    //     }
-    //   }
+
 
 //Gets called when the user clicks on submit to upload the image
 onUpload(addForm : NgForm ) : Image {
@@ -282,28 +269,32 @@ return this.uploadedImage;
 }
 
   //Gets called when the user clicks on retieve image button to get the image from back end
-  getImage() {
-  //Make a call to Sprinf Boot to get the Image Bytes.
-  this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
-    .subscribe(
-      res => {
-        this.retrieveResonse = res;
-        this.base64Data = this.retrieveResonse.picByte;
-        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-      }
-    );
-    console.log(this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
-    .subscribe(
-      res => {
-        this.retrieveResonse = res;
-        this.base64Data = this.retrieveResonse.picByte;
-        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-      }
-    ));
-}
+// getImage() {
+//   //Make a call to Sprinf Boot to get the Image Bytes.
+//   this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
+//     .subscribe(
+//       res => {
+//         this.retrieveResonse = res;
+//         this.base64Data = this.retrieveResonse.picByte;
+//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+//       }
+//     );
+//     console.log(this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
+//     .subscribe(
+//       res => {
+//         this.retrieveResonse = res;
+//         this.base64Data = this.retrieveResonse.picByte;
+//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+//       }
+//     ));
+// }
 getImage1(){
   //Make a call to Sprinf Boot to get the Image Bytes.
-  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.name)
+  if(this.viewConducteur?.image?.id == null){
+    return;
+  }
+  else {
+  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.id)
     .subscribe(
      (res: Image) => {
         this.retrieveResonse = res;
@@ -316,9 +307,9 @@ getImage1(){
      ()=> this.completed(this.retrieveResonse)
     );
      
-    
-   
-    return this.retrieveResonse;
+    return this.retrieveResonse; 
+  }
+ 
 }
 public completed(image : Image) {
   this.image = image;
