@@ -43,4 +43,8 @@ export class ConducteurService {
       return this.http.post<Image>(`${this.apiServerUrl}/image/upload`, image);
     }
  
+    public deleteImage(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiServerUrl}/image/supprimer/${id}`);
+    }
+
 }

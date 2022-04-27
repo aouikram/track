@@ -53,7 +53,7 @@
                   "minify": false,
                   "inlineCritical": false
                 },
-                "fonts": true
+                "fonts": true 
               },
               "outputHashing": "all",
               "sourceMap": false,
@@ -80,7 +80,7 @@
                   "minify": false,
                   "inlineCritical": true
                 },
-                "fonts": true
+                "fonts": false
               },
               "outputHashing": "all"
             }

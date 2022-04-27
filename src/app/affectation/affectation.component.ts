@@ -182,7 +182,7 @@ export class AffectationComponent implements OnInit{
   dateFin:
 } */
   public getAffectationFromEdit(affectation:Affectation) : Affectation {
-
+ 
     let result : Affectation 
 
     forkJoin(

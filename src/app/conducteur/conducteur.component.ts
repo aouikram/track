@@ -19,15 +19,17 @@ export class ConducteurComponent implements OnInit {
   message: string;
   imageName: any;
   url: any;
-  editConducteurImage: Image | undefined;
+  url1: any;
   image:any;
   imagenom:any;
 
   title = 'geolocalisation';
   conducteurs: Conducteur[] = [];
   editConducteur: Conducteur | undefined;
+  editConducteurImage: Image | undefined;
   deleteConducteur: Conducteur | undefined;
   viewConducteur : Conducteur | undefined;
+  viewConducteurUrl : any ;
 
   page: number = 1;
   count: number = 0;
@@ -54,7 +56,7 @@ export class ConducteurComponent implements OnInit {
   }
    
   // controls the modal of the html that will be displayed 
- public onOpenModal( mode: string ,conducteur?: Conducteur ): void {
+ public onOpenModal( mode: string ,conducteur?: Conducteur,conducteurImage ? : Image ): void {
   const container = document.getElementById('main-container');
   const button = document.createElement('button');
   button.type = 'button';
@@ -65,18 +67,23 @@ export class ConducteurComponent implements OnInit {
   }
   else if (mode === 'edit') {
    this.editConducteur  = conducteur;
-   this.editConducteurImage = conducteur.image; 
-    button.setAttribute('data-target', '#updateConducteurModal');
+   this.editConducteurImage = conducteur.image;
+   button.setAttribute('data-target', '#updateConducteurModal');
   }
   else if (mode === 'delete') {
     this.deleteConducteur = conducteur;
     button.setAttribute('data-target', '#deleteConducteurModal');
   }
   else if (mode === 'view') {
+
     this.viewConducteur = conducteur;
-    console.log(this.viewConducteur.image.name);
-    console.log(this.image);
+    this.viewConducteurUrl = "data:"+this.viewConducteur?.image?.type+";base64,"+this.viewConducteur?.image?.picByte;
+    console.log(this.viewConducteur);
+    console.log(this.viewConducteur.image);
+    console.log(this.viewConducteurUrl);
+    console.log(this.viewConducteur);
     button.setAttribute('data-target', '#viewConducteurModal');
+    this.url1=""
   }
   container?.appendChild(button);
   button.click();
@@ -118,6 +125,7 @@ public onAddConducteur(addForm:NgForm , uploadedImage : Image ):void{
 public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
     console.log(conducteur);
     console.log(uploadedImage);
+    console.log(this.editConducteurImage);
     conducteur.image = uploadedImage;
     console.log(conducteur);
 
@@ -181,9 +189,10 @@ public onFileChanged(event) {
 			
 		var reader = new FileReader();
 		reader.readAsDataURL(event.target.files[0]);
-		
+		console.log(event.target.files[0]);
 		reader.onload = (_event) => {
 			this.url = reader.result; 
+      console.log(this.url);
 		}
 	}
 
@@ -208,23 +217,34 @@ return this.uploadedImage;
 
 onEdit(conducteur : Conducteur ) : Image {
   console.log(this.selectedFile);
+  
   if(this.selectedFile == null){
-    console.log("null");
     this.onUpdateConducteur(conducteur,this.editConducteurImage); 
   }
   else {
+
   //FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
   const uploadImageData = new FormData();
   uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
 
-this.conducteurService.uploadImage(uploadImageData).subscribe(
-  (response : Image) => {
+   this.conducteurService.uploadImage(uploadImageData).subscribe(
+      (response : Image) => {
     this.uploadedImage = response;
-},
+        },
 (error :HttpErrorResponse) => {
   alert(error.message);
 } , ()=> this.onUpdateConducteur(conducteur , this.uploadedImage)  
-);  }
+);  
+console.log(this.editConducteurImage.id);
+this.conducteurService.deleteImage(this.editConducteurImage?.id).subscribe(
+  (response: void) => {
+    console.log(response);
+  },
+  (error: HttpErrorResponse) => {
+    alert(error.message);
+  }
+);
+ }
 return this.uploadedImage;
 }
 
@@ -248,14 +268,14 @@ return this.uploadedImage;
       }
     ));
 }
-getImage1(imagenom: String) : Image{
+getImage1(){
   //Make a call to Sprinf Boot to get the Image Bytes.
-  this.httpClient.get('http://localhost:8095/image/get/' + imagenom)
+  this.httpClient.get('http://localhost:8095/image/get/' + this.viewConducteur?.image?.name)
     .subscribe(
      (res: Image) => {
         this.retrieveResonse = res;
         this.base64Data = this.retrieveResonse.picByte;
-        this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+        this.retrievedImage = "data:"+this.viewConducteur?.image?.type+";base64," + this.base64Data;
       },
       (error:HttpErrorResponse)=>{
         alert(error.message)
@@ -269,7 +289,11 @@ getImage1(imagenom: String) : Image{
 }
 public completed(image : Image) {
   this.image = image;
+
+  this.url1="data:"+this.viewConducteur?.image?.type+";base64,"+this.image.picByte;
+  
   console.log(this.image);
+  console.log(this.url1);
   var reader = new FileReader();
   reader.readAsDataURL(this.image);
   
@@ -277,4 +301,20 @@ public completed(image : Image) {
     this.url = reader.result; 
   }
 }
+
+// onOpenModalView(mode : string , conducteur: Conducteur){
+//   //retrieve Image 
+//   if(conducteur.image == null){
+//     this.onOpenModal(mode,conducteur);
+//   }
+//   else {
+//   this.httpClient.get('http://localhost:8080/image/get/' + conducteur.image.name)
+//     .subscribe(
+//       res => {
+//         this.retrieveResonse = res;
+//         this.base64Data = this.retrieveResonse.picByte;
+//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+//       } , ()=> this.onOpenModal(mode,conducteur,this.retrieveResonse)
+//     );
+// } } 
 }
