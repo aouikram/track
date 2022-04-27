@@ -3,14 +3,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-danger">
+                    <div class="card-header card-header-info">
                         <div class="row">
                             <div class="col-md-4">
-                              <h4 class="card-title  p-3">liste des véhicules</h4>                   
+                              <h4 class="card-title  p-3">liste des conducteurs</h4>                   
                             </div> 
                               <!-- search bar -->
-                                  
-                            
                                 <div class="col-md-5 p-3">
                         
                                     <div class="row col-md-12">
@@ -26,8 +24,8 @@
                                 </div>
                             
                             <div class="col-md-3 float-right p-3">
-                                <button  (click)="onOpenModal('add')" mat-raised-button class="btn btn-danger pull-right" >
-                                    <i class="fa fa-plus"></i> Ajouter véhicule
+                                <button  (click)="onOpenModal('add')" mat-raised-button class="btnadd pull-right" >
+                                    <i class="fa fa-plus"></i> Ajouter conducteur
                                 </button>
                             </div>
                         </div>
@@ -69,7 +67,7 @@
                                         <td>
                                           {{conducteur?.userId}}
                                         </td>
-                                        <td>
+                                         <td>
                                           {{conducteur?.nom}}
                                         </td>
                                         <td>
@@ -171,6 +169,7 @@
                         <div class="container row">
                             <div class="col-md-6">
                                 <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                <img [src]=url>
                             </div>
                             <!--<div *ngIf=url >
                                 <img [src]=url>
@@ -277,8 +276,10 @@
                                 <div class="container row">
                                     <div class="col-md-6">
                                         <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                        <img [src]=url>
                                     </div>
                                 </div>
+                                
 
                                
                         
@@ -352,10 +353,9 @@
                 </div>
                 <div class="col-md-3">
                     <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
-                 
+                    <img [src]= viewConducteurUrl>
                 </div>
-                
-                 
+             
                </div>
            
                 <div class="modal-footer col-md-12">
