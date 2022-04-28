@@ -15,7 +15,7 @@ import { ViewChild } from '@angular/core';
 export class ConducteurComponent implements OnInit {
 
   @ViewChild('myInput')
-   myInputVariable: ElementRef;
+  myInputVariable: ElementRef;
 
   selectedFile: File;
   retrievedImage: any;
@@ -62,11 +62,7 @@ export class ConducteurComponent implements OnInit {
     );
   }
 
-  reset() {
-    console.log(this.myInputVariable.nativeElement.files);
-    this.myInputVariable.nativeElement.value = "";
-    console.log(this.myInputVariable.nativeElement.files);
-}
+
 
 
   // controls the modal of the html that will be displayed 
@@ -138,7 +134,11 @@ public onAddConducteur(addForm:NgForm , uploadedImage : Image ):void{
 public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
  
     conducteur.image = uploadedImage;
-
+    
+    console.log(this.myInputVariable.nativeElement.files);
+    this.myInputVariable.nativeElement.value = "";
+    console.log(this.myInputVariable.nativeElement.files);
+    
     this.conducteurService.updateConducteur(conducteur).subscribe(
       (response: Conducteur) => {
         console.log(response);
@@ -294,7 +294,7 @@ getImage1(){
     return;
   }
   else {
-  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.id)
+  this.httpClient.get('http://localhost:8095/image/get/' + this.viewConducteur?.image?.id)
     .subscribe(
      (res: Image) => {
         this.retrieveResonse = res;
