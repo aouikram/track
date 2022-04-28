@@ -14,7 +14,7 @@ import { ViewChild } from '@angular/core';
 export class ConducteurComponent implements OnInit {
 
   @ViewChild('myInput')
-   myInputVariable: ElementRef;
+  myInputVariable: ElementRef;
 
    @ViewChild('addFormFileInput')
    addInputVariable: ElementRef;
@@ -292,7 +292,7 @@ public getImage1(){
     return;
   }
   else {
-  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.id)
+  this.httpClient.get('http://localhost:8095/image/get/' + this.viewConducteur?.image?.id)
     .subscribe(
      (res: Image) => {
         this.retrieveResonse = res;

@@ -308,7 +308,134 @@
           </div>
           
           <div class="modal-body">
+            <div class="card-body">
+                <!--/********************************************************************-->
+                
+                <section class="lis-bg-light">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            
+                        
+                        <div class="row">
+                            <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                                <div class="price-table">
+                                    <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                                        <article class="article">
+                                            <div class="col-md-3" class="article__content">
+                                                <input type="button" (click)="getImage1()" value="Voir image" class="btn btn-success pull-center col-md-2"> <br><br>
+                                                <img [src]=url1 class=img-responsive style=width:100%>
+                                            </div>
+                                        </article>
+                                    </div>
+                                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                                        <ul class="list-unstyled lis-line-height-3">
+                                            <li> <b><b>Identification:</b></b>   {{viewConducteur?.userId}}</li>
+                                            <li><b><b>Nom:</b></b>   {{viewConducteur?.nom}}</li>
+                                            <li><b><b>Prenom:</b></b>   {{viewConducteur?.prenom}}</li>
+                                            <li><b><b>Telephone:</b></b>   {{viewConducteur?.numTel}}</li>
+                                            <li><b><b>Email:</b></b>   {{viewConducteur?.contactEmail}}</li>
+                                            <li><b><b>Gender:</b></b>   {{viewConducteur?.gender}}</li>
+                                            <li><b><b>Categorie Permis:</b></b>   {{viewConducteur?.categoriePermis}}</li>
+
+                                        </ul> 
+                                        
+                                        <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-center col-md-2">Fermer</button>
+                                        
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+                
+                
+                
+                
+                
+                <!--/********************************************************************-->
+                <!--<div class="table-responsive">
+                    <table class="table">
+                            <tr>
+                                <td>
+                                    <article class="article">
+                                        <div class="col-md-3" class="article__content">
+                                            <input type="button" (click)="getImage1()" value="Voir image"> <br><br>
+                                            <img [src]=url1 class=img-responsive style=width:100%>
+                                        </div>
+                                    </article>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-2">
+                                        <p>Identification: {{viewConducteur?.userId}} </p>
+                                     
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-3"> 
+                                            <p>Nom: {{viewConducteur?.nom}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-2">
+                                        <p>Prenom: {{viewConducteur?.prenom}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-3">
+                                        <p >Telephone: {{viewConducteur?.numTel}}</p>
+                                 
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="col-md-3">
+                                       <p >Email: {{viewConducteur?.contactEmail}} </p>
+                                    
+                                   </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   <div class="col-md-3">
+                                      <p >Gender: {{viewConducteur?.gender}} </p>
+                                   
+                                  </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                  <div class="col-md-3">
+                                      <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>    
+                                  </div>
+                                </td>
+                                
+                            </tr>
+                        </table>   
+                        <div class="modal-footer col-md-12">
+                            <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
+                                     </div>
+                         <div class="clearfix"></div>-->
+                    </div>
+            </div>     
+              <!--              
                 <div class="row block">
+                    <article class="article">
+                        <div class="col-md-3" class="article__content">
+                            <input type="button" (click)="getImage1()" value="Voir image"> <br><br>
+                            <img [src]=url1 class=img-responsive style=width:100%>
+                        </div>
+                    </article>
                     <div class="col-md-2">
                         <p>Identification: {{viewConducteur?.userId}} </p>
                      
@@ -332,11 +459,9 @@
                  
                 </div>
                 <div class="col-md-3">
-                    <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>
-                    
-                    <input type="button" (click)="getImage1()" value="Voir image">
-                    <img [src]=url1>
+                    <p >Categorie Permis: {{viewConducteur?.categoriePermis}} </p>    
                 </div>
+                
                </div>
            
                 <div class="modal-footer col-md-12">
@@ -344,7 +469,7 @@
                             </div>
                 <div class="clearfix"></div>
           
-          </div>
+          </div> -->
        </div>
     </div>
   </div>
