@@ -5,7 +5,6 @@ import { Conducteur } from './conducteur';
 import { Image } from 'app/image/image';
 import { ConducteurService } from './conducteur.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ViewChild } from '@angular/core';
 @Component({
   selector: 'app-conducteur',
@@ -16,6 +15,9 @@ export class ConducteurComponent implements OnInit {
 
   @ViewChild('myInput')
    myInputVariable: ElementRef;
+
+   @ViewChild('addFormFileInput')
+   addInputVariable: ElementRef;
 
   selectedFile: File;
   retrievedImage: any;
@@ -44,14 +46,13 @@ export class ConducteurComponent implements OnInit {
   uploadedImage: Image;
   
 
-  constructor(private conducteurService: ConducteurService,private httpClient: HttpClient, 
-    private _sanitizer: DomSanitizer) { }
+  constructor(private conducteurService: ConducteurService,private httpClient: HttpClient) { }
 
-  ngOnInit(): void {
+ngOnInit(): void {
     this.getConducteurs();
-  }
+ }
 
-  public getConducteurs():void {
+public getConducteurs():void {
     this.conducteurService.getConducteurs().subscribe(
       (response : Conducteur[]) => {
         this.conducteurs = response;
@@ -60,17 +61,10 @@ export class ConducteurComponent implements OnInit {
         alert(error.message);
       }
     );
-  }
-
-  reset() {
-    console.log(this.myInputVariable.nativeElement.files);
-    this.myInputVariable.nativeElement.value = "";
-    console.log(this.myInputVariable.nativeElement.files);
-}
-
+ }
 
   // controls the modal of the html that will be displayed 
- public onOpenModal( mode: string ,conducteur?: Conducteur,conducteurImage ? : Image ): void {
+public onOpenModal( mode: string ,conducteur?: Conducteur,conducteurImage ? : Image ): void {
   const container = document.getElementById('main-container');
   const button = document.createElement('button');
   button.type = 'button';
@@ -98,11 +92,10 @@ export class ConducteurComponent implements OnInit {
   }
   container?.appendChild(button);
   button.click();
-}
+ }
+
 // adds the form input as a vehicule
-public onAddConducteur(addForm:NgForm , uploadedImage : Image ):void{
-  
-  console.log(addForm.value.nom);
+public onAddConducteur(addForm:NgForm , uploadedImage? : Image ):void{
 
  let conducteur : Conducteur = {
 
@@ -133,11 +126,15 @@ public onAddConducteur(addForm:NgForm , uploadedImage : Image ):void{
         this.url = "";
       }
     );
-  }
+ }
 
 public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
  
     conducteur.image = uploadedImage;
+
+    console.log(this.myInputVariable.nativeElement.files);
+    this.myInputVariable.nativeElement.value = "";
+    console.log(this.myInputVariable.nativeElement.files);
 
     this.conducteurService.updateConducteur(conducteur).subscribe(
       (response: Conducteur) => {
@@ -150,7 +147,7 @@ public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
         alert(error.message);
       }, ()=>this.deleteOldImage(this.editConducteurImage?.id)
     );
-  }
+ }
 
 public deleteOldImage(imageId : number) {
     if(imageId == null ){
@@ -165,7 +162,7 @@ public deleteOldImage(imageId : number) {
           alert(error.message);
         }, ()=>console.log(" old image deleted")
       );   }
-  }
+ }
 public onDeleteConducteur(id: number): void {
     this.conducteurService.deleteConducteur(id).subscribe(
       (response: void) => {
@@ -176,17 +173,18 @@ public onDeleteConducteur(id: number): void {
         alert(error.message);
       }
     );
-  }
+ }
 
-onTableDataChange(event: any) {
+public onTableDataChange(event: any) {
     this.page = event;
     this.getConducteurs();
-  }
-onTableSizeChange(event: any): void {
+ }
+
+public onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
     this.getConducteurs();
-  }
+ }
 
 // search vehicule by manufacturer or serial number
 public searchConducteurs(key: string):void {
@@ -208,27 +206,45 @@ public searchConducteurs(key: string):void {
   }
 }
 
+public onFileChanged(event) {
 
-  public onFileChanged(event) {
-    //Select File
     this.selectedFile = event.target.files[0];
-   
-        
+
+     var fileName = this.selectedFile.name;
+     var fileExtension = fileName.split('.')[fileName.split('.').length - 1].toLowerCase();
+     console.log(fileExtension);
+     
+     if (!(fileExtension === "png" || fileExtension === "jpeg")){
+      this.url="";  
+      this.selectedFile = null;
+      this.myInputVariable.nativeElement.value = "";
+      this.addInputVariable.nativeElement.value = "";
+      window.alert("Votre image est de type : "+fileExtension+" veuillez choisir une image de type png ou jpeg")
+     }
+     else if (this.selectedFile.size/1024 >= 64){
+      console.log('file is bigger than 64KB , size : '+(this.selectedFile.size / 1024).toFixed(2)+"KB");
+      this.url="";  
+      this.selectedFile = null;
+      this.myInputVariable.nativeElement.value = "";
+      this.addInputVariable.nativeElement.value = "";
+      window.alert("Le fichier est plus grand que 64 KB, veuillez choisir une autre image")
+   }
+    else  {   
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       
       reader.onload = (_event) => {
         this.url = reader.result; 
-      }
+      } } 
     }
 
-
-
-//Gets called when the user clicks on submit to upload the image
-onUpload(addForm : NgForm ) : Image {
-
-  
-  //FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
+//Gets called when the user clicks on submit from add form 
+public onUpload(addForm : NgForm ) : Image {
+  if(this.selectedFile == null){
+    console.log("file is null in add form");
+    this.onAddConducteur(addForm)  ;
+  }
+//FormData API provides methods and properties to allow us easily prepare form data to be sent with POST HTTP requests.
   const uploadImageData = new FormData();
   uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
 
@@ -240,13 +256,14 @@ this.conducteurService.uploadImage(uploadImageData).subscribe(
   alert(error.message);
 } , ()=> this.onAddConducteur(addForm , this.uploadedImage)  
 );  
-return this.uploadedImage;
+return this.uploadedImage; 
 }
 
-onEdit(conducteur : Conducteur ) : Image {  
+public onEdit(conducteur : Conducteur ) : Image {  
   if(this.selectedFile == null){
     this.onUpdateConducteur(conducteur,this.editConducteurImage); 
   }
+
   else {
   const uploadImageData = new FormData();
 
@@ -268,27 +285,8 @@ onEdit(conducteur : Conducteur ) : Image {
 return this.uploadedImage;
 }
 
-  //Gets called when the user clicks on retieve image button to get the image from back end
-// getImage() {
-//   //Make a call to Sprinf Boot to get the Image Bytes.
-//   this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
-//     .subscribe(
-//       res => {
-//         this.retrieveResonse = res;
-//         this.base64Data = this.retrieveResonse.picByte;
-//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-//       }
-//     );
-//     console.log(this.httpClient.get('http://localhost:8080/image/get/' + this.imageName)
-//     .subscribe(
-//       res => {
-//         this.retrieveResonse = res;
-//         this.base64Data = this.retrieveResonse.picByte;
-//         this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
-//       }
-//     ));
-// }
-getImage1(){
+
+public getImage1(){
   //Make a call to Sprinf Boot to get the Image Bytes.
   if(this.viewConducteur?.image?.id == null){
     return;
@@ -311,6 +309,7 @@ getImage1(){
   }
  
 }
+
 public completed(image : Image) {
   this.image = image;
 

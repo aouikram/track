@@ -111,9 +111,9 @@
             </div>          
         </div>
     </div>
-    <!--Add conducteur modal-->
+<!--Add conducteur modal-->
     <div class="modal fade col-md-12"  id="addConducteurModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl"  role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ajouter conducteur</h5>
@@ -143,12 +143,22 @@
                         <div class="col-md-3">
                             
                             <mat-form-field class="example-full-width">
-                              <input matInput type="text" ngModel name="contactEmail"  id="contactEmail" placeholder="Email" required >
+                              <input matInput type="email" ngModel name="contactEmail"  id="contactEmail" placeholder="Email" required >
                             </mat-form-field>
                         </div>
                         <div class="col-md-3">
-                            
+                          
                             <mat-form-field class="example-full-width">
+                                <label >Genre :</label>
+                                <!-- <div>
+                                    <input type="radio" id="female" name="gender"  value="female"
+                                           >
+                                    <label for="female">Female</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="male" name="gender"  value="male">
+                                    <label for="male">Male</label>
+                                </div> -->
                               <input matInput type="text" ngModel name="gender"  id="gender" placeholder="Gender" required >
                             </mat-form-field>
                         </div>
@@ -168,7 +178,7 @@
                         </div>
                         <div class="container row">
                             <div class="col-md-6">
-                                <input type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                <input #addFormFileInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
                                 <img [src]=url>
                             </div>
 
@@ -251,8 +261,8 @@
                                 </div>
                                 
 
-                               
-                        
+                                                       
+
                                 <div class="modal-footer col-md-12">
                                 <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
                                 <button  (click)="onEdit(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
@@ -289,9 +299,9 @@
 
     </div>
     </div>
-  <!-- View-->
+  <!-- View Conducteur modal-->
   <div class="modal fade col-md-12" id="viewConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurViewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
        <div class="modal-content">
           <div class="modal-header view">
              <h5 class="modal-title titleView" id="updateConducteurModalLabel">Conducteur </h5> 
