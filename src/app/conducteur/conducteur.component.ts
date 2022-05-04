@@ -143,7 +143,7 @@ public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
 
     console.log(this.myInputVariable.nativeElement.files);
     this.myInputVariable.nativeElement.value = "";
-    this.selectedFile = null;
+    this.selectedFile=null;
     console.log(this.myInputVariable.nativeElement.files);
 
     this.conducteurService.updateConducteur(conducteur).subscribe(
