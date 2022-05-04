@@ -52,6 +52,15 @@ ngOnInit(): void {
     this.getConducteurs();
  }
 
+
+public resetFile():void {
+  this.myInputVariable.nativeElement.value = "";
+  this.addInputVariable.nativeElement.value="";
+  this.selectedFile = null;
+  this.url = null ;
+  this.url1 = null ; 
+}
+
 public getConducteurs():void {
     this.conducteurService.getConducteurs().subscribe(
       (response : Conducteur[]) => {
@@ -129,11 +138,12 @@ public onAddConducteur(addForm:NgForm , uploadedImage? : Image ):void{
  }
 
 public onUpdateConducteur(conducteur : Conducteur , uploadedImage : Image):void{
- 
+  
     conducteur.image = uploadedImage;
 
     console.log(this.myInputVariable.nativeElement.files);
     this.myInputVariable.nativeElement.value = "";
+    this.selectedFile = null;
     console.log(this.myInputVariable.nativeElement.files);
 
     this.conducteurService.updateConducteur(conducteur).subscribe(
@@ -292,7 +302,7 @@ public getImage1(){
     return;
   }
   else {
-  this.httpClient.get('http://localhost:8095/image/get/' + this.viewConducteur?.image?.id)
+  this.httpClient.get('http://localhost:8080/image/get/' + this.viewConducteur?.image?.id)
     .subscribe(
      (res: Image) => {
         this.retrieveResonse = res;

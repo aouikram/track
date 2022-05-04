@@ -30,7 +30,7 @@
                        <div class="card-body">
                            <div class="table-responsive">
                                <table class="table table-sm table-condensed">
-                                   <thead class=" text-primary">
+                                   <thead class=" heading">
                                        <th>
                                            Identification
                                        </th>
@@ -51,26 +51,28 @@
                                        <tr class="clickable" (click)="onOpenModal('view', vehicule)" *ngFor="let vehicule of vehicules | paginate: {itemsPerPage: tableSize,
                                            currentPage: page,
                                            totalItems: count};   let i = index">
-                                           <td >
+                                           <td class="tdName">
                                              {{vehicule?.vehiculeId}}
                                            </td>
-                                           <td>
+                                           <td class="tdName">
                                              {{vehicule?.model}}
                                            </td>
-                                           <td>
+                                           <td class="tdName">
                                              {{vehicule?.licensePlate}}
                                            </td>
-                                           <td>
+                                           <td class="tdName">
                                              {{vehicule?.serialNumber}}
                                            </td>
-                                           <td>
+                                           <td class="tdName">
                                              {{vehicule?.manufacturer}}
                                            </td>
                                            <td>
                                                <div class="card-body">
-                                                   <div class="float-right btn-group btn-group-sm">
-                                                       <a (click)="$event.stopPropagation(); onOpenModal( 'edit' , vehicule)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-                                                       <a (click)="$event.stopPropagation(); onOpenModal( 'delete', vehicule)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a> 
+                                                   <div class="btn-group btn-group-sm">
+                                                    <mat-icon class="clickableRow "(click)="$event.stopPropagation(); onOpenModal( 'edit' , vehicule)">edit</mat-icon> 
+                                                    <mat-icon class="clickableRow " (click)="$event.stopPropagation(); onOpenModal( 'delete', vehicule)">delete</mat-icon>
+                                                       <!-- <a (click)="$event.stopPropagation(); onOpenModal( 'edit' , vehicule)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                       <a (click)="$event.stopPropagation(); onOpenModal( 'delete', vehicule)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>  -->
                                                    </div>
                                                    </div>
                                            </td>
@@ -456,8 +458,8 @@
      <div class="modal fade" id="deleteVehiculeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
        <div class="modal-dialog" role="document">
           <div class="modal-content">
-             <div class="Modal-header delete">
-                <h5 class="modal-title titleView" id="deleteModelLabel">Delete Vehicule</h5>
+             <div class="modal-header delete">
+                <h5 class="modal-title titleView" id="deleteModelLabel">Supprimer Vehicule</h5>
                
              </div>
              <div class="modal-body">
