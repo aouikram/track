@@ -210,52 +210,55 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="updateConducteurModalLabel">Modifier conducteur </h5> 
                 </div>
+                
                 <div class="modal-body">
                     <form #editForm="ngForm" >
                         <input type="hidden" ngModel="{{editConducteur?.userId}}" name="userId" class="form-control" id="userId" >
                             <div class="row block">
         
-                                <div class="col-md-3"> 
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex"> 
                         
                         <mat-form-field class="example-full-width">
-                        <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom"  id="nom" class="form-control" >
+                        <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom" placeholder="Nom"  id="nom" class="form-control" >
                         </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                                 
                                 <mat-form-field class="example-full-width">
                                     
-                                <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" class="form-control" id="prenom" >
+                                <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" placeholder="Prénom" class="form-control" id="prenom" >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                                 
                                 <mat-form-field class="example-full-width">
                                     
-                                <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" class="form-control" id="numTel" >
+                                <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" placeholder="Téléphpne" class="form-control" id="numTel" >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3 " class="form-group col-sm-6 flex-column d-flex">
                             
                                 <mat-form-field class="example-full-width">
-                                <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" class="form-control" id="contactEmail"  >
+                                <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" placeholder="Email" class="form-control" id="contactEmail"  >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                             
                                     <mat-form-field class="example-full-width">
-                                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" class="form-control" id="gender"  >
+                                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" placeholder="Gender" class="form-control" id="gender"  >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                             
                                     <mat-form-field class="example-full-width">
-                                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
+                                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" placeholder="categoriePermis" class="form-control" id="categoriePermis"  >
                                 </mat-form-field>
                                 </div>
                                 <div class="container row">
-                                    <div class="col-md-6">
-                                        <input #myInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                    <div class="col-md-6" >
+                                        <span class="btn btn-info btn-file"> choisir un fichier
+                                        <input #myInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image"  (change)="onFileChanged($event)" class="form-control-file"data-browse-on-zone-click="true">
+                                        </span>
                                         <img [src]=url>
                                     </div>
                                 </div>
@@ -264,12 +267,14 @@
                                                        
 
                                 <div class="modal-footer col-md-12">
-                                <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Annuler</button>
+                                <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-left col-md-2">Annuler</button>
+                                
                                 <button  (click)="onEdit(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
                     </form>
+                   
                 </div>
             </div>
         </div>
