@@ -114,168 +114,170 @@
         </div>
     </div>
 <!--Add conducteur modal-->
-    <div class="modal fade col-md-12"  id="addConducteurModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajouter conducteur</h5>
-            </div>       
-            <div class="modal-body col-md-12">
-                <form #addForm="ngForm" (ngSubmit)="onUpload(addForm);">
-                    <div class="row ">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                           
+<div class="modal fade col-md-12"  id="addConducteurModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Ajouter conducteur</h5>
+        </div>       
+        <div class="modal-body col-md-12">
+            <form #addForm="ngForm" (ngSubmit)="onUpload(addForm);">
+                <div class="row ">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                       
 
-                          <mat-form-field class="example-full-width">
-                              <input type="text" ngModel name="nom" matInput id="Nom" placeholder="Nom" required >
-                            </mat-form-field>
-                        </div> 
-                        <div class="col-md-5">
-                            
-                            <mat-form-field class="example-full-width">
-                              <input matInput type="text" ngModel name="prenom"  id="Prenom" placeholder="Prenom" required>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1"></div>
+                      <mat-form-field class="example-full-width">
+                          <input type="text" ngModel name="nom" matInput id="Nom" placeholder="Nom" required >
+                        </mat-form-field>
+                    </div> 
+                    <div class="col-md-5">
+                        
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="prenom"  id="Prenom" placeholder="Prenom" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-1"></div>
 
+                </div>
+                <div class="space">
+                </div>
+                <div class="row ">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                       
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="numTel"  id="Telephone" placeholder="Telephone" required>
+                        </mat-form-field>
                     </div>
-                    <div class="space">
+                    <div class="col-md-5">
+                        
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="email" ngModel name="contactEmail"  id="contactEmail" placeholder="Email" required >
+                        </mat-form-field>
                     </div>
-                    <div class="row ">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                           
-                            <mat-form-field class="example-full-width">
-                              <input matInput type="text" ngModel name="numTel"  id="Telephone" placeholder="Telephone" required>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-5">
-                            
-                            <mat-form-field class="example-full-width">
-                              <input matInput type="email" ngModel name="contactEmail"  id="contactEmail" placeholder="Email" required >
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1"></div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="space">
+                </div>
+                <div class="row ">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <mat-form-field class="example-full-width">
+                            <input matInput type="text" ngModel name="categoriePermis"  id="Permis" placeholder="CategoriePermis" required >
+                          </mat-form-field>
                     </div>
-                    <div class="space">
-                    </div>
-                    <div class="row ">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
-                            <mat-form-field class="example-full-width">
-                                <input matInput type="text" ngModel name="categoriePermis"  id="Permis" placeholder="CategoriePermis" required >
-                              </mat-form-field>
-                        </div>
-                        <div class="wrapper col-md-5">  
-                            <div class="space">
-                            </div>
-                            <div class="space">
-                            </div>
-                                <div class="custom-control custom-radio">
-                                    <input id="male" type="radio" class="custom-control-input" value="Homme" name="gender" ngModel checked>
-                                    <label for="male" class="option male">
-                                        <div class="dot"></div>
-                                         <span> Homme</span>
-                                         </label>
-                                 </div>
-                                 <div class="custom-control custom-radio">
-                                    <input id="female" type="radio" class="custom-control-input" value="Femme" name="gender" ngModel>
-                                    <label for="female" class="option female">
-                                        <div class="dot"></div>
-                                         <span> Femme</span>
-                                      </label>
-                                 </div>
-                           
-                            
-                        </div>
-                        <div class="col-md-1"></div>
-                    </div>
-                    <div class="space">
-                    </div>
-                   
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                            <div class="col-md-5">
-                                <label for="fileUpload">Upload file</label>
-                                <input id="fileUpload" #addFormFileInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
-                            </div>
-                            <div class="col-md-5">  
-                                <img [src]=url>
-                            </div>
-                            <div class="col-md-1"></div>
+                    <div class="wrapper col-md-5">  
+                        <div class="space">
                         </div>
                         <div class="space">
                         </div>
-
-                                 
-                    <div class="modal-footer justify-content-between">
-                        <a data-dismiss="modal" type="button" id="add-conducteur-form" class="btn btn-warning ml-auto" (click)="resetFile()" >Annuler</a>
-                        <div class="space">
+                            <div class="custom-control custom-radio">
+                                <input id="male" type="radio" class="custom-control-input" value="Homme" name="gender" ngModel checked>
+                                <label for="male" class="option male">
+                                    <div class="dot"></div>
+                                     <span> Homme</span>
+                                     </label>
+                             </div>
+                             <div class="custom-control custom-radio">
+                                <input id="female" type="radio" class="custom-control-input" value="Femme" name="gender" ngModel>
+                                <label for="female" class="option female">
+                                    <div class="dot"></div>
+                                     <span> Femme</span>
+                                  </label>
+                             </div>
+                       
+                        
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="space">
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <label for="fileUpload">Upload file</label>
+                            <input id="fileUpload" #addFormFileInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
                         </div>
-                        <button [disabled]="addForm.invalid" type="submit" class="btn btn-success mr-auto">Sauvegarder</button>
-                     </div>
-                    <div class="clearfix"></div>
-                </form>
-            </div>
-    
+                        <div class="col-md-5">  
+                            <img [src]=url>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="space">
+                    </div>
+
+                             
+                <div class="modal-footer justify-content-between">
+                    <a data-dismiss="modal" type="button" id="add-conducteur-form" class="btn btn-warning ml-auto" (click)="resetFile()" >Annuler</a>
+                    <div class="space">
+                    </div>
+                    <button [disabled]="addForm.invalid" type="submit" class="btn btn-success mr-auto">Sauvegarder</button>
+                 </div>
+                <div class="clearfix"></div>
+            </form>
         </div>
-        </div>
+
     </div>
-
-<!-- Edit conducteur modal -->
+    </div>
+</div>
+    <!--Edit conducteur modal-->
     <div class="modal fade col-md-12" id="updateConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurEditModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="updateConducteurModalLabel">Modifier conducteur </h5> 
                 </div>
+                
                 <div class="modal-body">
                     <form #editForm="ngForm" >
                         <input type="hidden" ngModel="{{editConducteur?.userId}}" name="userId" class="form-control" id="userId" >
                             <div class="row block">
         
-                                <div class="col-md-3"> 
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex"> 
                         
                         <mat-form-field class="example-full-width">
-                        <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom"  id="nom" class="form-control" >
+                        <input matInput type="text" ngModel="{{editConducteur?.nom}}" name="nom" placeholder="Nom"  id="nom" class="form-control" >
                         </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                                 
                                 <mat-form-field class="example-full-width">
                                     
-                                <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" class="form-control" id="prenom" >
+                                <input matInput type="text" ngModel="{{editConducteur?.prenom}}" name="prenom" placeholder="Prénom" class="form-control" id="prenom" >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                                 
                                 <mat-form-field class="example-full-width">
                                     
-                                <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" class="form-control" id="numTel" >
+                                <input matInput type="text" ngModel="{{editConducteur?.numTel}}" name="numTel" placeholder="Téléphpne" class="form-control" id="numTel" >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3 " class="form-group col-sm-6 flex-column d-flex">
                             
                                 <mat-form-field class="example-full-width">
-                                <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" class="form-control" id="contactEmail"  >
+                                <input matInput type="text" ngModel="{{editConducteur?.contactEmail}}" name="contactEmail" placeholder="Email" class="form-control" id="contactEmail"  >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                             
                                     <mat-form-field class="example-full-width">
-                                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" class="form-control" id="gender"  >
+                                    <input matInput type="text" ngModel="{{editConducteur?.gender}}" name="gender" placeholder="Gender" class="form-control" id="gender"  >
                                 </mat-form-field>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-3" class="form-group col-sm-6 flex-column d-flex">
                             
                                     <mat-form-field class="example-full-width">
-                                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" class="form-control" id="categoriePermis"  >
+                                    <input matInput type="text" ngModel="{{editConducteur?.categoriePermis}}" name="categoriePermis" placeholder="categoriePermis" class="form-control" id="categoriePermis"  >
                                 </mat-form-field>
                                 </div>
                                 <div class="container row">
-                                    <div class="col-md-6">
-                                        <input #myInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image" (change)="onFileChanged($event)">
+                                    <div class="col-md-6" >
+                                        <span class="btn btn-info btn-file"> choisir un fichier
+                                        <input #myInput type="file" ngModel="{{editConducteur?.image?.id}}" name="image"  (change)="onFileChanged($event)" class="form-control-file"data-browse-on-zone-click="true">
+                                        </span>
                                         <img [src]=url>
                                     </div>
                                 </div>
@@ -284,17 +286,19 @@
                                                        
 
                                 <div class="modal-footer col-md-12">
-                                <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2" (click)="resetFile()" >Annuler</button>
+                                <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-left col-md-2" (click)="resetFile()">Annuler</button>
+                                
                                 <button  (click)="onEdit(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
                     </form>
+                   
                 </div>
             </div>
         </div>
-    </div> 
-    <!-- Delete Modal -->
+    </div>
+  <!-- Delete Modal -->
   <div class="modal fade" id="deleteConducteurModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
        <div class="modal-content">
@@ -319,7 +323,7 @@
 
     </div>
     </div>
-    <!-- View Conducteur modal-->
+  <!-- View Conducteur modal-->
   <div class="modal fade col-md-12" id="viewConducteurModal" tabindex="-1" role="dialog" aria-labelledby="conducteurViewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
        <div class="modal-content">
