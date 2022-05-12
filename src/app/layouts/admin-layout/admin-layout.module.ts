@@ -22,6 +22,7 @@ import { AffectationComponent } from 'app/affectation/affectation.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MissionsComponent } from 'app/missions/missions.component';
 import { ConducteurComponent } from 'app/conducteur/conducteur.component';
+import { DeviceComponent } from 'app/device/device.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import {MatListModule} from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table'  ;
@@ -54,6 +55,7 @@ import * as moment from 'moment';
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    DeviceComponent,
     ConducteurComponent,
     MissionsComponent,
     VehiculeComponent,

@@ -26,11 +26,6 @@ import { ImageComponent } from './image/image.component';
     AdminLayoutComponent,
     ImageComponent,
     
-    
-    
-
-
-
   ],
   providers: [],
   bootstrap: [AppComponent]
