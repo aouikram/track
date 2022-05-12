@@ -200,12 +200,19 @@ export class AffectationComponent implements OnInit{
 
   public onUpdateAffectation(affectation: Affectation , vehicule : Vehicule , conducteur : Conducteur , dateDebut : Date, dateFin : Date):void{
     affectation.dateDebut = dateDebut;
+    
+    console.log(dateDebut);
+    console.log(dateFin);
+    console.log(vehicule);
+    console.log(conducteur);
+
     affectation.dateFin = dateFin;
     affectation.vehicule = vehicule;
     affectation.conducteur = conducteur;
-    
+    console.log(affectation);
     this.affectationService.updateAffectation(affectation).subscribe(
       (response: Affectation) => {
+        console.log("hello");
         this.getAffectations(); 
         this.getVehiculesAndConducteurs();
       },
