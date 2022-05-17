@@ -1,11 +1,15 @@
 <div class="logo">
-    <a href="https://www.creative-tim.com" class="simple-text">
+    <a href="" class="simple-text">
         <div class="logo-img">
-            <img src="/assets/img/angular2-logo-red.png"/>
+            <img src=""/>
         </div>
+        <!-- <a href="javascript:void(0);" class="icon"  (click) = "toggleDisplay()">
+            <i class="fa fa-bars"></i>
+          </a> -->
+     Track
+    </a> 
 
-        Track
-    </a>
+   
 </div>
 <div class="sidebar-wrapper">
   <div *ngIf="isMobileMenu()">
@@ -56,17 +60,38 @@
     </ul>
   </div>
 
-
-    <ul class="nav ">
+   <!-- <div [hidden] = "isShow"> -->
+    <ul class="nav navbar-nav nav-menu">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
             <a class="nav-link" [routerLink]="[menuItem.path]">
                 <i class="material-icons">{{menuItem.icon}}</i>
                 <p>{{menuItem.title}}</p>
             </a>
         </li>
-    </ul> 
-
-
-
-
+    </ul>  
 </div>
+
+ <!-- <ul class="nav navbar-nav nav-menu">
+    <li routerLinkActive="active" class="nav-item">
+        <a class="nav-link" [routerLink]="['/dashboard']">
+            <i class="material-icons">dashboard</i>
+            <p>Dashboard</p>
+        </a>
+    </li>
+    <li routerLinkActive="active" class="dropdown nav-item">
+         <a class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > 
+            <i class="material-icons">map</i>
+            <p>Cartes</p>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" [routerLink]="['/maps']">
+                <i class="material-icons">map</i>
+                Carte google maps
+                </a>
+            
+        </div>
+        </li>
+</ul>   -->
+
+
+

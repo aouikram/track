@@ -13,7 +13,8 @@ import { AffectationComponent } from 'app/affectation/affectation.component';
 import { MissionsComponent } from 'app/missions/missions.component';
 import { ConducteurComponent } from 'app/conducteur/conducteur.component';
 import { DeviceComponent } from 'app/device/device.component';
-
+import { MapLeafletComponent } from 'app/map-leaflet/map-leaflet.component';
+import { UtilisateurComponent } from 'app/utilisateur/utilisateur.component';
 export const AdminLayoutRoutes: Routes = [
     // {
     //   path: '',
@@ -69,5 +70,7 @@ export const AdminLayoutRoutes: Routes = [
     { path:'affectation',        component: AffectationComponent},
     { path: 'missions',        component: MissionsComponent },
     { path: 'conducteur',        component: ConducteurComponent },
-    { path: 'device',        component: DeviceComponent }
+    { path: 'device',        component: DeviceComponent },
+    { path: 'utilisateur',        component: UtilisateurComponent },
+    { path: 'map-leaflet',        component: MapLeafletComponent }
 ];

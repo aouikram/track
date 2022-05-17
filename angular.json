@@ -24,8 +24,11 @@
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/scss/material-dashboard.scss",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/@bepo65/leaflet.fullscreen/Control.FullScreen.css",
               "src/assets/css/demo.css",
               "src/styles.css"
+
             
            
             ],
