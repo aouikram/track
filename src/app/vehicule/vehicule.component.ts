@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Vehicule } from './vehicule';
+import { Device } from 'app/device/device';
 import { VehiculeService } from './vehicule.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -20,8 +21,10 @@ export class VehiculeComponent implements OnInit{
   editVehicule: Vehicule | undefined;
   deleteVehicule: Vehicule | undefined;
   viewVehicule : Vehicule | undefined;
-
-
+  vehicule : Vehicule | undefined;
+  devices:Device[]=[];
+  devices1:Device[]=[];
+  device:Device;
   page: number = 1;
   count: number = 0;
   tableSize: number = 4;
@@ -33,6 +36,7 @@ export class VehiculeComponent implements OnInit{
 
   ngOnInit(): void {
          this.getVehicules();
+         this.getDevices();
          console.log(this.vehicules);
  }
 
@@ -45,8 +49,33 @@ export class VehiculeComponent implements OnInit{
      },
      (error :HttpErrorResponse) => {
        alert(error.message);
-     }
-   );
+     }, ()=> this.getDevices())
+ }
+ getDevices():void{
+//get device who their etat = false (qui sont disponibles) 
+  this.vehiculeService.getDevices().subscribe(
+    (response : Device[]) => {
+      this.devices = response;
+       console.log(this.devices);
+    },
+    (error :HttpErrorResponse) => {
+      alert(error.message);
+    }
+  );
+  
+ }
+ getVehiculeDevices(vehicule? : Vehicule):Device[]{
+console.log(vehicule);
+  this.vehiculeService.getVehiculeDevices(vehicule).subscribe(
+    (response : Device[]) => {
+      this.devices1 = response;
+       console.log(this.devices1);
+    },
+    (error :HttpErrorResponse) => {
+      alert(error.message);
+    }
+  ); return this.devices1;
+  
  }
 
 onTableDataChange(event: any) {

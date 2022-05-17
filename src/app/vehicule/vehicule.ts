@@ -1,8 +1,10 @@
+import { Device } from 'app/device/device';
 export interface Vehicule {
     //***********************************Identification 
         vehiculeId : number;
         vehiculeCode : string;
         creationTime     : Date;
+        devices: Device[];
         //user: Utilisateur 
     
     //******************************* Model  

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vehicule } from './vehicule';
 import { environment } from 'environments/environment';
+import { Device } from 'app/device/device';
 
 
 
@@ -36,4 +37,13 @@ export class VehiculeService {
     public deleteVehicule(vehiculeId: number): Observable<void> {
       return this.http.delete<void>(`${this.apiServerUrl}/vehicule/supprimer/${vehiculeId}`);
     }
+
+    public getDevices(): Observable<Device[]>{
+      return this.http.get<Device[]>(`${this.apiServerUrl}/vehicule/lister_devices_pas_utilise`);
+    }
+
+    public getVehiculeDevices(vehicule : Vehicule): Observable<Device[]>{
+      return this.http.post<Device[]>(`${this.apiServerUrl}/lister_devices_de_vehicule`, vehicule);
+    }
+    
 }

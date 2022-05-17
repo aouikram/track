@@ -11,7 +11,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 @Component({
   selector: 'app-device',
   templateUrl: './device.component.html',
-  styleUrls: ['./device.component.css']
+  styleUrls: ['./device.component.scss']
 })
 export class DeviceComponent implements OnInit{
 
@@ -89,6 +89,7 @@ onTableSizeChange(event: any): void {
    }
    else if (mode === 'edit') {
     this.editDevice  = device;
+    console.log(this.editDevice);
      button.setAttribute('data-target', '#updateDeviceModal');
    }
    else if (mode === 'delete') {
@@ -120,6 +121,7 @@ onTableSizeChange(event: any): void {
    }
 
 public onUpdateDevice(device:Device):void{
+  console.log(device);
        this.deviceService.updateDevice(device).subscribe(
          (response: Device) => {
            console.log(response);
