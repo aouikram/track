@@ -89,6 +89,7 @@ onTableSizeChange(event: any): void {
    }
    else if (mode === 'edit') {
     this.editDevice  = device;
+    console.log(this.editDevice);
      button.setAttribute('data-target', '#updateDeviceModal');
    }
    else if (mode === 'delete') {
@@ -120,6 +121,7 @@ onTableSizeChange(event: any): void {
    }
 
 public onUpdateDevice(device:Device):void{
+  console.log(device);
        this.deviceService.updateDevice(device).subscribe(
          (response: Device) => {
            console.log(response);

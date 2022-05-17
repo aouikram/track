@@ -46,6 +46,9 @@
                                        <th>
                                            Fabricant
                                        </th>
+                                       <th>
+                                           Device
+                                        </th>
                                    </thead>
                                    <tbody>
                                        <tr class="clickable" (click)="onOpenModal('view', vehicule)" *ngFor="let vehicule of vehicules | paginate: {itemsPerPage: tableSize,
@@ -66,6 +69,19 @@
                                            <td class="tdName">
                                              {{vehicule?.manufacturer}}
                                            </td>
+                                           <td class="tdName">
+                                            
+                                            <mat-list>
+                                                <mat-list-item>
+                                                    <mat-select placeholder="GPS affecté " name="item" (click)="$event.stopPropagation(); getVehiculeDevices(vehicule)">
+                                                      <mat-option *ngFor="let item of devices1" [value]="item">
+                                                        {{item.deviceName}}
+                                                      </mat-option>
+                                                    </mat-select>
+                                                </mat-list-item>
+                                            </mat-list>
+                                           </td> 
+                                           
                                            <td>
                                                <div class="card-body">
                                                    <div class="btn-group btn-group-sm">
@@ -255,6 +271,19 @@
                                      </mat-form-field>
                                </td>
                            </tr>
+                           <tr>
+                            <td>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <mat-select placeholder="affecter GPS " name="item" >
+                                          <mat-option *ngFor="let item of devices" [value]="item">
+                                            {{item.deviceName}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-list-item>
+                                </mat-list>
+                            </td>
+                        </tr>
                        </table>
                        
                              
@@ -440,6 +469,33 @@
                                      </mat-form-field>
                                </td>
                            </tr>
+                           <tr>
+                            <td>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <mat-select placeholder="affecter GPS " name="item" >
+                                          <mat-option *ngFor="let item of devices" [value]="item">
+                                            {{item.deviceName}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-list-item>
+                                </mat-list>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let vehicule of vehicules">
+                            <td>
+                                <mat-list>
+                                    <mat-list-item>
+                                        <mat-select placeholder="GPS affecté " name="item" (ngModelChange)="getVehiculeDevices(vehicule)">
+                                          <mat-option *ngFor="let item of devices1" [value]="item">
+                                            {{item.deviceName}}
+                                          </mat-option>
+                                        </mat-select>
+                                    </mat-list-item>
+                                </mat-list>
+                            </td>
+                        </tr>
+                           
                        </table>  
                    </div>
    </div>
