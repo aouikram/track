@@ -38,4 +38,8 @@ export class DeviceService {
     public deleteDevice(id: number): Observable<void> {
       return this.http.delete<void>(`${this.apiServerUrl}/device/supprimer/${id}`);
     }
+
+    public getAvailableDevices(): Observable<Device[]>{
+      return this.http.get<Device[]>(`${this.apiServerUrl}/device/lister_devices_pas_utilise`);
+    }
 }

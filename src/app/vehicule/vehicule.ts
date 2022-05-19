@@ -6,6 +6,7 @@ export interface Vehicule {
         creationTime     : Date;
         devices: Device[];
         //user: Utilisateur 
+        
     
     //******************************* Model  
         manufacturer     : string;

@@ -6,6 +6,7 @@ import { Device } from 'app/device/device';
 import { VehiculeService } from './vehicule.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DeviceService } from 'app/device/device.service';
 
 
 
@@ -31,16 +32,25 @@ export class VehiculeComponent implements OnInit{
   tableSizes: any = [3, 6, 9, 12];
 
 
+  addedDevice : Device;
+  checkedDevice : Device ;
+  checkedDevices : Device[] = [];
 
- constructor(private vehiculeService: VehiculeService) {}
+
+  availableDevices:Device[]=[];
+
+
+ constructor(private vehiculeService: VehiculeService , private deviceService : DeviceService) {}
 
   ngOnInit(): void {
          this.getVehicules();
          this.getDevices();
+         this.getAvailableDevices();
          console.log(this.vehicules);
  }
 
- //shows the vehicules on the UI
+
+ //gets list of vehicules from database
    getVehicules():void {
    this.vehiculeService.getVehicules().subscribe(
      (response : Vehicule[]) => {
@@ -49,8 +59,47 @@ export class VehiculeComponent implements OnInit{
      },
      (error :HttpErrorResponse) => {
        alert(error.message);
-     }, ()=> this.getDevices())
+     }, ()=> this.getDevices());
  }
+
+   //get available devices ( not used vehiculeID == null)
+    public getAvailableDevices():void{
+      this.deviceService.getAvailableDevices().subscribe(
+        (response: Device[]) => {
+          this.availableDevices = response;
+          console.log(this.availableDevices);
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+
+    // if isChecked is true get the device with the deviceId = deviceId and add it to the vehicule
+onChangeCheckbox(deviceId: number, isChecked: boolean) {
+
+      if(isChecked == true){
+        this.deviceService.getDeviceById(deviceId).subscribe(
+          (response : Device) => {
+            this.checkedDevice = response;
+             
+          },
+          (error :HttpErrorResponse) => {
+            alert(error.message);
+          }, ()=> this.checkedDevices.push(this.checkedDevice) // add device to list of checked devices 
+          );
+      }
+      else if (isChecked == false){
+        // remove device from checkedDevices if it's in the list 
+        this.checkedDevices = this.checkedDevices.filter(device => device.deviceId !== deviceId);
+
+    } 
+  console.log(this.checkedDevices);
+}
+
+
+
+
  getDevices():void{
 //get device who their etat = false (qui sont disponibles) 
   this.vehiculeService.getDevices().subscribe(
@@ -137,19 +186,45 @@ onTableSizeChange(event: any): void {
 
  // adds the form input as a vehicule
  public onAddVehicule(addForm:NgForm):void{
+   addForm.value.devices = this.checkedDevices;
    document.getElementById('add-vehicule-form')?.click();
      this.vehiculeService.addVehicule(addForm.value).subscribe(
        (response: Vehicule) => {
-         console.log(response);
-         this.getVehicules();
-         addForm.reset();
+        this.getVehicules();
+        this.checkedDevices = []; // empty checked devices array
+        addForm.reset();
        },
        (error: HttpErrorResponse) => {
          alert(error.message);
          addForm.reset();
-       }
-     );
+      },  ()=> this.getAvailableDevices() 
+     
+     
+    
+     ); 
+     
    }
+
+   // adds the new device to the database and adds it to the availableDevices array
+   public onAddDevice(addDeviceForm:NgForm):void{
+    console.log(addDeviceForm.value);
+    document.getElementById('add-device-form')?.click();
+    this.deviceService.addDevice(addDeviceForm.value).subscribe(
+      (response: Device) => {
+        this.addedDevice = response;
+        this.getDevices();
+        this.getAvailableDevices();
+        addDeviceForm.reset();
+        },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        addDeviceForm.reset();
+      }, // check the addedDevice in the checkbox 
+      // ()=> document.getElementById("devices-checkbox-"+this.addedDevice.deviceId)?.click()
+    );
+    }
+
+
 
 public onUpdateVehicule(vehicule:Vehicule):void{
        this.vehiculeService.updateVehicule(vehicule).subscribe(
@@ -159,7 +234,7 @@ public onUpdateVehicule(vehicule:Vehicule):void{
          },
          (error: HttpErrorResponse) => {
            alert(error.message);
-         }
+         }, ()=> this.getAvailableDevices()
        );
      }
 
@@ -171,7 +246,7 @@ public onDeleteVehicule(vehiculeId: number): void {
          },
          (error: HttpErrorResponse) => {
            alert(error.message);
-         }
+         }, ()=> this.getAvailableDevices()
        );
      }
  
