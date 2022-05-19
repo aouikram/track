@@ -13,4 +13,5 @@ export interface Device{
     batteryVoltage?:number;
 
 
+
 }

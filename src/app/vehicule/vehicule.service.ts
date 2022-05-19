@@ -45,5 +45,15 @@ export class VehiculeService {
     public getVehiculeDevices(vehicule : Vehicule): Observable<Device[]>{
       return this.http.post<Device[]>(`${this.apiServerUrl}/lister_devices_de_vehicule`, vehicule);
     }
+
+    public getVehiculeDevicesFromVehiculeId(vehiculeId : number): Observable<Device[]> {
+      return this.http.get<Device[]>(`${this.apiServerUrl}/vehicule/lister_devices_de_vehicule/${vehiculeId}`);
+    }
+
+    // public updateVehiculeDevices(devices : Device[], vehiculeId : number): Observable<Vehicule>{
+    //   return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/modifier_boitiers/${vehiculeId}`, devices);
+    // }
+
+
     
 }
