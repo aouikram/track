@@ -1,3 +1,4 @@
+import { Vehicule } from "app/vehicule/vehicule";
 
 export interface Device{
     //***********************************Identification 
@@ -11,7 +12,8 @@ export interface Device{
 	deviceIMEI?:String;
 	externalStorage?:number;
     batteryVoltage?:number;
-
+	vehicule? : Vehicule ;
+ 
 
 
 }

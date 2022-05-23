@@ -7,6 +7,7 @@ import { VehiculeService } from './vehicule.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DeviceService } from 'app/device/device.service';
+import { on } from 'events';
 
 
 
@@ -32,6 +33,7 @@ export class VehiculeComponent implements OnInit{
   tableSizes: any = [3, 6, 9, 12];
 
 
+  freedDevices : Device[] = [];
   addedDevice : Device;
   checkedDevice : Device ;
   checkedDevices : Device[] = [];
@@ -44,9 +46,7 @@ export class VehiculeComponent implements OnInit{
 
   ngOnInit(): void {
          this.getVehicules();
-         this.getDevices();
          this.getAvailableDevices();
-         console.log(this.vehicules);
  }
 
 
@@ -55,19 +55,17 @@ export class VehiculeComponent implements OnInit{
    this.vehiculeService.getVehicules().subscribe(
      (response : Vehicule[]) => {
        this.vehicules = response;
-        console.log(this.vehicules);
      },
      (error :HttpErrorResponse) => {
        alert(error.message);
-     }, ()=> this.getDevices());
+     });
  }
 
    //get available devices ( not used vehiculeID == null)
-    public getAvailableDevices():void{
+public getAvailableDevices():void{
       this.deviceService.getAvailableDevices().subscribe(
         (response: Device[]) => {
           this.availableDevices = response;
-          console.log(this.availableDevices);
         },
         (error: HttpErrorResponse) => {
           alert(error.message);
@@ -76,7 +74,7 @@ export class VehiculeComponent implements OnInit{
     }
 
     // if isChecked is true get the device with the deviceId = deviceId and add it to the vehicule
-onChangeCheckbox(deviceId: number, isChecked: boolean) {
+onChangeCheckbox(deviceId: number, isChecked: boolean ) {
 
       if(isChecked == true){
         this.deviceService.getDeviceById(deviceId).subscribe(
@@ -94,38 +92,14 @@ onChangeCheckbox(deviceId: number, isChecked: boolean) {
         this.checkedDevices = this.checkedDevices.filter(device => device.deviceId !== deviceId);
 
     } 
-  console.log(this.checkedDevices);
+    console.log("onchange"+this.checkedDevices);
 }
 
-
-
-
- getDevices():void{
-//get device who their etat = false (qui sont disponibles) 
-  this.vehiculeService.getDevices().subscribe(
-    (response : Device[]) => {
-      this.devices = response;
-       console.log(this.devices);
-    },
-    (error :HttpErrorResponse) => {
-      alert(error.message);
-    }
-  );
-  
- }
- getVehiculeDevices(vehicule? : Vehicule):Device[]{
-console.log(vehicule);
-  this.vehiculeService.getVehiculeDevices(vehicule).subscribe(
-    (response : Device[]) => {
-      this.devices1 = response;
-       console.log(this.devices1);
-    },
-    (error :HttpErrorResponse) => {
-      alert(error.message);
-    }
-  ); return this.devices1;
-  
- }
+// empty checkedDevices array and call availableDevices
+public emptyArrays(){
+  this.checkedDevices = [];
+  this.getAvailableDevices();
+}
 
 onTableDataChange(event: any) {
   this.page = event;
@@ -139,7 +113,7 @@ onTableSizeChange(event: any): void {
 }
 
   // search vehicule by manufacturer or serial number
-  public searchVehicules(key: string):void {
+public searchVehicules(key: string):void {
     console.log(key);
     const results: Vehicule[] = []; // array that stores all the vehicules that match the key : results
     for (const vehicule of this.vehicules) { // loop over all the vehicules in the app
@@ -165,6 +139,9 @@ onTableSizeChange(event: any): void {
    button.type = 'button';
    button.style.display = 'none';
    button.setAttribute('data-toggle', 'modal');
+   button.setAttribute('data-backdrop', 'static');
+   button.setAttribute('data-keyboard', 'false');
+
    if (mode === 'add') {
      button.setAttribute('data-target', '#addVehiculeModal');
    }
@@ -178,7 +155,10 @@ onTableSizeChange(event: any): void {
    }
    else if (mode === 'view') {
     this.viewVehicule = vehicule;
+    console.log( this.viewVehicule);
     button.setAttribute('data-target', '#viewVehiculeModal');
+    button.setAttribute('data-backdrop', 'true');
+    button.setAttribute('data-keyboard', 'true');
   }
    container?.appendChild(button);
    button.click();
@@ -193,6 +173,7 @@ onTableSizeChange(event: any): void {
         this.getVehicules();
         this.checkedDevices = []; // empty checked devices array
         addForm.reset();
+       
        },
        (error: HttpErrorResponse) => {
          alert(error.message);
@@ -205,37 +186,96 @@ onTableSizeChange(event: any): void {
      
    }
 
-   // adds the new device to the database and adds it to the availableDevices array
-   public onAddDevice(addDeviceForm:NgForm):void{
-    console.log(addDeviceForm.value);
+// adds the new device to the database and adds it to the availableDevices array
+public onAddDevice(addDeviceForm:NgForm):void{
+ 
+
     document.getElementById('add-device-form')?.click();
+
     this.deviceService.addDevice(addDeviceForm.value).subscribe(
       (response: Device) => {
         this.addedDevice = response;
-        this.getDevices();
-        this.getAvailableDevices();
         addDeviceForm.reset();
         },
       (error: HttpErrorResponse) => {
         alert(error.message);
         addDeviceForm.reset();
-      }, // check the addedDevice in the checkbox 
-      // ()=> document.getElementById("devices-checkbox-"+this.addedDevice.deviceId)?.click()
+      }, // display check the chekbox of the added device
+      () => this.onChangeCheckbox(this.addedDevice.deviceId, true )
+      
+      
+      
+     
     );
     }
 
 
+// if cancel button is clicked add the freedDevice back to the editVehicule devices list 
+public onCancelEditForm():void{
+   if(this.freedDevices.length != 0 ){
+        // for each device in freedDevices add device to editVehicule devices list 
+    for(const device of this.freedDevices  ) {
+      this.editVehicule.devices.push(device);
+    }
+    // update editVehicule
+    this.onUpdateVehicule(this.editVehicule);
+   }
+
+}
+
+    
+
+// finds the device with the deviceId , and updates it in the database
+public freeDevice(device : Device , vehiculeId : number):void{
+
+      this.deviceService.freeDevice(device).subscribe(
+        (response: Device) => {
+          this.getAvailableDevices();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        },
+        ()=>{
+          this.vehiculeService.removeDeviceFromVehicule(vehiculeId, device).subscribe(
+            (response: Vehicule) => {
+              this.editVehicule= response;
+              this.getVehicules();
+            },
+            (error: HttpErrorResponse) => {
+              alert(error.message);
+            },()=>{ this.freedDevices.push(device);}
+          );
+        }
+      );
+}
 
 public onUpdateVehicule(vehicule:Vehicule):void{
-       this.vehiculeService.updateVehicule(vehicule).subscribe(
-         (response: Vehicule) => {
-           console.log(response);
-           this.getVehicules();
-         },
-         (error: HttpErrorResponse) => {
-           alert(error.message);
-         }, ()=> this.getAvailableDevices()
-       );
+  // console.log(this.editVehicule.devices);
+  // console.log(this.checkedDevices);
+   let emptyDevicesArray : Device[] = [];
+   vehicule.devices = this.editVehicule.devices.concat(this.checkedDevices);
+  console.log(vehicule);
+  this.vehiculeService.updateVehiculeDevices(emptyDevicesArray, vehicule.vehiculeId).subscribe(
+    (response: Vehicule) => {
+    },
+    (error: HttpErrorResponse) => {
+      alert(error.message);
+    },()=>{
+      this.vehiculeService.updateVehicule(vehicule).subscribe(
+        (response: Vehicule) => {
+          console.log(response);
+          this.checkedDevices = [];
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }, ()=> { this.getVehicules(); 
+         this.getAvailableDevices() ; 
+       this.freedDevices = []; }
+      );
+    }
+  )
+       
+
      }
 
 public onDeleteVehicule(vehiculeId: number): void {

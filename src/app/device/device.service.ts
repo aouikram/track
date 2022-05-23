@@ -42,4 +42,9 @@ export class DeviceService {
     public getAvailableDevices(): Observable<Device[]>{
       return this.http.get<Device[]>(`${this.apiServerUrl}/device/lister_devices_pas_utilise`);
     }
+
+    public freeDevice(device : Device): Observable<Device>{
+      return this.http.post<Device>(`${this.apiServerUrl}/device/liberer_device`, device);
+    }
+
 }

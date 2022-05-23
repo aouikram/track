@@ -59,6 +59,7 @@ h4 {
     padding: 25px 50px;
 
 }
+
 .heading{
     border-bottom: 1px solid #000;
     width:100%;
@@ -68,6 +69,12 @@ h4 {
     height: auto;
     display: inline-block;
   }
+
+.verticalspace{
+  width: auto ;
+  height : 10px;
+  display: inline-block;
+}
 .spaceheader {
     width: 50px;
     height: auto;
@@ -158,9 +165,9 @@ hr:after {
   font-weight: bold;
 }
 .cycle-tab-container {
-  margin: 30px auto;
-  width: 800px;
-  padding: 20px;
+   margin:  30px  auto; 
+   width: 600px; 
+  /* padding: 20px; */
   box-shadow: 0 0 10px 2px #ddd;
 }
 
@@ -172,8 +179,8 @@ hr:after {
 }
 
 .tab-pane {
-    text-align: center;
-    margin: 30px auto;
+    
+    margin: 0px 30px 0px  auto;
     max-width: 100%;
 }
 
@@ -184,7 +191,7 @@ hr:after {
 } 
 
 .cycle-tab-item {
-  width: 180px;
+  width: 180px; 
 }
 
 .cycle-tab-item:after {
@@ -207,3 +214,23 @@ hr:after {
   border-color: transparent !important;
   color: orange;
 } 
+
+.addDeviceContainer{
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 0 10px 2px #ddd;
+}
+.deviceformfield{
+  text-align: center;
+}
+.addForm{
+  margin: 0px auto;
+}
+
+.identification{
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 0 10px 2px #ddd;
+}

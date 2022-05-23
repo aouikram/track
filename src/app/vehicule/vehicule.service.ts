@@ -50,9 +50,17 @@ export class VehiculeService {
       return this.http.get<Device[]>(`${this.apiServerUrl}/vehicule/lister_devices_de_vehicule/${vehiculeId}`);
     }
 
-    // public updateVehiculeDevices(devices : Device[], vehiculeId : number): Observable<Vehicule>{
-    //   return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/modifier_boitiers/${vehiculeId}`, devices);
-    // }
+    public removeDeviceFromVehicule(vehiculeId : number, device : Device): Observable<Vehicule> {
+      return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/supprimer_boitier_de_vehicule/${vehiculeId}`, {device});
+    }
+
+    public addDeviceToVehicule(vehiculeId : number, device : Device): Observable<Vehicule> {
+      return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/ajouter_boitier_a_vehicule/${vehiculeId}`, {device});
+    }
+
+    public updateVehiculeDevices(devices : Device[], vehiculeId : number): Observable<Vehicule>{
+      return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/modifier_boitiers/${vehiculeId}`, devices);
+    }
 
 
     
