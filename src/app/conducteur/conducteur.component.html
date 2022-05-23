@@ -22,17 +22,22 @@
                                                 placeholder="Search..." autofocus required>
                                             </form>
                                         </div>
-                                  
+                                        
                             <div class="col-md-3 float-right p-3">
                                 <button  (click)="onOpenModal('add')" mat-raised-button class="btnadd pull-right" >
                                     <i class="fa fa-plus"></i> Ajouter conducteur
                                 </button>
+                                <div>
+                                    <button (click)="exportexcel()" mat-raised-button class="btnadd pull-center">
+                                        <mat-icon> cloud_download</mat-icon> Export Excel
+                                    </button>
+                                    </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table" id="excel-table">
                                 <thead class=" text-primary">
                                  
                                     <th>
@@ -92,6 +97,7 @@
                                                 <div class="float-right btn-group btn-group-sm">
                                                     <a (click)="$event.stopPropagation();  onOpenModal( 'edit' , conducteur)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
                                                     <a (click)="$event.stopPropagation(); onOpenModal( 'delete', conducteur)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                                    
                                                   
                                                 </div>
                                                 </div>

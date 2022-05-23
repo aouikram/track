@@ -6,6 +6,7 @@ import { Image } from 'app/image/image';
 import { ConducteurService } from './conducteur.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ViewChild } from '@angular/core';
+import * as XLSX from 'xlsx'; 
 @Component({
   selector: 'app-conducteur',
   templateUrl: './conducteur.component.html',
@@ -45,6 +46,9 @@ export class ConducteurComponent implements OnInit {
   tableSizes: any = [3, 6, 9, 12];
   uploadedImage: Image;
   
+  	
+/*name of the excel-file which will be downloaded. */ 
+fileName= 'ExcelSheet.xlsx'; 
 
   constructor(private conducteurService: ConducteurService,private httpClient: HttpClient) { }
 
@@ -335,4 +339,20 @@ public completed(image : Image) {
   }
 }
 
+exportexcel(): void 
+    {
+       /* table id is passed over here */   
+       let element = document.getElementById('excel-table'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       /* generate workbook and add the worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
+			
+    }
 }
+
+
