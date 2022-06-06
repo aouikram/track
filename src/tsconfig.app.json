@@ -4,10 +4,15 @@
     "outDir": "../out-tsc/app",
     "module": "es2020",
     "baseUrl": "",
-    "types": []
+    "types": [
+      "node"
+    ]
   },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  "types": [ "node" ],
+  "typeRoots": [ "../node_modules/@types" ],
+  
 }

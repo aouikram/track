@@ -17,5 +17,7 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
-  ]
+  ],
+  "types": [ "node" ],
+  "typeRoots": [ "../node_modules/@types" ]
 }
