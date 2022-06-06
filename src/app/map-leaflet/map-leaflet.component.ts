@@ -8,7 +8,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Vehicule } from 'app/vehicule/vehicule';
 import { NgForm } from '@angular/forms';
 import { identity } from 'rxjs';
-
+import * as E from 'leaflet';
+import 'leaflet-routing-machine';
 
 @Component({
   selector: 'app-map-leaflet',
@@ -18,7 +19,7 @@ import { identity } from 'rxjs';
 export class MapLeafletComponent  implements   AfterViewInit {
 
 
-   clickedVehicule: Vehicule;
+  clickedVehicule: Vehicule;
   map : Map;
   custom : Control ; 
   vehicules: Vehicule[] = [];
@@ -107,7 +108,9 @@ export class MapLeafletComponent  implements   AfterViewInit {
   }
 
   public receive(detailForm : NgForm): void {
-   console.log(detailForm.form.controls);
+    console.log(detailForm.form.controls);
+   console.log(detailForm.form.controls.dateDebut.value);
+   console.log(this.clickedVehicule);
   }
 
 
@@ -349,12 +352,47 @@ private loadMap(): void {
         subdomains:['mt0','mt1','mt2','mt3']
     }).addTo(this.map);
 
-// markers of vehicules
+    // var pointA = new L.LatLng(28.635308, 77.22496);
+    // var pointB = new L.LatLng(28.984461, 77.70641);
+    // var pointList = [pointA, pointB];
+    
+  //   var firstpolyline = new L.Polyline(pointList, {
+  //       color: 'red',
+  //       weight: 3,
+  //       opacity: 0.5,
+  //       smoothFactor: 1
+  //   });
+  //   firstpolyline.addTo(this.map);
+
+  
+
+  // var control = E.Routing.control({
+  //   waypoints: pointList,
+  //   show: false,
+  //   waypointMode: 'snap',
+ 
+  // }).addTo(this.map);
+   
+
+
+
+
 for (const c of this.eventData) {
          console.log(c);
           const lat = c.latitude;
       
           const lon = c.longitude;
+
+          // var pointA = new L.LatLng(lat, lon);
+          // var pointB = new L.LatLng(lat+0.02, lon+0.025);
+          // var pointList = [pointA,pointB];
+   
+          // var control = E.Routing.control({
+          //   waypoints: pointList,
+          //   waypointMode:'snap',
+        
+          // }).addTo(this.map);
+          
 
           const customOptions = {
             'maxWidth': 200, // set max-width
@@ -365,14 +403,19 @@ for (const c of this.eventData) {
 // popup of vehicules
 if(c.speedKPH<60){
         const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+
           marker.on('mouseover', function() {
             marker.bindPopup(template1,{className: 'mouseover-popup'});
             marker.openPopup();
           })
           
+         
+         
+          
         
 }else if(c.speedKPH>=60 && c.speedKPH<120){
     const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+    const template="";
       marker.on('mouseover', function() {
         marker.bindPopup(template1,{className: 'mouseover-popup'});
         marker.openPopup();
@@ -381,6 +424,7 @@ if(c.speedKPH<60){
      
 }else{
   const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+  const template="";
   marker.on('mouseover', function() {
     marker.bindPopup(template1,{className: 'mouseover-popup'});
     marker.openPopup();

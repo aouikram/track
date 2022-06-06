@@ -8,8 +8,8 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ImageComponent } from './image/image.component';
-
-
+import { MapLeafletComponent } from './map-leaflet/map-leaflet.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
@@ -17,6 +17,7 @@ import { ImageComponent } from './image/image.component';
 
 @NgModule({
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,

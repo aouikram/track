@@ -362,7 +362,7 @@ ul.task-items {
 			
 			.icon {
 				// background: $colorDarkGreen;
-				margin-right: $standardPadding/2;
+				margin-right: calc($standardPadding/2);
 				// width: 14px;
 				height: 14px;
 				border-radius: 50%;

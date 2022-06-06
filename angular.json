@@ -27,7 +27,8 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/@bepo65/leaflet.fullscreen/Control.FullScreen.css",
               "src/assets/css/demo.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css"
 
             
            
