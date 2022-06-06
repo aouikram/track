@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EventData } from './eventData';
 import { environment } from 'environments/environment';
+import { Vehicule } from 'app/vehicule/vehicule';
 
 
 
@@ -24,5 +25,9 @@ export class EventDataService {
         return this.http.get<EventData[]>(`${this.apiServerUrl}/eventData/lister_derniers_eventData`);
       }
 
+    // get Vehicules by eventData[]
+    public findAllVehicules(eventDataList : EventData[]): Observable<Vehicule[]> {
+      return this.http.post<Vehicule[]>(`${this.apiServerUrl}/eventData/trouver_vehicules`, eventDataList);
+    }
 
 }

@@ -18,6 +18,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { VehiculeComponent } from 'app/vehicule/vehicule.component';
+import { MapLeafletComponent } from 'app/map-leaflet/map-leaflet.component';
 import { AffectationComponent } from 'app/affectation/affectation.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MissionsComponent } from 'app/missions/missions.component';
@@ -28,9 +29,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import {MatListModule} from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table'  ;
 import {MatIconModule} from '@angular/material/icon';
-import { MapLeafletComponent } from 'app/map-leaflet/map-leaflet.component';
-import * as moment from 'moment';
-
 
 
 @NgModule({
@@ -50,8 +48,11 @@ import * as moment from 'moment';
     MatListModule,
     MatTableModule,
     MatIconModule,
-    
 
+
+
+
+ 
   ],
   declarations: [
     DashboardComponent,
@@ -67,6 +68,10 @@ import * as moment from 'moment';
     NotificationsComponent,
     UpgradeComponent,
     AffectationComponent,
+    MapLeafletComponent,
+
+ 
+   
 
   ]
 })

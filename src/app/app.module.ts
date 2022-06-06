@@ -13,6 +13,8 @@ import { ImageComponent } from './image/image.component';
 
 
 
+
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -22,11 +24,13 @@ import { ImageComponent } from './image/image.component';
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    ImageComponent
+    ImageComponent,
+
 
     
     

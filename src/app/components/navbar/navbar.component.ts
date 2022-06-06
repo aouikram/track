@@ -47,12 +47,15 @@ export class NavbarComponent implements OnInit {
         this.sidebarVisible = true;
     };
     sidebarClose() {
-        const body = document.getElementsByTagName('body')[0];
-        this.toggleButton.classList.remove('toggled');
-        this.sidebarVisible = false;
-        body.classList.remove('nav-open');
+      // console.log('sidebarClose');
+ 
+      //   const body = document.getElementsByTagName('body')[0];
+      //   this.toggleButton.classList.remove('toggled');
+      //   this.sidebarVisible = false;
+      //   body.classList.remove('nav-open');
     };
     sidebarToggle() {
+
         // const toggleButton = this.toggleButton;
         // const body = document.getElementsByTagName('body')[0];
         var $toggle = document.getElementsByClassName('navbar-toggler')[0];
@@ -111,6 +114,7 @@ export class NavbarComponent implements OnInit {
     };
 
     getTitle(){
+      
       var titlee = this.location.prepareExternalUrl(this.location.path());
       if(titlee.charAt(0) === '#'){
           titlee = titlee.slice( 1 );
@@ -118,6 +122,7 @@ export class NavbarComponent implements OnInit {
 
       for(var item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === titlee){
+           
               return this.listTitles[item].title;
           }
       }

@@ -1,1 +1,153 @@
-<div id="map"></div>
+<div id="map" class="map-container" leaflet ></div>
+
+<div class="row">
+<div id="side-menu" class="leaflet-sidebar">
+
+    <div class="leaflet-sidebar-tabs">
+        <ul class="nav nav-tabs" role="tablist"> <!-- top aligned tabs -->
+            <li><a class="nav-link" href="#home" role="tab" aria-controls="home" data-toggle="tab"><i class="fa fa-bars"></i></a></li>
+            <li><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-envelope"></i></a></li>
+            <li><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i></a></li>
+        </ul>
+
+    </div>
+
+        <!-- Tab panes -->
+        <div class=" tab-content leaflet-sidebar-content">
+            <div  role="tabpanel" class="leaflet-sidebar-pane fade active in  " id="home">
+                <h1 class="leaflet-sidebar-header">
+                   home
+         </h1>
+
+      
+      
+          <!-- <div class="container py-1">
+
+
+            <div class="row">
+              <div class="col-lg-12 mx-auto">
+        
+                <ul id="list" class="list-group shadow">
+                </ul>
+               
+              </div>
+            </div>
+          </div> -->
+          
+            <section class="container">
+              <div class="col-md-12 ">
+                <!-- search bar -->
+                  <form class="form-inline my-2 my-lg-0 search" >
+                     <!-- (ngModelChange)="searchVehicules(key.value)"  -->
+                    <input type="search" 
+                   
+                    #key="ngModel" ngModel
+                    name="key" id="searchName" class="form-control col-md-12 "  
+                    placeholder="Search..." autofocus required>
+                 </form> 
+                 </div>
+            
+              <!-- List Items -->
+              <ul *ngIf="vehicules && vehicules.length != 0" class="task-items" id="list">
+                
+                <!-- List Item -->
+                <li *ngFor="vehicule of vehicules; ; let i = index" class="item type1 " (click)="onClickListElement(vehicules[i],latestEventDataofAllVehicules)">
+                  <div class="task col-md-12">
+                  <img  class="image col-md-3" [src]="makeImageUrl(vehicules[i])">
+                    
+                    <div class="col-md-9">
+                      <div class="name col-md-12" > {{vehicules[i].serialNumber}} {{vehicules[i].model}} </div>
+
+                      <div class="status col-md-12">
+                        <!-- <div class="icon off"> </div> -->
+                        <!-- <i class="icon fa  fa-arrow-down"></i> -->
+                        <mat-icon class="icon">{{getClosestDestinationOfVehicule(vehicules[i])}}</mat-icon>
+                        <div>
+                          <div class="col-md-12 text"> {{getSpeedOfVehicule(vehicules[i])+" km/h"}} </div>
+                          <div class="col-md-12">  {{getClosestDestinatOfVehiculeFrench(vehicules[i])}}</div>
+                        </div>
+                        
+                      </div>
+
+
+                       </div>
+
+                  </div>
+            
+               
+                </li>
+
+                  
+            
+              </ul>
+            
+            </section>
+        
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+    
+            <div class="leaflet-sidebar-pane fade" id="messages">
+                <h1 class="leaflet-sidebar-header">
+                    Messages
+               </h1>
+            </div>
+    
+            <div class="leaflet-sidebar-pane fade" id="profile">
+                <h1 class="leaflet-sidebar-header">
+                    Profile
+                    </h1>
+            </div>
+        </div>
+      
+</div>
+
+
+<div id="detail-menu" class="details-sidebar">
+  <form #detailForm="ngForm" (ngSubmit)="receive(detailForm)">
+    <div class="col-md-12">
+      <mat-label>Date debut</mat-label>
+      <mat-form-field>
+        <input matInput type="datetime-local" ngModel required name="dateDebut" id="dateDebut">
+      </mat-form-field>
+      </div>
+
+      <div class="col-md-12">
+        <mat-label>Date Fin</mat-label>
+        <mat-form-field>
+          <input matInput type="datetime-local" ngModel required name="dateFin" id="dateFin">
+        </mat-form-field>
+        </div>
+
+        
+        <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>1">
+          <mat-form-field>
+          
+            <mat-label>GPS</mat-label>
+            <mat-select  placeholder="select gps" ngModel matInput name="deviceId" id="deviceId" required>
+                  <ng-container *ngFor="let device of clickedVehicule?.devices">
+                    <mat-option [value]="device.deviceId">{{device.deviceIMEI}} {{device.deviceName}}</mat-option>
+                  </ng-container>
+            </mat-select>  
+            </mat-form-field>
+          </div>
+
+    
+
+          <button  [disabled]="detailForm.invalid" type="submit" data-dismiss="modal" class="btn btn-success mr-auto" >Sauvegarder</button>
+
+
+  </form>
+
+
+</div>
+</div>
