@@ -39,6 +39,14 @@ export class MapLeafletComponent  implements   AfterViewInit {
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     shadowSize:  [41, 41]
   });
+  googleHybrid: L.TileLayer;
+  googleTerrain: L.TileLayer;
+  googleStreets: L.TileLayer;
+  openStreetMap: L.TileLayer;
+  tomtom: L.TileLayer;
+  tomtomMapDefault: any;
+  tomtomMapSatellite: any;
+
   i : number;
 
   constructor(private eventDataService : EventDataService , private http: HttpClient) { }
@@ -91,7 +99,7 @@ export class MapLeafletComponent  implements   AfterViewInit {
     this.eventData = this.getLatestEventDataOfVehicule(vehicule,eventData);
     this.map.off();
     this.map.remove();
-    this.loadMap();
+    this.loadMap("default");
     
 
   }
@@ -140,11 +148,11 @@ return this.eventDatadates;
 public subscribe1(eventDatadates : EventData[]) {
 
  this.eventDatadates=eventDatadates;
- console.log(this.eventDatadates[0]);
+ this.eventData = eventDatadates;
 
- this.map.off();
+  this.map.off();
   this.map.remove();
-  this.loadMap2(this.eventDatadates);
+  this.loadMap("itenerary");
 
 }
 
@@ -192,18 +200,23 @@ public subscribe1(eventDatadates : EventData[]) {
   // find closest degree and assign corresponding icon
   public getClosestDestinationIcon(eventData : EventData ):string {
     var closestDestinationIcon = "";
-   if (eventData.heading == null || eventData.heading == 0 ||eventData.speedKPH == 0 || eventData.speedKPH == null){
+    if(eventData.heading == null || eventData.heading == 0){
+        closestDestinationIcon ='';
+    }
+  else if ( eventData.speedKPH == 0 || eventData.speedKPH == null){
      closestDestinationIcon ="local_parking"
    }
    else {
     var degree = eventData.heading;
     var closestDegree = this.degrees[0];
     closestDestinationIcon = this.icons[0];
+    console.log(closestDestinationIcon);
 
     for (var i = 0; i < this.degrees.length; i++) {
       if (Math.abs(this.degrees[i] - degree) < Math.abs(closestDegree - degree)) {
         closestDegree = this.degrees[i];
         closestDestinationIcon = this.icons[i];
+        console.log(closestDestinationIcon);
       
       }
       
@@ -217,11 +230,14 @@ public subscribe1(eventDatadates : EventData[]) {
   // assign icon to eventData
   public getIcon(eventData : EventData,):L.Icon{
     var destinationIcon = this.getClosestDestinationIcon(eventData);
+    if(destinationIcon != ""){
+       destinationIcon = "&icon="+destinationIcon; 
+    }
     var color = this.getSpeedColor(eventData);
   
     var icon = L.icon({
 
-      iconUrl: 'https://api.geoapify.com/v1/icon/?type=material&color=%'+color+'&size=small&icon='+destinationIcon+'&scaleFactor=2&apiKey=10009fb840984ed0b026de075f9be71d',
+      iconUrl: 'https://api.geoapify.com/v1/icon/?type=material&color=%'+color+'&size=small'+destinationIcon+'&scaleFactor=2&apiKey=10009fb840984ed0b026de075f9be71d',
       popupAnchor: [13, 0],
        //iconSize: [50, 70],
       iconAnchor: [15.5, 42]
@@ -251,15 +267,38 @@ public getVehiculesOfLatestEventData(eventData: EventData[]) {
 this.eventDataService.findAllVehicules(eventData).subscribe(
   (response : Vehicule[]) => {
     this.vehicules = response;
-    console.log(this.eventData);
-    console.log(this.vehicules);
   },
   (error :HttpErrorResponse) => {
     alert(error.message);
-  },()=> this.loadMap()
+  },()=> { 
+    if(this.map != null){
+      this.eventData = eventData;
+      this.map.off();
+      this.map.remove();
+    }
+    this.loadMap("default");
+  }
+
 
 );
 }
+
+//enter array of eventData keep only the eventData where speedKPH equals 0
+public getEventDataWithNoSpeed(eventData: EventData[]): EventData[] {
+  var eventDataWithNoSpeed = [];
+  for (var i = 0; i < eventData.length; i++) {
+    if (eventData[i].speedKPH == 0) {
+      eventDataWithNoSpeed.push(this.eventData[i]);
+    }
+  }
+  return eventDataWithNoSpeed;
+}
+
+//display all eventData where speedKPH equals 0
+public displayEventDataWithNoSpeed(eventData: EventData[]): void {
+    this.getVehiculesOfLatestEventData(this.getEventDataWithNoSpeed(eventData));
+}
+
 
 getSpeedOfVehicule(vehicule : Vehicule) : number{
 
@@ -296,15 +335,189 @@ makeImageUrl(vehicule: Vehicule) : string{
   }
 
 
+AddLayer(mapLayer : string){
+  // get buttons 
+  var defaultButton = document.getElementById("defaultButton");
+  var hybridButton = document.getElementById("hybridButton");
+  var terrainButton = document.getElementById("terrainButton");
+  var tomtomDefaultButton = document.getElementById("tomtomDefaultButton");
+  var tomtomHybridButton = document.getElementById("tomtomHybridButton");
 
-private loadMap(): void {
+  hybridButton.setAttribute("class", "choice-button");
+  terrainButton.setAttribute("class", "choice-button");
+  defaultButton.setAttribute("class", "choice-button");
+
+
+
+
+  // remove all layers
+ if(this.googleHybrid != null){
+  this.map.removeLayer(this.googleHybrid);
+ }
+ if(this.googleStreets != null){
+      this.map.removeLayer(this.googleStreets);
+ }
+  if(this.googleTerrain != null){
+      this.map.removeLayer(this.googleTerrain);
+  }
+  if(this.tomtomMapSatellite != null){
+
+    this.map.removeLayer(this.tomtomMapSatellite);
+  }
+  if(this.tomtomMapDefault != null){
+    this.map.removeLayer(this.tomtomMapDefault);
+  }
+
+
+  // add selected layer 
+  if (mapLayer == "terrain"){
+
+  this.googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+}).addTo(this.map);
+
+  terrainButton.setAttribute("class", "choice-button button-clicked");
+  }
+
+  else if (mapLayer == "hybrid"){
+    this.googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+  }).addTo(this.map);
+  hybridButton.setAttribute("class", "choice-button button-clicked");
+  }
+
+  else if (mapLayer == "streets"){
+  this.map.addLayer(this.googleStreets);
+  defaultButton.setAttribute("class", "choice-button button-clicked");
+  }
+  else if(mapLayer == "tomtomMapSatellite"){
+    this.tomtomMapSatellite = L.tileLayer('https://api.tomtom.com/map/1/tile/sat/main/{z}/{x}/{y}.jpg?key=1cRN2mBUhsKtt6RArfK6HJSUN3M6Gl2P', 
+    {attribution:'TOMTOM'}
+    ).addTo(this.map);
+    tomtomHybridButton.setAttribute("class", "choice-button button-clicked");
+    tomtomDefaultButton.setAttribute("class", "choice-button");
+  }
+  else if(mapLayer == "tomtomMapDefault"){
+      this.map.addLayer(this.tomtomMapDefault);
+      tomtomDefaultButton.setAttribute("class", "choice-button button-clicked");
+      tomtomHybridButton.setAttribute("class", "choice-button");
+  }
+
+
+
+
+
+  
+}
+
+hideGoogleMapsDetails(){
+  // hide element with id map-details
+  var mapDetails = document.getElementById("map-details");
+  mapDetails.style.display = "none";
+
+}
+
+displayGoogleMapsDetails(){
+  // display element with id map-details
+  var mapDetails = document.getElementById("map-details");
+  mapDetails.style.display = "block";
+
+}
+
+displayTomtomDetails(){
+  var tomtomMapDetails = document.getElementById("tomtom-map-details");
+  tomtomMapDetails.style.display = "block";
+}
+
+hideTomtomDetails(){
+  var tomtomMapDetails = document.getElementById("tomtom-map-details");
+  tomtomMapDetails.style.display = "none";
+}
+
+
+changeMapType(mapType: string){
+  console.log(mapType);
+  var streetMapButton = document.getElementById("streetMapButton");
+  var googleMapButton = document.getElementById("googleMapButton");
+  var tomtomMapButton = document.getElementById("tomtomMapButton");
+
+  var tomtomDefaultButton = document.getElementById("tomtomDefaultButton");
+  var tomtomHybridButton = document.getElementById("tomtomHybridButton");
+
+  var defaultButton = document.getElementById("defaultButton");
+  var hybridButton = document.getElementById("hybridButton");
+  var terrainButton = document.getElementById("terrainButton");
+
+  hybridButton.setAttribute("class", "choice-button");
+  terrainButton.setAttribute("class", "choice-button");
+  defaultButton.setAttribute("class", "choice-button");
+
+  streetMapButton.setAttribute("class", "choice-button");
+  googleMapButton.setAttribute("class", "choice-button");
+  tomtomMapButton.setAttribute("class", "choice-button");
+
+    // remove all layers
+ if(this.googleHybrid != null){
+  this.map.removeLayer(this.googleHybrid);
+ }
+  if(this.googleStreets != null){
+      this.map.removeLayer(this.googleStreets);
+ }
+  if(this.googleTerrain != null){
+      this.map.removeLayer(this.googleTerrain);
+  }
+  if(this.openStreetMap != null){
+      this.map.removeLayer(this.openStreetMap);
+  }
+ if(this.tomtomMapDefault != null){
+  this.map.removeLayer(this.tomtomMapDefault);
+}
+ if(this.tomtomMapSatellite != null){
+  this.map.removeLayer(this.tomtomMapSatellite);
+}
+
+// openStreetMap
+if (mapType == "openStreetMap"){
+  
+  streetMapButton.setAttribute("class", "choice-button button-clicked");
+
+    this.openStreetMap =  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(this.map);
+}
+// googleMap
+else if (mapType == "googleMap"){
+
+  googleMapButton.setAttribute("class", "choice-button button-clicked");
+  this.map.addLayer(this.googleStreets);
+  defaultButton.setAttribute("class", "choice-button button-clicked");
+
+}
+else if(mapType == "tomtomMap"){
+  tomtomMapButton.setAttribute("class", "choice-button button-clicked");
+  tomtomDefaultButton.setAttribute("class", "choice-button button-clicked");
+  tomtomHybridButton.setAttribute("class", "choice-button");
+  this.tomtomMapDefault =   L.tileLayer('https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=1cRN2mBUhsKtt6RArfK6HJSUN3M6Gl2P', 
+  {attribution:'TOMTOM'}
+  ).addTo(this.map);
+
+}
+}
+
+
+
+
+private loadMap(mode : string): void {
     // let self = this;
 
     this.map = new L.Map('map', {
       center: [this.eventData[0].latitude, this.eventData[0].longitude],
-      zoom: 5,
+      zoom: 6,
       fullscreenControl: true,
       fullscreenControlOptions: {position: 'topleft'}
+  
     });
 
     // zoom and fullscreen position (top right)
@@ -369,64 +582,38 @@ private loadMap(): void {
   }).addTo(this.map);
  
   
- // map layers
-    var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+ // map default layer : google streets
+    this.googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
       maxZoom: 20,
-      minZoom: 2,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-    }).addTo(this.map);
-
-    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-      maxZoom: 20,
-      subdomains:['mt0','mt1','mt2','mt3']
-    }).addTo(this.map);
-
-    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    }).addTo(this.map);
-
-    // var pointA = new L.LatLng(28.635308, 77.22496);
-    // var pointB = new L.LatLng(28.984461, 77.70641);
-    // var pointList = [pointA, pointB];
-    
-  //   var firstpolyline = new L.Polyline(pointList, {
-  //       color: 'red',
-  //       weight: 3,
-  //       opacity: 0.5,
-  //       smoothFactor: 1
-  //   });
-  //   firstpolyline.addTo(this.map);
-
+      subdomains:['mt0','mt1','mt2','mt3'],
   
-
-  // var control = E.Routing.control({
-  //   waypoints: pointList,
-  //   show: false,
-  //   waypointMode: 'snap',
- 
-  // }).addTo(this.map);
-   
+    }).addTo(this.map);
 
 
-
-
+let index = 0;
 for (const c of this.eventData) {
-         console.log(c);
+  
           const lat = c.latitude;
       
           const lon = c.longitude;
 
-          // var pointA = new L.LatLng(lat, lon);
-          // var pointB = new L.LatLng(lat+0.02, lon+0.025);
-          // var pointList = [pointA,pointB];
-   
-          // var control = E.Routing.control({
-          //   waypoints: pointList,
-          //   waypointMode:'snap',
-        
-          // }).addTo(this.map);
-          
+          if(mode == "itenerary"){
+
+            if(index<this.eventData.length-1){
+              var pointA = new L.LatLng(this.eventData[index].latitude, this.eventData[index].longitude);
+              var pointB = new L.LatLng(this.eventData[index+1].latitude, this.eventData[index+1].longitude);
+              var pointList = [pointA, pointB];
+              index++;
+
+              var firstpolyline = new L.Polyline(pointList, {
+                  color: 'red',
+                  weight: 3,
+                  opacity: 0.5,
+                  smoothFactor: 1
+              });
+              firstpolyline.addTo(this.map);
+          }
+        }
 
           const customOptions = {
             'maxWidth': 200, // set max-width
@@ -436,233 +623,220 @@ for (const c of this.eventData) {
 
 // popup of vehicules
 if(c.speedKPH<60){
-        const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+            const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+            marker.bindPopup(template1);
+            marker.getPopup().options.closeButton = false;
 
-          marker.on('mouseover', function() {
-            marker.bindPopup(template1,{className: 'mouseover-popup'});
-            marker.openPopup();
-          })
-          
-         
-         
-          
-        
-}else if(c.speedKPH>=60 && c.speedKPH<120){
+     
+}
+else if(c.speedKPH>=60 && c.speedKPH<120){
     const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-    const template="";
-      marker.on('mouseover', function() {
-        marker.bindPopup(template1,{className: 'mouseover-popup'});
-        marker.openPopup();
-})
 
-     
-}else{
+   
+        marker.bindPopup(template1);
+        marker.getPopup().options.closeButton = false;
+    
+}
+else{
   const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-  const template="";
-  marker.on('mouseover', function() {
-    marker.bindPopup(template1,{className: 'mouseover-popup'});
-    marker.openPopup();
-})
+    marker.bindPopup(template1);
+    marker.getPopup().options.closeButton = false;
+
+}
+
+
 }
 }
-}
-private loadMap2(eventData:EventData[]): void {
-  // let self = this;
 
-  this.map = new L.Map('map', {
-    center: [this.eventData[0].latitude, this.eventData[0].longitude],
-    zoom: 5,
-    fullscreenControl: true,
-    fullscreenControlOptions: {position: 'topleft'}
-  });
+// private loadMap2(eventData:EventData[]): void {
+//   // let self = this;
 
-  // zoom and fullscreen position (top right)
-  this.map.zoomControl.setPosition('topright');
-  L.control.fullscreen({
-    position:'topright'
-  }).addTo(this.map);
+//   this.map = new L.Map('map', {
+//     center: [this.eventData[0].latitude, this.eventData[0].longitude],
+//     zoom: 5,
+//     fullscreenControl: true,
+//     fullscreenControlOptions: {position: 'topleft'}
+//   });
+
+//   // zoom and fullscreen position (top right)
+//   this.map.zoomControl.setPosition('topright');
+//   L.control.fullscreen({
+//     position:'topright'
+//   }).addTo(this.map);
 
 
 
-  // side menu position (left)
-  let Custom = Control.extend({
-    onAdd(map: Map) {
-       var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control customcss');
-        var button = L.DomUtil.create('a', 'menuButton', container);
-            button.innerHTML = '&#9776;';
-            button.setAttribute('role', 'button');
+//   // side menu position (left)
+//   let Custom = Control.extend({
+//     onAdd(map: Map) {
+//        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control customcss');
+//         var button = L.DomUtil.create('a', 'menuButton', container);
+//             button.innerHTML = '&#9776;';
+//             button.setAttribute('role', 'button');
            
-        L.DomEvent.disableClickPropagation(button);
-        L.DomEvent.on(button, 'click', this.click);
+//         L.DomEvent.disableClickPropagation(button);
+//         L.DomEvent.on(button, 'click', this.click);
 
      
 
-        return container;
-    },
-    onRemove(map: Map) {}
-    ,
-    click() {
-      let width : string ;
-      // mobile or small screen 
-      if($('div.sidebar-wrapper.ps').width() == null){
-        width = "360px";
-      }
-      // else take the width of the sidebar and add 100 px 
-    else {
-      width  = String($('div.sidebar-wrapper.ps').width()+100)+'px';
-     }
+//         return container;
+//     },
+//     onRemove(map: Map) {}
+//     ,
+//     click() {
+//       let width : string ;
+//       // mobile or small screen 
+//       if($('div.sidebar-wrapper.ps').width() == null){
+//         width = "360px";
+//       }
+//       // else take the width of the sidebar and add 100 px 
+//     else {
+//       width  = String($('div.sidebar-wrapper.ps').width()+100)+'px';
+//      }
 
-      // open side menu
-      if(document.getElementById('side-menu').style.width == '0px' || document.getElementById('side-menu').style.width == ''){
-        console.log("here");
-      document.getElementById('side-menu').style.width=width;
-  }
-      // close side menu
-  else {
-        document.getElementById('side-menu').style.width='0px';
-        document.getElementById('detail-menu').style.width='0px';
-      }
+//       // open side menu
+//       if(document.getElementById('side-menu').style.width == '0px' || document.getElementById('side-menu').style.width == ''){
+//         console.log("here");
+//       document.getElementById('side-menu').style.width=width;
+//   }
+//       // close side menu
+//   else {
+//         document.getElementById('side-menu').style.width='0px';
+//         document.getElementById('detail-menu').style.width='0px';
+//       }
 
 
    
-    }
+//     }
 
   
-  });
+//   });
 
 
-  this.custom = new Custom({
-      position: 'topright'
+//   this.custom = new Custom({
+//       position: 'topright'
      
        
-}).addTo(this.map);
+// }).addTo(this.map);
 
 
-// map layers
-  var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    minZoom: 2,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-  }).addTo(this.map);
+// // map layers
 
-  var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
-  }).addTo(this.map);
 
-  var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-      maxZoom: 20,
-      subdomains:['mt0','mt1','mt2','mt3']
-  }).addTo(this.map);
-  // for (let i = 0; i < eventData.length-1; i++) {
+//   var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+//     maxZoom: 20,
+//     subdomains:['mt0','mt1','mt2','mt3']
+//   }).addTo(this.map);
+
+//   // for (let i = 0; i < eventData.length-1; i++) {
     
-  //  var pointA = new L.LatLng(eventData[i].latitude, eventData[i].longitude);
-  //  var pointB = new L.LatLng(eventData[i+1].latitude, eventData[i+1].latitude);
-  //  var pointList = [pointA, pointB];
+//   //  var pointA = new L.LatLng(eventData[i].latitude, eventData[i].longitude);
+//   //  var pointB = new L.LatLng(eventData[i+1].latitude, eventData[i+1].latitude);
+//   //  var pointList = [pointA, pointB];
   
-  // //  var firstpolyline = new L.Polyline(pointList, {
-  // //      color: 'red',
-  // //      weight: 3,
-  // //      opacity: 0.5,
-  // //      smoothFactor: 1
-  // //  });
-  // //  firstpolyline.addTo(this.map);
+//   // //  var firstpolyline = new L.Polyline(pointList, {
+//   // //      color: 'red',
+//   // //      weight: 3,
+//   // //      opacity: 0.5,
+//   // //      smoothFactor: 1
+//   // //  });
+//   // //  firstpolyline.addTo(this.map);
 
-  //  var control = E.Routing.control({
-  //   waypoints: pointList,
-  //   show: false,
-  //   waypointMode: 'snap',
+//   //  var control = E.Routing.control({
+//   //   waypoints: pointList,
+//   //   show: false,
+//   //   waypointMode: 'snap',
   
-  // }).addTo(this.map);
+//   // }).addTo(this.map);
     
-  // }
+//   // }
 
 
  
 
 
 
- this.i=0;
-for (const c of eventData) {
-       console.log(c);
+//  this.i=0;
+// for (const c of eventData) {
+//        console.log(c);
        
-        const lat = c.latitude;
+//         const lat = c.latitude;
     
-        const lon = c.longitude;
+//         const lon = c.longitude;
 
-        // var pointA = new L.LatLng(lat, lon);
-        // var pointB = new L.LatLng(lat+0.02, lon+0.025);
-        // var pointList = [pointA,pointB];
+//         // var pointA = new L.LatLng(lat, lon);
+//         // var pointB = new L.LatLng(lat+0.02, lon+0.025);
+//         // var pointList = [pointA,pointB];
  
-        // var control = E.Routing.control({
-        //   waypoints: pointList,
-        //   waypointMode:'snap',
+//         // var control = E.Routing.control({
+//         //   waypoints: pointList,
+//         //   waypointMode:'snap',
       
-        // }).addTo(this.map);
-        console.log(this.i);
-        console.log(eventData[this.i]);
-        if(this.i<eventData.length-1){
-        var pointA = new L.LatLng(eventData[this.i].latitude, eventData[this.i].longitude);
-        var pointB = new L.LatLng(eventData[this.i+1].latitude, eventData[this.i+1].longitude);
-        var pointList = [pointA, pointB];
-        console.log(pointList);
-       this.i++;
-        var firstpolyline = new L.Polyline(pointList, {
-            color: 'red',
-            weight: 3,
-            opacity: 0.5,
-            smoothFactor: 1
-        });
-        firstpolyline.addTo(this.map);
+//         // }).addTo(this.map);
+
+//         if(this.i<eventData.length-1){
+//         var pointA = new L.LatLng(eventData[this.i].latitude, eventData[this.i].longitude);
+//         var pointB = new L.LatLng(eventData[this.i+1].latitude, eventData[this.i+1].longitude);
+//         var pointList = [pointA, pointB];
+//         console.log(pointList);
+//        this.i++;
+//         var firstpolyline = new L.Polyline(pointList, {
+//             color: 'red',
+//             weight: 3,
+//             opacity: 0.5,
+//             smoothFactor: 1
+//         });
+//         firstpolyline.addTo(this.map);
      
-      //   var control = E.Routing.control({
-      //    waypoints: pointList,
-      //    show: false,
-      //    waypointMode: 'snap',
+//       //   var control = E.Routing.control({
+//       //    waypoints: pointList,
+//       //    show: false,
+//       //    waypointMode: 'snap',
        
-      //  }).addTo(this.map);
-      }
-        const customOptions = {
-          'maxWidth': 200, // set max-width
-          'className': 'customPopup' // name custom popup
-         }
-         const marker = L.marker([lat, lon], { icon: this.getIcon(c) }).addTo(this.map);
+//       //  }).addTo(this.map);
+//       }
+//         const customOptions = {
+//           'maxWidth': 200, // set max-width
+//           'className': 'customPopup' // name custom popup
+//          }
+//          const marker = L.marker([lat, lon], { icon: this.getIcon(c) }).addTo(this.map);
 
-// popup of vehicules
-if(c.speedKPH<60){
-      const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+// // popup of vehicules
+// if(c.speedKPH<60){
+//       const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
 
-        marker.on('mouseover', function() {
-          marker.bindPopup(template1,{className: 'mouseover-popup'});
-          marker.openPopup();
-        })
+//         marker.on('mouseover', function() {
+//           marker.bindPopup(template1,{className: 'mouseover-popup'});
+//           marker.openPopup();
+//         })
         
        
        
         
       
-}else if(c.speedKPH>=60 && c.speedKPH<120){
-  const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-  const template="";
-    marker.on('mouseover', function() {
-      marker.bindPopup(template1,{className: 'mouseover-popup'});
-      marker.openPopup();
-})
+// }else if(c.speedKPH>=60 && c.speedKPH<120){
+//   const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+//   const template="";
+//     marker.on('mouseover', function() {
+//       marker.bindPopup(template1,{className: 'mouseover-popup'});
+//       marker.openPopup();
+// })
 
    
-}else{
-const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-const template="";
-marker.on('mouseover', function() {
-  marker.bindPopup(template1,{className: 'mouseover-popup'});
-  marker.openPopup();
-})
-}
-}
-}
+// }else{
+// const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+// const template="";
+// marker.on('mouseover', function() {
+//   marker.bindPopup(template1,{className: 'mouseover-popup'});
+//   marker.openPopup();
+// })
+// }
+// }
+// }
 
 
 }
+
 
 
 

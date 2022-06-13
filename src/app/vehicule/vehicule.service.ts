@@ -38,6 +38,7 @@ export class VehiculeService {
       return this.http.delete<void>(`${this.apiServerUrl}/vehicule/supprimer/${vehiculeId}`);
     }
 
+
     public getDevices(): Observable<Device[]>{
       return this.http.get<Device[]>(`${this.apiServerUrl}/vehicule/lister_devices_pas_utilise`);
     }

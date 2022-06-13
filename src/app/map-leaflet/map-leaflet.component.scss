@@ -397,8 +397,154 @@ ul.task-items {
   
 }
 
+detail-menu-button{
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  background:rgb(255, 255, 255);
+  margin-top: 10px;
+  margin-right: 5px;
+  
+  padding: 0 1.6rem;
+  border-radius:.7rem;
+}
+
+.buttons{
+  margin: 0 auto; 
+  margin-top: 10px;
+
+   text-align: center;
+}
+
+.space {
+  width: 10px;
+  height: auto;
+  display: inline-block;
+}
+
 .material-icons {
 font-size: 21px;
+}
+.header{
+  color: black;
+  font-family: Roboto, 'Noto Naskh Arabic UI', Arial, sans-serif;
+  white-space: normal;
+  --noto-ff: "Noto Naskh Arabic UI";
+  padding : 20px 20px 0px 20px;
+  margin-bottom: 0px;
+  padding: 20px 20px 0px 20px;
+
+}
+.header-title{
+  color: #3c4043;
+  font-family: "Google Sans",sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 8px;
+  background: transparent;
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    list-style: none;
+    margin: 0;
+    outline: 0;
+    overflow: visible;
+    padding: 0;
+    vertical-align: baseline;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    margin-top:0px;
+    font-size: larger;
+    font-weight: unset;
+}
+.layer-list{
+  margin-left: 10px;
+    margin-right: -12px;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    justify-content: space-evenly;
+    color: black;
+    --noto-ff: "Noto Naskh Arabic UI";
+}
+.item-layer{
+  margin-bottom: 16px;
+    margin-top: 4px;
+
+}
+.choice-button{
+  color: inherit;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    height: 68px;
+    line-height: 0;
+    text-align: center;
+    width: 72px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    list-style: none;
+    margin: 0;
+    outline: 0;
+    overflow: visible;
+    padding: 0;
+    vertical-align: baseline;
+    appearance: auto;
+    writing-mode: horizontal-tb !important;
+}
+.satellite{
+  background-image: url("../../assets/img/ic_satellite.png");
+   
+}
+.default{
+  background-image: url("../../assets/img/ic_default.png");
+}
+.terrain{
+  background-image: url("../../assets/img/ic_terrain.png");
+}
+.streetMap{
+  background-image:  url("../../assets/img/Openstreetmap_logo.png") ;
+}
+.googleMap{
+  background-image: url("../../assets/img/Google_Maps_icon.png");
+}
+.tomtomMap{
+  background-image: url("../../assets/img/tomtom.jpg");
+}
+
+.layer-image{
+
+  background-position: center;
+    background-size: 48px 48px;
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+}
+.choice-label{
+  color: #70757a;
+    cursor: pointer;
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 4px;
+}
+.button-clicked .choice-label, .choice-button:hover .choice-label {
+  color: #1a73e8;
+}
+
+
+.button-clicked .layer-image {
+  background-clip: content-box;
+  border: 2px solid #1a73e8;
+  border-radius: 8px;
+  padding: 3px;
+
 }
 
 
@@ -406,3 +552,14 @@ font-size: 21px;
 
 
 
+
+ul.layer-list {
+  list-style: none;
+}
+.li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.main-panel .header {
+   margin-bottom: 0px; 
+}
