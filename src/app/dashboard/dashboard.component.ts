@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
+import { VehiculeService } from 'app/vehicule/vehicule.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,8 +9,8 @@ import * as Chartist from 'chartist';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
-  constructor() { }
+  nombreVehicules : number;
+  constructor(private vehiculeService: VehiculeService) { }
   startAnimationForLineChart(chart){
       let seq: any, delays: any, durations: any;
       seq = 0;
@@ -65,7 +67,18 @@ export class DashboardComponent implements OnInit {
 
       seq2 = 0;
   };
+  countVehiculesDisponibles():void{
+    this.vehiculeService.countVehiculesDisponible().subscribe(
+      (response : number) => {
+        this.nombreVehicules = response;
+      },
+      (error :HttpErrorResponse) => {
+        alert(error.message);
+      });
+
+  }
   ngOnInit() {
+    this.countVehiculesDisponibles();
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
       const dataDailySalesChart: any = {
