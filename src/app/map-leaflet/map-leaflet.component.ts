@@ -38,6 +38,13 @@ export class MapLeafletComponent  implements   AfterViewInit {
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     shadowSize:  [41, 41]
   });
+  googleHybrid: L.TileLayer;
+  googleTerrain: L.TileLayer;
+  googleStreets: L.TileLayer;
+  openStreetMap: L.TileLayer;
+  tomtom: L.TileLayer;
+  tomtomMapDefault: any;
+  tomtomMapSatellite: any;
 
 
   constructor(private eventDataService : EventDataService , private http: HttpClient) { }
@@ -217,15 +224,38 @@ public getVehiculesOfLatestEventData(eventData: EventData[]) {
 this.eventDataService.findAllVehicules(eventData).subscribe(
   (response : Vehicule[]) => {
     this.vehicules = response;
-    console.log(this.eventData);
-    console.log(this.vehicules);
   },
   (error :HttpErrorResponse) => {
     alert(error.message);
-  },()=> this.loadMap()
+  },()=> { 
+    if(this.map != null){
+      this.eventData = eventData;
+      this.map.off();
+      this.map.remove();
+    }
+    this.loadMap()
+  }
+
 
 );
 }
+
+//enter array of eventData keep only the eventData where speedKPH equals 0
+public getEventDataWithNoSpeed(eventData: EventData[]): EventData[] {
+  var eventDataWithNoSpeed = [];
+  for (var i = 0; i < eventData.length; i++) {
+    if (eventData[i].speedKPH == 0) {
+      eventDataWithNoSpeed.push(this.eventData[i]);
+    }
+  }
+  return eventDataWithNoSpeed;
+}
+
+//display all eventData where speedKPH equals 0
+public displayEventDataWithNoSpeed(eventData: EventData[]): void {
+    this.getVehiculesOfLatestEventData(this.getEventDataWithNoSpeed(eventData));
+}
+
 
 getSpeedOfVehicule(vehicule : Vehicule) : number{
 
@@ -262,15 +292,189 @@ makeImageUrl(vehicule: Vehicule) : string{
   }
 
 
+AddLayer(mapLayer : string){
+  // get buttons 
+  var defaultButton = document.getElementById("defaultButton");
+  var hybridButton = document.getElementById("hybridButton");
+  var terrainButton = document.getElementById("terrainButton");
+  var tomtomDefaultButton = document.getElementById("tomtomDefaultButton");
+  var tomtomHybridButton = document.getElementById("tomtomHybridButton");
+
+  hybridButton.setAttribute("class", "choice-button");
+  terrainButton.setAttribute("class", "choice-button");
+  defaultButton.setAttribute("class", "choice-button");
+
+
+
+
+  // remove all layers
+ if(this.googleHybrid != null){
+  this.map.removeLayer(this.googleHybrid);
+ }
+ if(this.googleStreets != null){
+      this.map.removeLayer(this.googleStreets);
+ }
+  if(this.googleTerrain != null){
+      this.map.removeLayer(this.googleTerrain);
+  }
+  if(this.tomtomMapSatellite != null){
+
+    this.map.removeLayer(this.tomtomMapSatellite);
+  }
+  if(this.tomtomMapDefault != null){
+    this.map.removeLayer(this.tomtomMapDefault);
+  }
+
+
+  // add selected layer 
+  if (mapLayer == "terrain"){
+
+  this.googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+}).addTo(this.map);
+
+  terrainButton.setAttribute("class", "choice-button button-clicked");
+  }
+
+  else if (mapLayer == "hybrid"){
+    this.googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+  }).addTo(this.map);
+  hybridButton.setAttribute("class", "choice-button button-clicked");
+  }
+
+  else if (mapLayer == "streets"){
+  this.map.addLayer(this.googleStreets);
+  defaultButton.setAttribute("class", "choice-button button-clicked");
+  }
+  else if(mapLayer == "tomtomMapSatellite"){
+    this.tomtomMapSatellite = L.tileLayer('https://api.tomtom.com/map/1/tile/sat/main/{z}/{x}/{y}.jpg?key=1cRN2mBUhsKtt6RArfK6HJSUN3M6Gl2P', 
+    {attribution:'TOMTOM'}
+    ).addTo(this.map);
+    tomtomHybridButton.setAttribute("class", "choice-button button-clicked");
+    tomtomDefaultButton.setAttribute("class", "choice-button");
+  }
+  else if(mapLayer == "tomtomMapDefault"){
+      this.map.addLayer(this.tomtomMapDefault);
+      tomtomDefaultButton.setAttribute("class", "choice-button button-clicked");
+      tomtomHybridButton.setAttribute("class", "choice-button");
+  }
+
+
+
+
+
+  
+}
+
+hideGoogleMapsDetails(){
+  // hide element with id map-details
+  var mapDetails = document.getElementById("map-details");
+  mapDetails.style.display = "none";
+
+}
+
+displayGoogleMapsDetails(){
+  // display element with id map-details
+  var mapDetails = document.getElementById("map-details");
+  mapDetails.style.display = "block";
+
+}
+
+displayTomtomDetails(){
+  var tomtomMapDetails = document.getElementById("tomtom-map-details");
+  tomtomMapDetails.style.display = "block";
+}
+
+hideTomtomDetails(){
+  var tomtomMapDetails = document.getElementById("tomtom-map-details");
+  tomtomMapDetails.style.display = "none";
+}
+
+
+changeMapType(mapType: string){
+  console.log(mapType);
+  var streetMapButton = document.getElementById("streetMapButton");
+  var googleMapButton = document.getElementById("googleMapButton");
+  var tomtomMapButton = document.getElementById("tomtomMapButton");
+
+  var tomtomDefaultButton = document.getElementById("tomtomDefaultButton");
+  var tomtomHybridButton = document.getElementById("tomtomHybridButton");
+
+  var defaultButton = document.getElementById("defaultButton");
+  var hybridButton = document.getElementById("hybridButton");
+  var terrainButton = document.getElementById("terrainButton");
+
+  hybridButton.setAttribute("class", "choice-button");
+  terrainButton.setAttribute("class", "choice-button");
+  defaultButton.setAttribute("class", "choice-button");
+
+  streetMapButton.setAttribute("class", "choice-button");
+  googleMapButton.setAttribute("class", "choice-button");
+  tomtomMapButton.setAttribute("class", "choice-button");
+
+    // remove all layers
+ if(this.googleHybrid != null){
+  this.map.removeLayer(this.googleHybrid);
+ }
+  if(this.googleStreets != null){
+      this.map.removeLayer(this.googleStreets);
+ }
+  if(this.googleTerrain != null){
+      this.map.removeLayer(this.googleTerrain);
+  }
+  if(this.openStreetMap != null){
+      this.map.removeLayer(this.openStreetMap);
+  }
+ if(this.tomtomMapDefault != null){
+  this.map.removeLayer(this.tomtomMapDefault);
+}
+ if(this.tomtomMapSatellite != null){
+  this.map.removeLayer(this.tomtomMapSatellite);
+}
+
+// openStreetMap
+if (mapType == "openStreetMap"){
+  
+  streetMapButton.setAttribute("class", "choice-button button-clicked");
+
+    this.openStreetMap =  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(this.map);
+}
+// googleMap
+else if (mapType == "googleMap"){
+
+  googleMapButton.setAttribute("class", "choice-button button-clicked");
+  this.map.addLayer(this.googleStreets);
+  defaultButton.setAttribute("class", "choice-button button-clicked");
+
+}
+else if(mapType == "tomtomMap"){
+  tomtomMapButton.setAttribute("class", "choice-button button-clicked");
+  tomtomDefaultButton.setAttribute("class", "choice-button button-clicked");
+  tomtomHybridButton.setAttribute("class", "choice-button");
+  this.tomtomMapDefault =   L.tileLayer('https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=1cRN2mBUhsKtt6RArfK6HJSUN3M6Gl2P', 
+  {attribution:'TOMTOM'}
+  ).addTo(this.map);
+
+}
+}
+
+
+
 
 private loadMap(): void {
     // let self = this;
 
     this.map = new L.Map('map', {
       center: [this.eventData[0].latitude, this.eventData[0].longitude],
-      zoom: 5,
+      zoom: 6,
       fullscreenControl: true,
       fullscreenControlOptions: {position: 'topleft'}
+  
     });
 
     // zoom and fullscreen position (top right)
@@ -335,22 +539,19 @@ private loadMap(): void {
   }).addTo(this.map);
  
   
- // map layers
-    var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+ // map default layer : google streets
+    this.googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
       maxZoom: 20,
-      minZoom: 2,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      subdomains:['mt0','mt1','mt2','mt3'],
+  
     }).addTo(this.map);
 
-    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-      maxZoom: 20,
-      subdomains:['mt0','mt1','mt2','mt3']
-    }).addTo(this.map);
 
-    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-        maxZoom: 20,
-        subdomains:['mt0','mt1','mt2','mt3']
-    }).addTo(this.map);
+
+
+//     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+// }).addTo(this.map);
 
     // var pointA = new L.LatLng(28.635308, 77.22496);
     // var pointB = new L.LatLng(28.984461, 77.70641);
@@ -402,40 +603,37 @@ for (const c of this.eventData) {
 
 // popup of vehicules
 if(c.speedKPH<60){
-        const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-
-          marker.on('mouseover', function() {
-            marker.bindPopup(template1,{className: 'mouseover-popup'});
-            marker.openPopup();
-          })
-          
-         
-         
-          
-        
-}else if(c.speedKPH>=60 && c.speedKPH<120){
-    const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-    const template="";
-      marker.on('mouseover', function() {
-        marker.bindPopup(template1,{className: 'mouseover-popup'});
-        marker.openPopup();
-})
+            const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+            marker.bindPopup(template1);
+            marker.getPopup().options.closeButton = false;
 
      
-}else{
+}
+else if(c.speedKPH>=60 && c.speedKPH<120){
+    const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+
+      marker.on('mouseover', function() {
+        marker.bindPopup(template1,{className: 'mouseover-popup'});
+        marker.getPopup().options.closeButton = false;
+})     
+}
+else{
   const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
-  const template="";
+
   marker.on('mouseover', function() {
     marker.bindPopup(template1,{className: 'mouseover-popup'});
-    marker.openPopup();
+    marker.getPopup().options.closeButton = false;
 })
 }
+
+
 }
 }
 
 
 
 }
+
 
 
 

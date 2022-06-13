@@ -5,18 +5,18 @@
 
     <div class="leaflet-sidebar-tabs">
         <ul class="nav nav-tabs" role="tablist"> <!-- top aligned tabs -->
-            <li><a class="nav-link" href="#home" role="tab" aria-controls="home" data-toggle="tab"><i class="fa fa-bars"></i></a></li>
-            <li><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-envelope"></i></a></li>
-            <li><a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i></a></li>
+            <li ><a class="nav-link" href="#home" role="tab" aria-controls="home" data-toggle="tab"><i class="fa fa-list"></i></a></li>
+            <li><a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-map"></i></a></li>
+           
         </ul>
 
     </div>
 
         <!-- Tab panes -->
         <div class=" tab-content leaflet-sidebar-content">
-            <div  role="tabpanel" class="leaflet-sidebar-pane fade active in  " id="home">
+            <div  role="tabpanel" class="leaflet-sidebar-pane fade active in show " id="home">
                 <h1 class="leaflet-sidebar-header">
-                   home
+                  Unités mobiles
          </h1>
 
       
@@ -35,16 +35,16 @@
           </div> -->
           
             <section class="container">
-              <div class="col-md-12 ">
-                <!-- search bar -->
-                  <form class="form-inline my-2 my-lg-0 search" >
-                     <!-- (ngModelChange)="searchVehicules(key.value)"  -->
-                    <input type="search" 
-                   
-                    #key="ngModel" ngModel
-                    name="key" id="searchName" class="form-control col-md-12 "  
-                    placeholder="Search..." autofocus required>
-                 </form> 
+              
+                 <div class="col-md-12 buttons">
+                 <button (click)="getVehiculesOfLatestEventData(latestEventDataofAllVehicules)" type="button" mat-raised-button class="detail-menu-button mr-auto">
+                  tous 
+                 </button>
+                 <div class="space">
+                </div>
+                 <button  (click)="displayEventDataWithNoSpeed(latestEventDataofAllVehicules)" type="button" mat-raised-button class="detail-menu-button">
+                  garées
+                 </button>
                  </div>
             
               <!-- List Items -->
@@ -98,15 +98,157 @@
     
             <div class="leaflet-sidebar-pane fade" id="messages">
                 <h1 class="leaflet-sidebar-header">
-                    Messages
+                    Carte
                </h1>
+               <header class="header">
+               <h2 class ="header-title">Type de carte </h2>
+              </header>
+               <ul class="layer-list">
+
+                <li  class="item-layer">
+                  <button  type="button" 
+                  id="googleMapButton"
+                   class="choice-button button-clicked"  
+                  (click)="changeMapType('googleMap'); displayGoogleMapsDetails() ; hideTomtomDetails()"
+                  >
+                    <div class="layer-image  googleMap">
+
+                    </div>
+                    <label class="choice-label">
+               Google maps
+                    </label>
+
+                  </button>
+                </li>
+
+                      <li  class="item-layer">
+                        <button  id="streetMapButton" class="choice-button"  
+                        (click)="changeMapType('openStreetMap'); hideGoogleMapsDetails() ; hideTomtomDetails()"
+                        >
+                          <div class="layer-image  streetMap">
+      
+                          </div>
+                          <label class="choice-label">
+                     OpenStreetMap
+                          </label>
+      
+                        </button>
+                      </li>
+                      <li  class="item-layer">
+                        <button  type="button" 
+                        id="tomtomMapButton"
+                         class="choice-button"  
+                        (click)="changeMapType('tomtomMap');  hideGoogleMapsDetails() ; displayTomtomDetails()">
+                          <div class="layer-image  tomtomMap">
+            
+                          </div>
+                          <label class="choice-label">
+                      Tomtom
+                          </label>
+            
+                        </button>
+                      </li>
+
+               </ul>
+
+           
+
+
+               <div  id="map-details" style="display: block;">
+               <header class="header">
+                 <h2 class="header-title">Détails de la carte</h2>
+                 </header>
+              
+               <ul class="layer-list"> 
+
+                <li class="item-layer">
+                  <button  id="defaultButton" role="radio" class="choice-button button-clicked"  
+                  (click)="AddLayer('streets')">
+                    <div class="layer-image default">
+
+                    </div>
+                    <label class="choice-label">
+               Par défaut
+                    </label>
+
+                  </button>
+
+                </li>
+
+                 <li class="item-layer">
+                   <button id="hybridButton" role="radio" class="choice-button "  (click)="AddLayer('hybrid')">
+                     <div class="layer-image satellite">
+
+                     </div>
+                     <label class="choice-label">
+                        Satellite
+                     </label>
+
+                   </button>
+
+                 </li>
+
+
+                 <li class="item-layer">
+                  <button id="terrainButton" class="choice-button "  (click)="AddLayer('terrain')">
+                    <div class="layer-image terrain">
+
+                    </div>
+                    <label class="choice-label">
+                       Terrain
+                    </label>
+
+                  </button>
+
+                </li>
+                 
+
+                
+
+
+               </ul>
+             </div>
+             <div  id="tomtom-map-details" style="display: none;">
+              <header class="header">
+                <h2 class="header-title">Détails de la carte </h2>
+                </header>
+             
+              <ul class="layer-list"> 
+
+               <li class="item-layer">
+                 <button  id="tomtomDefaultButton" role="radio" class="choice-button button-clicked"  
+                 (click)="AddLayer('tomtomMapDefault')">
+                   <div class="layer-image default">
+
+                   </div>
+                   <label class="choice-label">
+              Par défaut
+                   </label>
+
+                 </button>
+
+               </li>
+
+                <li class="item-layer">
+                  <button id="tomtomHybridButton" role="radio" class="choice-button "  (click)="AddLayer('tomtomMapSatellite')">
+                    <div class="layer-image satellite">
+
+                    </div>
+                    <label class="choice-label">
+                       Satellite
+                    </label>
+
+                  </button>
+
+                </li>
+              </ul>
             </div>
+            </div>
+
+          
+           </div>
     
-            <div class="leaflet-sidebar-pane fade" id="profile">
-                <h1 class="leaflet-sidebar-header">
-                    Profile
-                    </h1>
-            </div>
+
         </div>
       
 </div>
@@ -150,4 +292,4 @@
 
 
 </div>
-</div>
+
