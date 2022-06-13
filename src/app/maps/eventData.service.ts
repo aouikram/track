@@ -30,4 +30,8 @@ export class EventDataService {
       return this.http.post<Vehicule[]>(`${this.apiServerUrl}/eventData/trouver_vehicules`, eventDataList);
     }
 
+    public getEventDataBeetwenDates(id : number, timestamp1 : number, timestamp2 : number ): Observable<EventData[]> {
+      return this.http.get<EventData[]>(`${this.apiServerUrl}/eventData/lister_eventData_beetwen_dates/${id}/${timestamp1}/${timestamp2}`);
+    }
+
 }

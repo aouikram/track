@@ -25,6 +25,7 @@ export class MapLeafletComponent  implements   AfterViewInit {
   vehicules: Vehicule[] = [];
   latestEventDataofAllVehicules : EventData[] = [];
   eventData: EventData[] = [];
+  eventDatadates: EventData[] = [];
   destinations : string[]  = ["north","north_east","north_west","west","south_west","east","south_east","south","north"];
   destinationsFrench : string[] = ["Nord","Nord-Est","Nord-Ouest","Ouest","Sud-Ouest","Est","Sud-Est","Sud","Nord"];
   icons : string[]  = ["arrow-up&iconType=awesome","call_made","call_missed","arrow-left&iconType=awesome","call_received","arrow-right&iconType=awesome","trending_down","arrow-down&iconType=awesome","arrow-up&iconType=awesome"];
@@ -38,12 +39,13 @@ export class MapLeafletComponent  implements   AfterViewInit {
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     shadowSize:  [41, 41]
   });
-
+  i : number;
 
   constructor(private eventDataService : EventDataService , private http: HttpClient) { }
 
 
   ngAfterViewInit(): void { 
+    L.Icon.Default.imagePath = "assets/leaflet/" 
     this.getLatestEventData(); 
   }
   
@@ -109,10 +111,42 @@ export class MapLeafletComponent  implements   AfterViewInit {
 
   public receive(detailForm : NgForm): void {
     console.log(detailForm.form.controls);
-   console.log(detailForm.form.controls.dateDebut.value);
+   console.log(Date.parse(detailForm.form.controls.dateDebut.value)/1000);
+   console.log(Date.parse(detailForm.form.controls.dateFin.value)/1000);
    console.log(this.clickedVehicule);
+   console.log(detailForm.form.controls.deviceId.value);
+   this.eventDatadates=this.getEventDataBeetwenDates(detailForm.form.controls.deviceId.value,Date.parse(detailForm.form.controls.dateDebut.value)/1000,Date.parse(detailForm.form.controls.dateFin.value)/1000);
+   console.log(this.eventDatadates);
   }
+public getEventDataBeetwenDates(id:number,timestamp1:number,timestamp2:number): EventData[] {
+  
+  this.eventDataService.getEventDataBeetwenDates(id,timestamp1,timestamp2).subscribe(
+    (response : EventData[]) => {
+      this.eventDatadates = response;
+      console.log(this.eventDatadates);
+      
+    },
+    (error :HttpErrorResponse) => {
+      alert(error.message);
+    },
+    ()=>this.subscribe1(this.eventDatadates)
+    );
+    console.log(this.eventDatadates);
+return this.eventDatadates;
 
+
+}
+
+public subscribe1(eventDatadates : EventData[]) {
+
+ this.eventDatadates=eventDatadates;
+ console.log(this.eventDatadates[0]);
+
+ this.map.off();
+  this.map.remove();
+  this.loadMap2(this.eventDatadates);
+
+}
 
 
   
@@ -432,7 +466,200 @@ if(c.speedKPH<60){
 }
 }
 }
+private loadMap2(eventData:EventData[]): void {
+  // let self = this;
 
+  this.map = new L.Map('map', {
+    center: [this.eventData[0].latitude, this.eventData[0].longitude],
+    zoom: 5,
+    fullscreenControl: true,
+    fullscreenControlOptions: {position: 'topleft'}
+  });
+
+  // zoom and fullscreen position (top right)
+  this.map.zoomControl.setPosition('topright');
+  L.control.fullscreen({
+    position:'topright'
+  }).addTo(this.map);
+
+
+
+  // side menu position (left)
+  let Custom = Control.extend({
+    onAdd(map: Map) {
+       var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control customcss');
+        var button = L.DomUtil.create('a', 'menuButton', container);
+            button.innerHTML = '&#9776;';
+            button.setAttribute('role', 'button');
+           
+        L.DomEvent.disableClickPropagation(button);
+        L.DomEvent.on(button, 'click', this.click);
+
+     
+
+        return container;
+    },
+    onRemove(map: Map) {}
+    ,
+    click() {
+      let width : string ;
+      // mobile or small screen 
+      if($('div.sidebar-wrapper.ps').width() == null){
+        width = "360px";
+      }
+      // else take the width of the sidebar and add 100 px 
+    else {
+      width  = String($('div.sidebar-wrapper.ps').width()+100)+'px';
+     }
+
+      // open side menu
+      if(document.getElementById('side-menu').style.width == '0px' || document.getElementById('side-menu').style.width == ''){
+        console.log("here");
+      document.getElementById('side-menu').style.width=width;
+  }
+      // close side menu
+  else {
+        document.getElementById('side-menu').style.width='0px';
+        document.getElementById('detail-menu').style.width='0px';
+      }
+
+
+   
+    }
+
+  
+  });
+
+
+  this.custom = new Custom({
+      position: 'topright'
+     
+       
+}).addTo(this.map);
+
+
+// map layers
+  var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    minZoom: 2,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+  }).addTo(this.map);
+
+  var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom: 20,
+    subdomains:['mt0','mt1','mt2','mt3']
+  }).addTo(this.map);
+
+  var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+  }).addTo(this.map);
+  // for (let i = 0; i < eventData.length-1; i++) {
+    
+  //  var pointA = new L.LatLng(eventData[i].latitude, eventData[i].longitude);
+  //  var pointB = new L.LatLng(eventData[i+1].latitude, eventData[i+1].latitude);
+  //  var pointList = [pointA, pointB];
+  
+  // //  var firstpolyline = new L.Polyline(pointList, {
+  // //      color: 'red',
+  // //      weight: 3,
+  // //      opacity: 0.5,
+  // //      smoothFactor: 1
+  // //  });
+  // //  firstpolyline.addTo(this.map);
+
+  //  var control = E.Routing.control({
+  //   waypoints: pointList,
+  //   show: false,
+  //   waypointMode: 'snap',
+  
+  // }).addTo(this.map);
+    
+  // }
+
+
+ 
+
+
+
+ this.i=0;
+for (const c of eventData) {
+       console.log(c);
+       
+        const lat = c.latitude;
+    
+        const lon = c.longitude;
+
+        // var pointA = new L.LatLng(lat, lon);
+        // var pointB = new L.LatLng(lat+0.02, lon+0.025);
+        // var pointList = [pointA,pointB];
+ 
+        // var control = E.Routing.control({
+        //   waypoints: pointList,
+        //   waypointMode:'snap',
+      
+        // }).addTo(this.map);
+        console.log(this.i);
+        console.log(eventData[this.i]);
+        if(this.i<eventData.length-1){
+        var pointA = new L.LatLng(eventData[this.i].latitude, eventData[this.i].longitude);
+        var pointB = new L.LatLng(eventData[this.i+1].latitude, eventData[this.i+1].longitude);
+        var pointList = [pointA, pointB];
+        console.log(pointList);
+       this.i++;
+        var firstpolyline = new L.Polyline(pointList, {
+            color: 'red',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        });
+        firstpolyline.addTo(this.map);
+     
+      //   var control = E.Routing.control({
+      //    waypoints: pointList,
+      //    show: false,
+      //    waypointMode: 'snap',
+       
+      //  }).addTo(this.map);
+      }
+        const customOptions = {
+          'maxWidth': 200, // set max-width
+          'className': 'customPopup' // name custom popup
+         }
+         const marker = L.marker([lat, lon], { icon: this.getIcon(c) }).addTo(this.map);
+
+// popup of vehicules
+if(c.speedKPH<60){
+      const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-success subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+
+        marker.on('mouseover', function() {
+          marker.bindPopup(template1,{className: 'mouseover-popup'});
+          marker.openPopup();
+        })
+        
+       
+       
+        
+      
+}else if(c.speedKPH>=60 && c.speedKPH<120){
+  const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-warning subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+  const template="";
+    marker.on('mouseover', function() {
+      marker.bindPopup(template1,{className: 'mouseover-popup'});
+      marker.openPopup();
+})
+
+   
+}else{
+const template1="<b><b><b>City: </b></b> "+c.city+"<br><b><b>Speed: </b></b>"+'<br><b><b>Speed: <span _ngcontent-mno-c22="" class="text1 text-danger subtitle-2">'+c.speedKPH+" km/h</span></b></b>"+"<br><b><b>Fuel Level: </b></b>"+c.fuelLevel+"<br><b><b>Battery Level: </b></b>"+c.batteryLevel;
+const template="";
+marker.on('mouseover', function() {
+  marker.bindPopup(template1,{className: 'mouseover-popup'});
+  marker.openPopup();
+})
+}
+}
+}
 
 
 }

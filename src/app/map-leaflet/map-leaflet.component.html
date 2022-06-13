@@ -1,4 +1,7 @@
-<div id="map" class="map-container" leaflet ></div>
+<div id="map" class="map-container" leaflet >
+
+  
+</div>
 
 <div class="row">
 <div id="side-menu" class="leaflet-sidebar">
@@ -143,7 +146,7 @@
 
     
 
-          <button  [disabled]="detailForm.invalid" type="submit" data-dismiss="modal" class="btn btn-success mr-auto" >Sauvegarder</button>
+          <button  [disabled]="detailForm.invalid" type="submit" data-dismiss="modal" (click)="receive(detailForm)" class="btn btn-success mr-auto" >Sauvegarder</button>
 
 
   </form>

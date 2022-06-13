@@ -62,6 +62,10 @@ export class VehiculeService {
       return this.http.put<Vehicule>(`${this.apiServerUrl}/vehicule/modifier_boitiers/${vehiculeId}`, devices);
     }
 
+    public countVehiculesDisponible(): Observable<number>{
+      return this.http.get<number>(`${this.apiServerUrl}/vehicule/countvehiculesdisponible`);
+    }
+
 
     
 }
