@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DeviceService } from 'app/device/device.service';
 import { on } from 'events';
+import { AuthenticationService } from 'app/services/authentication.service';
 
 
 
@@ -40,10 +41,10 @@ export class VehiculeComponent implements OnInit{
 
 
   availableDevices:Device[]=[];
-  addedDevices: Device[]=[];
+  addedDevices: Device[] = [];
+ 
 
-
- constructor(private vehiculeService: VehiculeService , private deviceService : DeviceService) {}
+ constructor(private vehiculeService: VehiculeService , private deviceService : DeviceService, public authService:AuthenticationService) {}
 
   ngOnInit(): void {
          this.getVehicules();

@@ -1,5 +1,12 @@
-<div class="wrapper"> 
+ <!-- <div><app-login></app-login></div>-->
+ 
+ <!-- <div *ngIf="authService.isAdmin()==false && authService.isUser()==false " class="wrapper">  
+    <div class="main-panel">
+    <router-outlet></router-outlet>
+    </div>
+</div> -->
 
+<div class="wrapper"> 
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="./assets/img/sidebar-1.jpg">
         <app-sidebar></app-sidebar>
         <div class="sidebar-background" style="background-image: url(./assets/img/sidebar-3.jpg)"></div>
@@ -10,6 +17,7 @@
         <div *ngIf="isMaps('maps')">
         </div>
    </div> 
+  
     <!-- <div class="fixed-plugin">
         <div class="dropdown show-dropdown open show">
             <a href="#" data-toggle="dropdown" aria-expanded="true">
@@ -146,3 +154,5 @@
 </div>
 
 </div> -->
+
+

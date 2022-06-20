@@ -292,21 +292,21 @@ this.eventDataService.findAllVehicules(eventData).subscribe(
 
 //enter array of eventData keep only the eventData where speedKPH equals 0
 public getEventDataWithNoSpeed(eventData: EventData[]): EventData[] {
+  console.log(eventData);
   var eventDataWithNoSpeed = [];
   for (var i = 0; i < eventData.length; i++) {
     if (eventData[i].speedKPH == 0) {
-      eventDataWithNoSpeed.push(this.eventData[i]);
+
+      eventDataWithNoSpeed.push(eventData[i]);
     }
+
   }
+
   return eventDataWithNoSpeed;
 }
 
 //display all eventData where speedKPH equals 0
 public displayEventDataWithNoSpeed(eventData: EventData[]): void {
-  console.log(eventData);
-  console.log(this.getEventDataWithNoSpeed(eventData));
-  
-
     this.getVehiculesOfLatestEventData(this.getEventDataWithNoSpeed(eventData));
 }
 

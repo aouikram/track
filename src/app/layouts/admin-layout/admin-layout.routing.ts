@@ -14,6 +14,7 @@ import { ConducteurComponent } from 'app/conducteur/conducteur.component';
 import { DeviceComponent } from 'app/device/device.component';
 import { MapLeafletComponent } from 'app/map-leaflet/map-leaflet.component';
 import { UtilisateurComponent } from 'app/utilisateur/utilisateur.component';
+import { LoginComponent } from 'app/login/login.component';
 export const AdminLayoutRoutes: Routes = [
     // {
     //   path: '',
@@ -71,5 +72,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'conducteur',        component: ConducteurComponent },
     { path: 'device',        component: DeviceComponent },
     { path: 'utilisateur',        component: UtilisateurComponent },
-    { path: 'map-leaflet',        component: MapLeafletComponent }
+    { path: 'map-leaflet',        component: MapLeafletComponent },
+    // { path: 'login',        component: LoginComponent },
+    { path: '',        component: DashboardComponent }
 ];

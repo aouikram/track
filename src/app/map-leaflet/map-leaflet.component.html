@@ -276,7 +276,7 @@
         </div>
 
         
-        <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>1">
+        <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>=1">
           <mat-form-field>
           
             <mat-label>GPS</mat-label>
@@ -287,6 +287,9 @@
             </mat-select>  
             </mat-form-field>
           </div>
+          <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length<1">
+            <h4>pas de device ==> pas de trajet</h4>
+            </div>
 
     
 
@@ -297,4 +300,3 @@
 
 
 </div>
-
