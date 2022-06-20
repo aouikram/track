@@ -111,14 +111,23 @@ export class MapLeafletComponent  implements   AfterViewInit {
 
   // changes the width of the detail menu
   public openDetailMenu(): void {
-
+     
     let width = String($('div#side-menu.leaflet-sidebar').width()-100)+'px'
     let left = document.getElementById('side-menu').style.width;
   
       if(document.getElementById('detail-menu').style.width == '0px' || document.getElementById('detail-menu').style.width == '' ){
+        document.getElementById('detail-menu').style.top = "0";
         document.getElementById('detail-menu').style.left=left;
         document.getElementById('detail-menu').style.width=width;
+        document.getElementById('detail-menu').style.position="fixed";
     }
+
+    document.getElementById('icon-close-menu').style.visibility="hidden";
+  }
+
+ public closeSideMenu(): void {
+    document.getElementById('side-menu').style.width='0px';
+    this.closeDetailMenu();
   }
 
   public receive(detailForm : NgForm): void {
@@ -160,6 +169,11 @@ public subscribe1(eventDatadates : EventData[]) {
 
 }
 
+public closeDetailMenu(): void {
+  document.getElementById('detail-menu').style.width = "0px";
+  document.getElementById('detail-menu').style.position='unset';
+  document.getElementById('icon-close-menu').style.visibility="visible";
+}
 
   
   // find closest degree and assign destination 
@@ -525,7 +539,7 @@ else if(mapType == "tomtomMap"){
 
 
 private loadMap(mode : string): void {
-    // let self = this;
+     let self = this;
 
     this.map = new L.Map('map', {
       center: [this.eventData[0].latitude, this.eventData[0].longitude],
@@ -566,20 +580,18 @@ private loadMap(mode : string): void {
         if($('div.sidebar-wrapper.ps').width() == null){
           width = "360px";
         }
-        // else take the width of the sidebar and add 100 px 
+        // else find the width of the sidebar and add 100 px 
       else {
         width  = String($('div.sidebar-wrapper.ps').width()+100)+'px';
        }
 
         // open side menu
         if(document.getElementById('side-menu').style.width == '0px' || document.getElementById('side-menu').style.width == ''){
-          console.log("here");
         document.getElementById('side-menu').style.width=width;
     }
-        // close side menu
+        // close side menu and detail menu if open
     else {
-          document.getElementById('side-menu').style.width='0px';
-          document.getElementById('detail-menu').style.width='0px';
+          self.closeSideMenu();
         }
  
 

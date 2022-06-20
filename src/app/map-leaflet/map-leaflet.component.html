@@ -19,7 +19,8 @@
         <div class=" tab-content leaflet-sidebar-content">
             <div  role="tabpanel" class="leaflet-sidebar-pane fade active in show " id="home">
                 <h1 class="leaflet-sidebar-header">
-                  Unités mobiles
+                  Unités mobiles 
+                  <i id="icon-close-menu" (click)="closeSideMenu()"class="fa fa-angle-left position-absolute end-0 icon clickable"></i>
          </h1>
 
       
@@ -260,6 +261,9 @@
 
 
 <div id="detail-menu" class="details-sidebar">
+  <h1 class="leaflet-sidebar-header">
+    <i class="fa fa-angle-left position-absolute end-0 icon clickable" (click)="closeDetailMenu()"></i>
+</h1>
   <form #detailForm="ngForm" (ngSubmit)="receive(detailForm)">
     <div class="col-md-12">
       <mat-label>Date debut</mat-label>

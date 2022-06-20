@@ -101,15 +101,18 @@ body {
 .details-sidebar{
   height:100%;
   width:0;
-  position: fixed;
-  top:0;
+  position: absolute;
+  // top:0;
   left:0;
   background-color:rgb(255, 255, 255);
   opacity: 1;
   overflow-x:hidden;
   /* padding-top:60px; */
-  transition: 0.5s;
+  // transition: 0.5s;
+  // box-sizing: border-box;
   z-index: 2000;
+padding: 10px 20px;
+
 }
 ::-webkit-scrollbar {
   display: none;
@@ -189,17 +192,7 @@ overflow-x: hidden;
 
 overflow-y: auto; }
 
-/* .leaflet-sidebar-left .leaflet-sidebar-content {
-  left: 40px;
-  right: 0; }
-.leaflet-sidebar-right .leaflet-sidebar-content {
-  left: 0;
-  right: 40px; }
-.leaflet-sidebar.collapsed > .leaflet-sidebar-content {
-  overflow-y: hidden; } */
 
-/* .collapsed > .leaflet-sidebar-content {
-overflow-y: hidden; } */
 
 .leaflet-sidebar-pane {
 display: none;
@@ -547,8 +540,10 @@ font-size: 21px;
 
 }
 
-
-
+.icon{
+  padding: 10px;
+ 
+}
 
 
 
