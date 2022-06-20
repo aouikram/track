@@ -309,7 +309,7 @@ export class AffectationComponent implements OnInit{
     this.displayedColumns = Object.keys(data[0]);
 
     console.log(Object.keys(data[0]));
-    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Action']
+    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin']
     this.initialData = this.newInputData;
     return true;
         }

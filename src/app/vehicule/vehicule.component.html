@@ -1,3 +1,4 @@
+<div *ngIf="authService.isAdmin()">
 <div class="main-content" id="main-container">  
   
 <!--list vehicules-->
@@ -876,6 +877,85 @@
              </div>
              
              <div class="modal-body">
+<!--*********************************************************************-->
+<section class="lis-bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            
+        
+        <div class="row">
+            <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="price-table">
+                    <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                        <article class="article">
+                            <div class="col-md-3" class="article__content">
+                               
+                            </div>
+                        </article>
+                    </div>
+                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                        <ul class="list-unstyled lis-line-height-3">
+                            <li> <b><b>Identification:</b></b>   {{viewVehicule?.vehiculeId}}</li>
+                            <li><b><b>Fabricant</b></b>   {{viewVehicule?.manufacturer}}</li>
+                            <li><b><b></b></b>   </li>
+                            <li><b><b> Modèle:</b></b>   {{viewVehicule?.model}}</li>
+                            <li><b><b>Plaque d'immatriculation:</b></b>   {{viewVehicule?.licensePlate}}</li>
+                            <li><b><b>Numéro de châssis:</b></b>  {{viewVehicule?.serialNumber}} </li>
+                            <ul class="list-unstyled lis-line-height-3" *ngFor="let vehiculeDevice of viewVehicule?.devices">
+                            <li ><b><b>Boitier GPS:</b></b>   {{vehiculeDevice?.deviceName}} {{vehiculeDevice?.deviceIMEI}}</li>
+                            </ul>
+                            <ul *ngIf="viewVehicule?.devices.length == 0">
+                                <li><b><b>Boitier GPS:</b></b>   Aucun boitier GPS affecté</li>
+                                </ul>
+
+                        </ul> 
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<section class="lis-bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            
+        
+        <div class="row">
+            <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="price-table">
+                    <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                        <article class="article">
+                            <div class="col-md-3" class="article__content">
+                                <h6>Modèle</h6>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                        <ul class="list-unstyled lis-line-height-3">
+                            <li> <b><b>Type d'équipement: </b></b>  {{viewVehicule?.equipmentType}}</li>
+                            <li><b><b>Année du modèle:</b></b>  {{viewVehicule?.modelYear}}</li>
+                            <li><b><b>Couleur:</b></b>   {{viewVehicule?.color}}</li>
+                            <li><b><b>Nombre de sièges</b></b>   Nombre de sièges: {{viewVehicule?.numberOfSeats}}</li>
+                            <li><b><b>Nombre de portes: </b></b>  {{viewVehicule?.numberOfDoors}}</li>
+                           
+                        </ul> 
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!--*********************************************************************-->
+
+<!--
+                
                    <div class="row col-md-12">
                        <div class="row col-md-4 engine">
                         <table>
@@ -909,9 +989,9 @@
                      <div class="col-md-3">
                          <p >Plaque d'immatriculation: {{viewVehicule?.licensePlate}}</p>
                           </div> -->
-   
+   <!--
                        </div>
-
+                    -->
 
                           <!-- <div class="row">
                            <div class="col-md-5">
@@ -924,7 +1004,7 @@
                           </div>
                      </div> -->
                      
-                        <div class=" col-md-4 engine">
+                        <!--<div class=" col-md-4 engine">
                            
                          <table>
                           
@@ -950,7 +1030,7 @@
                                    </td>
                                </tr>
                                <!-- display <tr> if vehicule.devices is empty -->
-                                   <tr *ngIf="viewVehicule?.devices.length == 0">
+                                <!--   <tr *ngIf="viewVehicule?.devices.length == 0">
                                        <td>
                                            <p >Aucun boitier GPS affecté</p>
                                        </td>
@@ -958,10 +1038,11 @@
                           
                            </div>
                       </div>
-                     
+                    -->
                     
                   
-              
+                   
+                    
                   <div class="row col-md-12">
                    <div class="row col-md-4 engine">
                         <table>
@@ -1066,5 +1147,5 @@
        </div>
      </div>
    
-         
+</div>
        

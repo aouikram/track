@@ -3,3 +3,7 @@
     z-index: 1000;
   }
 
+  .modal-backdrop {
+    /* bug fix - no overlay */    
+    display: none;    
+}
