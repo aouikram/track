@@ -1,0 +1,236 @@
+.modal-body
+{
+    background-color: #FFFFFF;
+}
+
+.modal-content
+{
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    background-color: transparent;
+}
+
+.modal-footer
+{
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    -moz-border-radius-bottomright: 6px;
+}
+
+.btnadd{
+    background-color: #ffffff;
+    border-color: #f8f8f8;
+    color: #000000;
+    border-radius: 0.25rem;
+}
+.modal-header
+{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    background-color: #0D8A72;
+    color: #FBFDFF;
+}
+.card-title{
+  color: #FBFDFF;
+  font-size: 20px;
+}
+h4 {
+    font-weight: 400;
+  }
+.block{
+    border-bottom:1px dashed rgba(0,0,0,.2); 
+    flex-basis: 100%;
+    padding: 25px 50px;
+  }
+.engine{
+    border-bottom: none;
+    border-top: 1px dashed rgba(0,0,0,.2);
+    border-right: 1px dashed rgba(0,0,0,.2);
+
+    flex-basis: 100%;
+    padding: 25px 50px;
+
+}
+
+.heading{
+    border-bottom: 1px solid #000;
+    width:100%;
+}
+.space {
+    width: 10px;
+    height: auto;
+    display: inline-block;
+  }
+
+.verticalspace{
+  width: auto ;
+  height : 10px;
+  display: inline-block;
+}
+.spaceheader {
+    width: 50px;
+    height: auto;
+    display: inline-block;
+  }
+.buttons{
+    margin: 0 auto; 
+
+     text-align: center;
+}
+
+hr {
+    margin-top: 1rem;
+    border: 0;
+    border-top: 1px solid rgb(85, 82, 82);
+  }
+hr:after {
+    background: #fff;
+    padding: 0 4px;
+    position: relative;
+    top: -13px;
+}
+.clickable {
+    cursor: pointer;
+  }
+.modal__details {
+    text-align: center;
+    background: linear-gradient(to right bottom, #1179C3, hsl(0, 0%, 100%));
+    box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, 0.3);
+    color: hsl(0, 0%, 100%);
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid hsla(0, 0%, 100%, .4);
+  }
+.modal__description {
+    margin-top: 2rem;
+  
+    font-size: 1.6rem;
+    font-style: italic;
+  }
+
+.titleView{
+    color: hsl(0, 0%, 100%);
+}
+.view
+  {
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      -webkit-border-top-left-radius: 6px;
+      -webkit-border-top-right-radius: 6px;
+      -moz-border-radius-topleft: 6px;
+      -moz-border-radius-topright: 6px;
+      background-color: #1179C3;
+  }
+  .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+    padding: 2px 4px;
+  }
+
+  .search{
+    background:#fff;
+    
+    padding: 0 1.6rem;
+    border-radius:.7rem;
+    
+  }
+
+  .delete{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    background-color: #ef6454;
+    color: #FBFDFF;
+}
+.tdName{
+  color: #5b5d63;
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: 0.64px;
+  margin-left: 12px;
+}
+
+
+.heading {
+
+  font-weight: bold;
+}
+.cycle-tab-container {
+   margin:  30px  auto; 
+   width: 600px; 
+  /* padding: 20px; */
+  box-shadow: 0 0 10px 2px #ddd;
+}
+
+ .cycle-tab-container a {
+  color: #173649;
+  font-size: 16px;
+  font-family: roboto;
+  text-align: center;
+}
+
+.tab-pane {
+    
+    margin: 0px 30px 0px  auto;
+    max-width: 100%;
+}
+
+
+
+.fade.active {
+  opacity: 1;
+} 
+
+.cycle-tab-item {
+  width: 180px; 
+}
+
+.cycle-tab-item:after {
+  display:block;
+  content: '';
+  border-bottom: solid 3px orange;  
+  transform: scaleX(0);  
+  transition: transform 0ms ease-out;
+}
+.cycle-tab-item.active:after { 
+  transform: scaleX(1);
+  transform-origin:  0% 50%; 
+  transition: transform 5000ms ease-in;
+}
+
+
+.nav-link:focus,
+.nav-link:hover,
+.cycle-tab-item.active a {
+  border-color: transparent !important;
+  color: orange;
+} 
+
+.addDeviceContainer{
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 0 10px 2px #ddd;
+}
+.deviceformfield{
+  text-align: center;
+}
+.addForm{
+  margin: 0px auto;
+}
+
+.identification{
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 0 10px 2px #ddd;
+}

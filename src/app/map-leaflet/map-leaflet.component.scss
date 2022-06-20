@@ -1,0 +1,565 @@
+ 
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+
+
+$colorLight: #fafafa;
+$colorDark: #252529;
+$colorLightGrey: #eeeeee;
+$colorGrey: #bdbdbd;
+
+$colorWhite: #fff;
+
+$colorDarkGreen: #2e7d32;
+$colorGreen: #4caf50;
+$colorLightGreen: #4dd0e1;
+
+$color1: #9575cd;
+$color2: #7986cb;
+$color2: #f48fb1;
+$color3: #9575cd;
+$color4: #4FC3F7;
+
+$colorWarning: #FFA000;
+$colorOff: #BF360C;
+
+$layoutWidth: 980px;
+$standardPadding: 20px;
+$layoutBorderRadius: 5px;
+
+$sizeDefault: 1em;
+$sizeLarge: 1.25em;
+$sizeXLarge: 1.5em;
+$sizeXXLarge: 2em;
+
+$col1Width: 240px;
+$col2Width: 145px;
+$col3Width: 190px;
+$col4Width: 150px;
+$col5Width: 170px;
+$col6Width: 30px;
+
+ * {
+  margin: 0;
+  padding: 0
+}
+
+html {
+  height: 100%
+}
+
+body,
+html,
+#map {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+
+}
+
+.customPopup .leaflet-popup-content-wrapper,
+.customPopup .leaflet-popup-tip {
+  background: #000;
+  color: #fff;
+}
+  b{
+    font-weight: bold bolder;
+    font-size: xx-large;
+
+  }
+  p{
+    color: red;
+  } 
+
+  .customcss a{
+    font-size: 20px;
+    cursor: pointer;
+}
+.menuButton{
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.leaflet-sidebar{
+  height:100%;
+  width:0;
+  position: fixed;
+  top:0;
+  left:0;
+  background-color:rgb(255, 255, 255);
+  opacity: 1;
+  overflow-x:hidden;
+  /* padding-top:60px; */
+  transition: 0.5s;
+  z-index: 2000;
+}
+.details-sidebar{
+  height:100%;
+  width:0;
+  position: fixed;
+  top:0;
+  left:0;
+  background-color:rgb(255, 255, 255);
+  opacity: 1;
+  overflow-x:hidden;
+  /* padding-top:60px; */
+  transition: 0.5s;
+  z-index: 2000;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.clickable {
+  cursor: pointer;
+}
+/* .leaflet-sidebar a{
+  padding: 10px 10px 10px 30px;
+  text-decoration: none;
+  font-size:22px;
+  color:#ccc;
+  display:block;
+  transition:0.3s;
+}
+.leaflet-sidebar a:hover{
+  color:#fff;
+} */
+.leaflet-sidebar-tabs {
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: #fff;
+}
+
+#main{
+  transition:margin-left 0.5s;
+  padding:20px;
+  overflow: hidden;
+  width:100%;
+}
+.leaflet-sidebar-tabs, .leaflet-sidebar-tabs > ul {
+  position: absolute;
+  width: 40px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none; }
+  .leaflet-sidebar-tabs > li, .leaflet-sidebar-tabs > ul > li {
+    width: 100%;
+    height: 40px;
+    color: #333;
+    font-size: 12pt;
+    overflow: hidden;
+    transition: all 80ms; }
+    .leaflet-sidebar-tabs > li:hover, .leaflet-sidebar-tabs > ul > li:hover {
+      color: #000;
+      background-color: #eee; }
+    .leaflet-sidebar-tabs > li.active, .leaflet-sidebar-tabs > ul > li.active {
+      color: #fff;
+      background-color: #0074d9; }
+    .leaflet-sidebar-tabs > li.disabled, .leaflet-sidebar-tabs > ul > li.disabled {
+      color: rgba(51, 51, 51, 0.4); }
+      .leaflet-sidebar-tabs > li.disabled:hover, .leaflet-sidebar-tabs > ul > li.disabled:hover {
+        background: transparent; }
+      .leaflet-sidebar-tabs > li.disabled > a, .leaflet-sidebar-tabs > ul > li.disabled > a {
+        cursor: default; }
+    .leaflet-sidebar-tabs > li > a, .leaflet-sidebar-tabs > ul > li > a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      line-height: 40px;
+      color: inherit;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer; }
+.leaflet-sidebar-tabs > ul + ul {
+  bottom: 0; }
+
+.leaflet-sidebar-content {
+/* position: absolute; */
+top: 0;
+bottom: 0;
+padding-left: 40px;
+padding-top: 0px;
+background-color: rgba(255, 255, 255, 0.95);
+overflow-x: hidden;
+
+overflow-y: auto; }
+
+/* .leaflet-sidebar-left .leaflet-sidebar-content {
+  left: 40px;
+  right: 0; }
+.leaflet-sidebar-right .leaflet-sidebar-content {
+  left: 0;
+  right: 40px; }
+.leaflet-sidebar.collapsed > .leaflet-sidebar-content {
+  overflow-y: hidden; } */
+
+/* .collapsed > .leaflet-sidebar-content {
+overflow-y: hidden; } */
+
+.leaflet-sidebar-pane {
+display: none;
+left: 0;
+right: 0;
+box-sizing: border-box;
+padding: 10px 20px; }
+
+.leaflet-sidebar-pane.active {
+  display: block; }
+
+
+.leaflet-sidebar-header {
+margin: -10px -20px 0;
+height: 40px;
+padding: 0 20px;
+line-height: 40px;
+font-size: 14.4pt;
+color: #fff;
+background-color: #0074d9; }
+.leaflet-sidebar-right .leaflet-sidebar-header {
+  padding-left: 40px; }
+
+/* .leaflet-sidebar-close {
+position: absolute;
+top: 0;
+width: 40px;
+height: 40px;
+text-align: center;
+cursor: pointer; }
+.leaflet-sidebar-left .leaflet-sidebar-close {
+  right: 0; }
+.leaflet-sidebar-right .leaflet-sidebar-close {
+  left: 0; } */
+
+.leaflet-sidebar {
+box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65); }
+@media (min-width: 768px) {
+  .leaflet-sidebar {
+     border-radius: 0px; } 
+    .leaflet-sidebar.leaflet-touch {
+      border: 2px solid rgba(0, 0, 0, 0.2); } }
+
+/* .leaflet-sidebar-left.leaflet-touch {
+box-shadow: none;
+border-right: 2px solid rgba(0, 0, 0, 0.2); } */
+
+.text-gray {
+  color: #aaa;
+}
+
+.container {
+		
+	margin: 0 auto;
+	margin-top: 20px;
+
+}
+
+header {
+	display: flex;
+	align-items: center;	
+	font-size: 1em;
+	font-weight: 600;
+	color: #bdbdbd;
+	padding: 20px;
+	box-sizing: border-box;
+	user-select: none;
+	text-align: center;
+	
+	.button-col {
+		width: 145px;
+		text-align: left;
+	}
+
+	.status-col {
+		width: 145px
+	}
+
+
+
+
+	
+	.icon-col {
+		width: 30px;
+		text-align: right;
+	}
+
+	button {
+		color: #bdbdbd;
+		outline: none;
+		border: none;
+		background: darken(#eeeeee, 10%);
+		padding: 20px/2 20px;
+		border-radius: 5px/2;
+		margin-right: 20px;
+		font-size: 1em;
+		font-weight: 600;
+
+		&:hover {
+			cursor: pointer;
+			background: lighten(#252529, 10%);
+		}
+	}
+
+
+
+	.icon-col {
+		padding-right: 20px;
+	}
+}
+
+ul.task-items {
+	li.item {
+		display: flex;
+		align-items: center;		
+		margin: $standardPadding 0;
+		padding: $standardPadding;
+		background: $colorWhite;
+		border-radius: $layoutBorderRadius;
+		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+
+		&.type1 .task {
+			.icon {
+				background: #fff;
+			}
+		}
+		
+
+		
+		
+		
+
+
+		.task {
+			display: flex;
+			align-items: center;
+			// width: $col1Width;
+
+			.icon {
+				background: $colorGrey;
+				// width: 50px;
+				height: 50px;
+				border-radius: $layoutBorderRadius;
+			}
+
+			.name {
+				margin-left: $standardPadding;
+				height: 25px;
+				border-radius: $layoutBorderRadius * 3;
+			}
+		}
+
+		.status {
+			display: flex;
+			align-items: center;
+			font-size: $sizeDefault;
+			color: #000000;
+			// width: $col2Width;
+			margin-left: $standardPadding*1.5;
+			
+			.icon {
+				// background: $colorDarkGreen;
+				margin-right: calc($standardPadding/2);
+				// width: 14px;
+				height: 14px;
+				border-radius: 50%;
+				
+				&.risk {
+					background: red;	
+				}
+				
+				&.warning {
+					background: $colorWarning;	
+				}
+				
+				&.off {
+					background: $colorOff;	
+				}
+			}
+		}
+
+	
+
+
+
+
+	}
+}
+.search{
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  background:rgb(255, 255, 255);
+  
+  padding: 0 1.6rem;
+  border-radius:.7rem;
+  
+}
+
+detail-menu-button{
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  background:rgb(255, 255, 255);
+  margin-top: 10px;
+  margin-right: 5px;
+  
+  padding: 0 1.6rem;
+  border-radius:.7rem;
+}
+
+.buttons{
+  margin: 0 auto; 
+  margin-top: 10px;
+
+   text-align: center;
+}
+
+.space {
+  width: 10px;
+  height: auto;
+  display: inline-block;
+}
+
+.material-icons {
+font-size: 21px;
+}
+.header{
+  color: black;
+  font-family: Roboto, 'Noto Naskh Arabic UI', Arial, sans-serif;
+  white-space: normal;
+  --noto-ff: "Noto Naskh Arabic UI";
+  padding : 20px 20px 0px 20px;
+  margin-bottom: 0px;
+  padding: 20px 20px 0px 20px;
+
+}
+.header-title{
+  color: #3c4043;
+  font-family: "Google Sans",sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 8px;
+  background: transparent;
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    list-style: none;
+    margin: 0;
+    outline: 0;
+    overflow: visible;
+    padding: 0;
+    vertical-align: baseline;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    margin-top:0px;
+    font-size: larger;
+    font-weight: unset;
+}
+.layer-list{
+  margin-left: 10px;
+    margin-right: -12px;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    justify-content: space-evenly;
+    color: black;
+    --noto-ff: "Noto Naskh Arabic UI";
+}
+.item-layer{
+  margin-bottom: 16px;
+    margin-top: 4px;
+
+}
+.choice-button{
+  color: inherit;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    height: 68px;
+    line-height: 0;
+    text-align: center;
+    width: 72px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    list-style: none;
+    margin: 0;
+    outline: 0;
+    overflow: visible;
+    padding: 0;
+    vertical-align: baseline;
+    appearance: auto;
+    writing-mode: horizontal-tb !important;
+}
+.satellite{
+  background-image: url("../../assets/img/ic_satellite.png");
+   
+}
+.default{
+  background-image: url("../../assets/img/ic_default.png");
+}
+.terrain{
+  background-image: url("../../assets/img/ic_terrain.png");
+}
+.streetMap{
+  background-image:  url("../../assets/img/Openstreetmap_logo.png") ;
+}
+.googleMap{
+  background-image: url("../../assets/img/Google_Maps_icon.png");
+}
+.tomtomMap{
+  background-image: url("../../assets/img/tomtom.jpg");
+}
+
+.layer-image{
+
+  background-position: center;
+    background-size: 48px 48px;
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+}
+.choice-label{
+  color: #70757a;
+    cursor: pointer;
+    display: block;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 4px;
+}
+.button-clicked .choice-label, .choice-button:hover .choice-label {
+  color: #1a73e8;
+}
+
+
+.button-clicked .layer-image {
+  background-clip: content-box;
+  border: 2px solid #1a73e8;
+  border-radius: 8px;
+  padding: 3px;
+
+}
+
+
+
+
+
+
+
+ul.layer-list {
+  list-style: none;
+}
+.li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.main-panel .header {
+   margin-bottom: 0px; 
+}

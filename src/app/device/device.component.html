@@ -1,0 +1,361 @@
+<div class="main-content" id="main-container">  
+  
+<!--list devices-->
+       <div class="container-fluid">
+           <div class="row">
+               <div class="col-md-12">
+                   <div class="card">
+                           <div class="card-header card-header-info">
+                               <div class="row">
+                                    <div class="col-md-4">
+                                   <h4 class="card-title p-3">Liste des boitiers GPS</h4> 
+                                    </div>
+                                    <div class="col-md-5 p-3">
+                                         <!-- search bar -->
+                                           <form class="form-inline my-2 my-lg-0 search" >
+                                             <input type="search" (ngModelChange)="searchDevices(key.value)" 
+                                             #key="ngModel" ngModel
+                                             name="key" id="searchName" class="form-control col-md-12 "  
+                                             placeholder="Search..." autofocus required>
+                                          </form> 
+                                          </div>
+                                   <!--add device-->
+                                   <div class="col-md-3 float-right p-3">
+                                       <button (click)="onOpenModal('add')" mat-raised-button class=" btnadd pull-right">
+                                           <i class="fa fa-plus"></i> Ajouter Boitier GPS
+                                           </button>
+                                   </div>
+                               </div>
+                            </div>
+                       <div class="card-body">
+                           <div class="table-responsive">
+                               <table class="table ">
+                                   <thead class=" text-primary">
+                                       <th>
+                                            Id
+                                       </th>
+                                       <th>
+                                            Identification
+                                       </th>
+                                       <th>
+                                            Nom
+                                       </th>
+                                       <th>
+                                            firmwareVersion
+                                       </th>
+                                       <th>
+                                            lastStartTime
+                                       </th>
+                                       <th>
+                                            rtcTime
+                                       </th>
+                                       <th>
+                                            powerVoltage
+                                       </th>
+                                       <th>
+                                            Boitier GPS IMEI
+                                       </th>
+                                       <th>
+                                            externalStorage
+                                       </th>
+                                       <th>
+                                            batteryVoltage
+                                       </th>
+                                   </thead>
+                                   <tbody>
+                                       <tr class="clickable" (click)="onOpenModal('view', device)" *ngFor="let device of devices | paginate: {itemsPerPage: tableSize,
+                                           currentPage: page,
+                                           totalItems: count};   let i = index">
+                                           <td class="tdName">
+                                             {{device?.deviceId}}
+                                           </td>
+                                           <td class="tdName">
+                                            {{device?.identification}}
+                                          </td>
+                                            <td class="tdName">
+                                             {{device?.deviceName}}
+                                            </td>
+
+                                           <td class="tdName">
+                                             {{device?.firmwareVersion}}
+                                           </td>
+                                           <td class="tdName">
+                                             {{device?.lastStartTime}}
+                                           </td>
+                                           <td class="tdName">
+                                             {{device?.rtcTime}}
+                                           </td>
+                                           <td class="tdName">
+                                             {{device?.powerVoltage}}
+                                           </td>
+                                           <td class="tdName">
+                                            {{device?.deviceIMEI}}
+                                          </td>
+                                          <td class="tdName">
+                                            {{device?.externalStorage}}
+                                          </td>
+                                          <td class="tdName">
+                                            {{device?.batteryVoltage}}
+                                          </td>
+                                           <td>
+                                               <div class="card-body">
+                                                   <div class="btn-group btn-group-sm">
+                                                    <a (click)="$event.stopPropagation();  onOpenModal( 'edit' , device)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                    <a (click)="$event.stopPropagation(); onOpenModal( 'delete', device)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+                                                       <!-- <a (click)="$event.stopPropagation(); onOpenModal( 'edit' , device)"  class="btn btn-primary tooltips" data-placement="top"  data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                                                       <a (click)="$event.stopPropagation(); onOpenModal( 'delete', device)"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>  -->
+                                                   </div>
+                                                   </div>
+                                           </td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               <div class="d-flex justify-content-center">
+                                   <pagination-controls
+                                     previousLabel="Précédent"
+                                     nextLabel="Suivant"
+                                     responsive="true"
+                                     (pageChange)="onTableDataChange($event)"
+                                   >
+                                   </pagination-controls>
+                                 </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>          
+           </div>
+       </div>
+   
+   <!--Add device modal-->
+   <div class="modal fade col-md-12"  id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-xl"  role="document">
+           <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title">Ajouter Boîtier GPS</h5>
+           </div>       
+           <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddDevice(addForm)">
+                   <div class="row block">
+                       <div class="col-md-3">
+                         <mat-form-field class="example-full-width">
+                             <input type="text" ngModel name="identification" matInput id="Fabricant" placeholder="Identification" required >
+                           </mat-form-field>
+                       </div>
+                       <div class="col-md-3">
+                           <mat-form-field class="example-full-width">
+                             <input matInput type="text" ngModel name="deviceName"  id="model" placeholder="Nom" required >
+                           </mat-form-field>
+                       </div>
+                       <div class="col-md-3">
+                           <mat-form-field class="example-full-width">
+                             <input matInput type="text" ngModel name="firmwareVersion"  id="licensePlate" placeholder="firmwareVersion" required >
+                           </mat-form-field>
+                       </div>
+                       <div class="col-md-3">
+                           <mat-form-field class="example-full-width">
+                             <input matInput type="date" ngModel name="lastStartTime"  id="serialNumber" placeholder="lastStartTime" required >
+                           </mat-form-field>
+                       </div>
+                       <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="date" ngModel name="rtcTime"  id="serialNumber" placeholder="rtcTime" required  >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="powerVoltage"  id="serialNumber" placeholder="powerVoltage" required >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="deviceIMEI"  id="serialNumber" placeholder="deviceIMEI"  required >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="externalStorage"  id="serialNumber" placeholder="externalStorage" required >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="text" ngModel name="batteryVoltage"  id="serialNumber" placeholder="batteryVoltage" required >
+                        </mat-form-field>
+                    </div>
+                   </div>
+                   
+                   <div class="modal-footer col-md-12">
+                       <a data-dismiss="modal" type="button" id="add-device-form" class="btn btn-warning pull-right col-md-2" >Annuler</a>
+                       <button [disabled]="addForm.invalid" type="submit" class="btn btn-success pull-right col-md-2">Sauvegarder</button>
+                    </div>
+                   <div class="clearfix"></div>
+               </form>
+           </div>
+   
+       </div>
+       </div>
+   </div>
+   
+   <!--Edit device modal-->
+   <div class="modal fade col-md-12" id="updateDeviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceEditModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title" id="updateDeviceModalLabel">Modifier votre Boîtier GPS </h5> 
+             </div>
+             <div class="modal-body">
+                <form #editForm="ngForm">
+                   <input type="hidden" ngModel="{{editDevice?.deviceId}}" name="deviceId" class="form-control" id="deviceId" >
+                   <div class="row block">
+   
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                      <input matInput type="text" ngModel="{{editDevice?.identification}}" name="identification" placeholder="Identification" class="form-control" id="model" >
+                   </mat-form-field>
+                   </div>
+                <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                  <input matInput type="text" ngModel="{{editDevice?.deviceName}}" name="deviceName" placeholder="Nom" class="form-control" id="model" >
+               </mat-form-field>
+               </div>
+               <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                  <input matInput type="text" ngModel="{{editDevice?.firmwareVersion}}" name="firmwareVersion" placeholder="firmwareVersion" class="form-control" id="licensePlate" >
+                 </mat-form-field>
+               </div>
+               <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                  <input matInput type="date" ngModel="{{editDevice?.lastStartTime}}" name="lastStartTime" placeholder="lastStartTime" class="form-control" id="serialNumber"  >
+               </mat-form-field>
+               </div>
+               <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                <input matInput type="date" ngModel="{{editDevice?.rtcTime}}" name="rtcTime" placeholder="rtcTime" class="form-control" id="serialNumber"  >
+             </mat-form-field>
+             </div>
+             <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                <input matInput type="text" ngModel="{{editDevice?.powerVoltage}}" name="powerVoltage" placeholder="powerVoltage" class="form-control" id="serialNumber"  >
+             </mat-form-field>
+             </div>
+             <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                <input matInput type="text" ngModel="{{editDevice?.deviceIMEI}}" name="deviceIMEI" placeholder="deviceIMEI" class="form-control" id="serialNumber"  >
+             </mat-form-field>
+             </div>
+             <div class="col-md-3">
+                <mat-form-field class="example-full-width">
+                <input matInput type="text" ngModel="{{editDevice?.externalStorage}}" name="externalStorage" placeholder="externalStorage" class="form-control" id="serialNumber"  >
+             </mat-form-field>
+             </div>
+              <div class="col-md-3">
+                  <mat-form-field class="example-full-width">
+                  <input matInput type="text" ngModel="{{editDevice?.batteryVoltage}}" name="batteryVoltage" placeholder="batteryVoltage" class="form-control" id="serialNumber"  >
+               </mat-form-field>
+               </div>
+   
+               </div>
+               
+                   <div class="modal-footer col-md-12">
+                      <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2" >Annuler</button>
+                      <button  (click)="onUpdateDevice(editForm.value)"data-dismiss="modal" class="btn btn-success pull-right col-md-2" >Sauvegarder</button>
+                   </div>
+                   <div class="clearfix"></div>
+                </form>
+             </div>
+          </div>
+       </div>
+     </div>
+   
+   <!-- Delete Modal -->
+     <div class="modal fade" id="deleteDeviceModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header delete">
+                <h5 class="modal-title titleView" id="deleteModelLabel">Supprimer Device</h5>
+               
+             </div>
+             <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le Boîtier GPS {{deleteDevice?.deviceName}} avec l'identification {{deleteDevice?.deviceId}}  avec le numéro d'IMEI' {{deleteDevice?.deviceIMEI}} ?</p>
+                <div class="col-md-12 buttons">
+                 
+                   <button (click)="onDeleteDevice(deleteDevice!.deviceId)" class="btn btn1 btn-danger mr-auto" data-dismiss="modal">Oui</button>
+                   <div class="space">
+                   </div>
+                   <button type="button" class="btn " data-dismiss="modal">Non</button>
+                    
+                </div>
+             </div>
+          </div>
+   
+       </div>
+     </div>
+   
+   <!-- view device modal -->
+   <div class="modal fade col-md-12" id="viewDeviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceViewModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+             <div class="modal-header view">
+                <h5 class="modal-title titleView" id="updateDeviceModalLabel">Votre Boîtier GPS </h5> 
+             </div>
+             
+             <div class="modal-body">
+                   <div class="row block">
+                       <div class="row">
+   
+                       <div class="col-md-2">
+                           <p>Identification: {{viewDevice?.deviceId}} </p>
+                        
+                       </div>
+                     <div class="col-md-3"> 
+                         <p>Nom: {{viewDevice?.deviceName}}</p>
+                    </div>
+                     <div class="col-md-2">
+                         <p>firmwareVersion: {{viewDevice?.firmwareVersion}}</p>
+                     </div>
+                     <div class="col-md-3">
+                         <p >lastStartTime: {{viewDevice?.lastStartTime}}</p>
+                          </div>
+   
+                       </div>
+                          <div class="row">
+                           <div class="col-md-5">
+                               <p >rtcTime: {{viewDevice?.rtcTime}} </p>
+                            
+                           </div>
+                           <div class="col-md-7">
+                              <p >powerVoltage {{viewDevice?.powerVoltage}} </p>
+                           
+                          </div>
+                          <div class="col-md-7">
+                            <p >deviceIMEI {{viewDevice?.deviceIMEI}} </p>
+                         
+                        </div>
+                        <div class="col-md-7">
+                            <p >externalStorage {{viewDevice?.externalStorage}} </p>
+                         
+                        </div>
+                        <div class="col-md-7">
+                            <p >batteryVoltage {{viewDevice?.batteryVoltage}} </p>
+                         
+                        </div>
+                     </div>
+                     </div>
+                    
+           
+                     
+                    
+                  
+              
+                
+                   <div class="modal-footer col-md-12">
+                      <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
+                               </div>
+                   <div class="clearfix"></div>
+             
+             </div>
+          </div>
+       </div>
+    </div>
+
+         
+       
