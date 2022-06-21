@@ -19,6 +19,7 @@ export class AffectationComponent implements OnInit{
 
     affectations: Affectation[] = [];
     displayedColumns: string[];
+    columns: string[];
     dataSource = [];
     groupingColumn;
     reducedGroups = [];
@@ -309,7 +310,8 @@ export class AffectationComponent implements OnInit{
     this.displayedColumns = Object.keys(data[0]);
 
     console.log(Object.keys(data[0]));
-    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Action']
+    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin'];
+    this.columns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Actions'];
     this.initialData = this.newInputData;
     return true;
         }
@@ -319,6 +321,7 @@ export class AffectationComponent implements OnInit{
    * Rebuilds the datasource after any change to the criterions
    */
    buildDataSource(){
+    console.log(this.reduceGroup);
     this.dataSource = this.groupBy(this.groupingColumn,this.initialData,this.reducedGroups);
   }
 
