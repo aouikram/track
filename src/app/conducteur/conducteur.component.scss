@@ -381,3 +381,8 @@ hr:after {
   #female:checked:checked ~ .female span{
     color: #fff;
   }
+
+  .button-group{
+    display: table-column;
+  }
+  

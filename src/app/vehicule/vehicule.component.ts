@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DeviceService } from 'app/device/device.service';
 import { on } from 'events';
+import { AuthenticationService } from 'app/services/authentication.service';
 
 
 
@@ -20,7 +21,7 @@ export class VehiculeComponent implements OnInit{
 
   title = 'geolocalisation';
   vehicules: Vehicule[] = [];
-  editVehicule: Vehicule | undefined;
+  editVehicule: Vehicule | undefined ;
   deleteVehicule: Vehicule | undefined;
   viewVehicule : Vehicule | undefined;
   vehicule : Vehicule | undefined;
@@ -40,9 +41,10 @@ export class VehiculeComponent implements OnInit{
 
 
   availableDevices:Device[]=[];
+  addedDevices: Device[] = [];
+ 
 
-
- constructor(private vehiculeService: VehiculeService , private deviceService : DeviceService) {}
+ constructor(private vehiculeService: VehiculeService , private deviceService : DeviceService, public authService:AuthenticationService) {}
 
   ngOnInit(): void {
          this.getVehicules();
@@ -99,7 +101,9 @@ onChangeCheckbox(deviceId: number, isChecked: boolean ) {
 public emptyArrays(){
   this.checkedDevices = [];
   this.getAvailableDevices();
+  this.addedDevices = [];
 }
+
 
 onTableDataChange(event: any) {
   this.page = event;
@@ -185,6 +189,18 @@ public searchVehicules(key: string):void {
      ); 
      
    }
+// check if addedDevices contains a device equals to device
+public checkIfAdded(device: Device): boolean {
+  console.log(device);
+  console.log(this.addedDevices);
+  for (const addedDevice of this.addedDevices) {
+    if (addedDevice.deviceId === device.deviceId) {
+      return true;
+    }
+  }
+  return false;
+
+}
 
 // adds the new device to the database and adds it to the availableDevices array
 public onAddDevice(addDeviceForm:NgForm):void{
@@ -195,6 +211,7 @@ public onAddDevice(addDeviceForm:NgForm):void{
     this.deviceService.addDevice(addDeviceForm.value).subscribe(
       (response: Device) => {
         this.addedDevice = response;
+        this.addedDevices.push(this.addedDevice);
         addDeviceForm.reset();
         },
       (error: HttpErrorResponse) => {
@@ -212,14 +229,19 @@ public onAddDevice(addDeviceForm:NgForm):void{
 
 // if cancel button is clicked add the freedDevice back to the editVehicule devices list 
 public onCancelEditForm():void{
-   if(this.freedDevices.length != 0 ){
-        // for each device in freedDevices add device to editVehicule devices list 
-    for(const device of this.freedDevices  ) {
-      this.editVehicule.devices.push(device);
-    }
-    // update editVehicule
-    this.onUpdateVehicule(this.editVehicule);
-   }
+  console.log(this.freedDevices)
+    if(this.freedDevices.length != 0 ){
+      // for each device in freedDevices add device to editVehicule devices list 
+  for(const device of this.freedDevices  ) {
+    this.editVehicule.devices.push(device);
+  }
+  this.checkedDevices = []; // empty checked devices array
+  // update editVehicule
+  this.onUpdateVehicule(this.editVehicule);
+  
+ }
+  
+
 
 }
 
@@ -227,7 +249,7 @@ public onCancelEditForm():void{
 
 // finds the device with the deviceId , and updates it in the database
 public freeDevice(device : Device , vehiculeId : number):void{
-
+console.log(device);
       this.deviceService.freeDevice(device).subscribe(
         (response: Device) => {
           this.getAvailableDevices();
@@ -243,24 +265,32 @@ public freeDevice(device : Device , vehiculeId : number):void{
             },
             (error: HttpErrorResponse) => {
               alert(error.message);
-            },()=>{ this.freedDevices.push(device);}
+            },()=>{ 
+              this.freedDevices.push(device);
+            console.log(this.freedDevices);
+          }
           );
         }
       );
 }
 
 public onUpdateVehicule(vehicule:Vehicule):void{
-  // console.log(this.editVehicule.devices);
-  // console.log(this.checkedDevices);
+   console.log(this.checkedDevices);
+   
    let emptyDevicesArray : Device[] = [];
    vehicule.devices = this.editVehicule.devices.concat(this.checkedDevices);
+
   console.log(vehicule);
+
+  // empty the vehicule devices : update with an empty array to remove the devices from the database
   this.vehiculeService.updateVehiculeDevices(emptyDevicesArray, vehicule.vehiculeId).subscribe(
     (response: Vehicule) => {
     },
     (error: HttpErrorResponse) => {
       alert(error.message);
-    },()=>{
+    },
+    ()=>{
+      // update the vehicule with the new devices and informations
       this.vehiculeService.updateVehicule(vehicule).subscribe(
         (response: Vehicule) => {
           console.log(response);
@@ -270,7 +300,8 @@ public onUpdateVehicule(vehicule:Vehicule):void{
           alert(error.message);
         }, ()=> { this.getVehicules(); 
          this.getAvailableDevices() ; 
-       this.freedDevices = []; }
+       this.freedDevices = []; 
+      this.addedDevices = [];}
       );
     }
   )

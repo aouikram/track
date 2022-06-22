@@ -29,6 +29,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import {MatListModule} from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table'  ;
 import {MatIconModule} from '@angular/material/icon';
+import { LoginComponent } from 'app/login/login.component';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import {MatIconModule} from '@angular/material/icon';
     UpgradeComponent,
     AffectationComponent,
     MapLeafletComponent,
+    LoginComponent,
 
  
    

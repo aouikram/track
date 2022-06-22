@@ -10,6 +10,7 @@ import { NgForm } from '@angular/forms';
 import { identity } from 'rxjs';
 import * as E from 'leaflet';
 import 'leaflet-routing-machine';
+import 'leaflet-bing-layer';
 
 @Component({
   selector: 'app-map-leaflet',
@@ -81,14 +82,18 @@ export class MapLeafletComponent  implements   AfterViewInit {
   // takes in a vehicule and an array of events , and returns an array of events that correspond to the vehicule
   public getLatestEventDataOfVehicule(vehicule: Vehicule, eventData: EventData[]) : EventData[] {
     let eventDataOfVehicule = [];
-  for (let device of vehicule.devices) {
-    for (let event of eventData) {
-      if (event.device.deviceId == device.deviceId) {
-        eventDataOfVehicule.push(event);
+    if(vehicule != null){
+      for (let device of vehicule.devices) {
+        for (let event of eventData) {
+          if (event.device.deviceId == device.deviceId) {
+            eventDataOfVehicule.push(event);
+          }
+        }
+        return eventDataOfVehicule;
       }
     }
     return eventDataOfVehicule;
-  }
+ 
 }
 
 // on click element list change the array eventData  loaded on the map , to an array of events of the clicked vehicule , and open the detail menu
@@ -107,14 +112,28 @@ export class MapLeafletComponent  implements   AfterViewInit {
 
   // changes the width of the detail menu
   public openDetailMenu(): void {
-
+     
     let width = String($('div#side-menu.leaflet-sidebar').width()-100)+'px'
     let left = document.getElementById('side-menu').style.width;
   
       if(document.getElementById('detail-menu').style.width == '0px' || document.getElementById('detail-menu').style.width == '' ){
+        document.getElementById('detail-menu').style.top = "0";
         document.getElementById('detail-menu').style.left=left;
         document.getElementById('detail-menu').style.width=width;
+        document.getElementById('detail-menu').style.position="fixed";
+        document.getElementById('detail-menu').style.padding="10px 20px 10px 0";
     }
+
+    document.getElementById('icon-close-menu').style.visibility="hidden";
+  }
+
+
+
+
+
+ public closeSideMenu(): void {
+    document.getElementById('side-menu').style.width='0px';
+    this.closeDetailMenu();
   }
 
   public receive(detailForm : NgForm): void {
@@ -147,15 +166,21 @@ return this.eventDatadates;
 
 public subscribe1(eventDatadates : EventData[]) {
 
- this.eventDatadates=eventDatadates;
- this.eventData = eventDatadates;
-
-  this.map.off();
-  this.map.remove();
-  this.loadMap("itenerary");
+  if(eventDatadates.length > 1){
+    this.eventDatadates=eventDatadates;
+    this.eventData = eventDatadates;
+    this.map.off();
+    this.map.remove();
+    this.loadMap("itenerary");
+  }
 
 }
 
+public closeDetailMenu(): void {
+  document.getElementById('detail-menu').style.width = "0px";
+  document.getElementById('icon-close-menu').style.visibility="visible";
+  document.getElementById('detail-menu').style.padding="0";
+}
 
   
   // find closest degree and assign destination 
@@ -185,8 +210,11 @@ public subscribe1(eventDatadates : EventData[]) {
 
   // find closest destination of vehicule
   public getClosestDestinationOfVehicule(vehicule:Vehicule): string {
-    const eventData = this.getLatestEventDataOfVehicule(vehicule,this.latestEventDataofAllVehicules);
-   return this.getClosestDestination(eventData[0]);
+    if(vehicule != null){
+      const eventData = this.getLatestEventDataOfVehicule(vehicule,this.latestEventDataofAllVehicules);
+      return this.getClosestDestination(eventData[0]);
+    }
+
   }
 
   // find closest destination of vehicule in french
@@ -285,12 +313,16 @@ this.eventDataService.findAllVehicules(eventData).subscribe(
 
 //enter array of eventData keep only the eventData where speedKPH equals 0
 public getEventDataWithNoSpeed(eventData: EventData[]): EventData[] {
+  console.log(eventData);
   var eventDataWithNoSpeed = [];
   for (var i = 0; i < eventData.length; i++) {
     if (eventData[i].speedKPH == 0) {
-      eventDataWithNoSpeed.push(this.eventData[i]);
+
+      eventDataWithNoSpeed.push(eventData[i]);
     }
+
   }
+
   return eventDataWithNoSpeed;
 }
 
@@ -301,36 +333,40 @@ public displayEventDataWithNoSpeed(eventData: EventData[]): void {
 
 
 getSpeedOfVehicule(vehicule : Vehicule) : number{
-
+if(vehicule != null){
   const eventDataOfVehicule = this.getLatestEventDataOfVehicule(vehicule , this.latestEventDataofAllVehicules);
   let speed = eventDataOfVehicule[0].speedKPH;
   return speed;
+}
+
 }
    
 
 
 // make image url depending on the speed of vehicule
 makeImageUrl(vehicule: Vehicule) : string{
-
-  let speed = this.getSpeedOfVehicule(vehicule);
-  let imageUrl ="../../assets/img/cars/truck-";
-
-    var speedString = "";
-    if (speed == 0 || speed == null) 
-    speedString = "parked";  
-    else if (speed > 0 && speed <= 60)
-    speedString = "lessThan60";  
-    else if (speed > 60 && speed <= 80)
-    speedString = "lessThan80";
-    else if (speed > 80 && speed <= 105)
-      speedString = "lessThan105";
-    else if (speed > 105 && speed <= 120)
-      speedString = "lessThan120";
-    else if (speed > 120)
-      speedString = "moreThan120";
-
-    imageUrl += speedString+".png";
-    return imageUrl;
+  if(vehicule != null){
+    let speed = this.getSpeedOfVehicule(vehicule);
+    let imageUrl ="../../assets/img/cars/truck-";
+  
+      var speedString = "";
+      if (speed == 0 || speed == null) 
+      speedString = "parked";  
+      else if (speed > 0 && speed <= 60)
+      speedString = "lessThan60";  
+      else if (speed > 60 && speed <= 80)
+      speedString = "lessThan80";
+      else if (speed > 80 && speed <= 105)
+        speedString = "lessThan105";
+      else if (speed > 105 && speed <= 120)
+        speedString = "lessThan120";
+      else if (speed > 120)
+        speedString = "moreThan120";
+  
+      imageUrl += speedString+".png";
+      return imageUrl;
+  }
+ 
    
   }
 
@@ -510,7 +546,7 @@ else if(mapType == "tomtomMap"){
 
 
 private loadMap(mode : string): void {
-    // let self = this;
+     let self = this;
 
     this.map = new L.Map('map', {
       center: [this.eventData[0].latitude, this.eventData[0].longitude],
@@ -551,20 +587,18 @@ private loadMap(mode : string): void {
         if($('div.sidebar-wrapper.ps').width() == null){
           width = "360px";
         }
-        // else take the width of the sidebar and add 100 px 
+        // else find the width of the sidebar and add 100 px 
       else {
         width  = String($('div.sidebar-wrapper.ps').width()+100)+'px';
        }
 
         // open side menu
         if(document.getElementById('side-menu').style.width == '0px' || document.getElementById('side-menu').style.width == ''){
-          console.log("here");
         document.getElementById('side-menu').style.width=width;
     }
-        // close side menu
+        // close side menu and detail menu if open
     else {
-          document.getElementById('side-menu').style.width='0px';
-          document.getElementById('detail-menu').style.width='0px';
+          self.closeSideMenu();
         }
  
 
@@ -588,6 +622,10 @@ private loadMap(mode : string): void {
       subdomains:['mt0','mt1','mt2','mt3'],
   
     }).addTo(this.map);
+   
+    // (L as any).tileLayer.bing("KosJhYsNl9rPBCQR0tax~tByUmD7BQ4l9GYu2I3G4AA~AmqA8bQckm7SvE5Ij4moPmTFzAHz-CHYzJQz7x-ezDGBjkuFeGt9IpvfpTGvCbHT", {type: 'AerialWithLabels'}).addTo(this.map);
+//     var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/YOUR-API-KEY/997/256/{z}/{x}/{y}.png',
+// cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18}).addTo(this.map);
 
 
 let index = 0;

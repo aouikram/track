@@ -67,18 +67,18 @@ export class DashboardComponent implements OnInit {
 
       seq2 = 0;
   };
-  countVehiculesDisponibles():void{
-    this.vehiculeService.countVehiculesDisponible().subscribe(
-      (response : number) => {
-        this.nombreVehicules = response;
-      },
-      (error :HttpErrorResponse) => {
-        alert(error.message);
-      });
+  // countVehiculesDisponibles():void{
+  //   this.vehiculeService.countVehiculesDisponible().subscribe(
+  //     (response : number) => {
+  //       this.nombreVehicules = response;
+  //     },
+  //     (error :HttpErrorResponse) => {
+  //       alert(error.message);
+  //     });
 
-  }
+  // }
   ngOnInit() {
-    this.countVehiculesDisponibles();
+    // this.countVehiculesDisponibles();
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
       const dataDailySalesChart: any = {

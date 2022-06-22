@@ -57,10 +57,6 @@ html,
   padding: 0;
 }
 
-body {
-  height: 100%;
-
-}
 
 .customPopup .leaflet-popup-content-wrapper,
 .customPopup .leaflet-popup-tip {
@@ -98,18 +94,23 @@ body {
   transition: 0.5s;
   z-index: 2000;
 }
+
 .details-sidebar{
   height:100%;
   width:0;
   position: fixed;
-  top:0;
+  // top:0;
   left:0;
   background-color:rgb(255, 255, 255);
   opacity: 1;
   overflow-x:hidden;
   /* padding-top:60px; */
-  transition: 0.5s;
+  // transition: 0.5s;
+  // box-sizing: border-box;
   z-index: 2000;
+  transition: 0.5s;
+  padding: 10px 20px 10px 0;
+
 }
 ::-webkit-scrollbar {
   display: none;
@@ -189,17 +190,7 @@ overflow-x: hidden;
 
 overflow-y: auto; }
 
-/* .leaflet-sidebar-left .leaflet-sidebar-content {
-  left: 40px;
-  right: 0; }
-.leaflet-sidebar-right .leaflet-sidebar-content {
-  left: 0;
-  right: 40px; }
-.leaflet-sidebar.collapsed > .leaflet-sidebar-content {
-  overflow-y: hidden; } */
 
-/* .collapsed > .leaflet-sidebar-content {
-overflow-y: hidden; } */
 
 .leaflet-sidebar-pane {
 display: none;
@@ -397,15 +388,15 @@ ul.task-items {
   
 }
 
-detail-menu-button{
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
-  background:rgb(255, 255, 255);
-  margin-top: 10px;
-  margin-right: 5px;
+// detail-menu-button{
+//   box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+//   background:rgb(255, 255, 255);
+//   margin-top: 10px;
+//   margin-right: 5px;
   
-  padding: 0 1.6rem;
-  border-radius:.7rem;
-}
+//   padding: 0 1.6rem;
+//   border-radius:.7rem;
+// }
 
 .buttons{
   margin: 0 auto; 
@@ -547,11 +538,125 @@ font-size: 21px;
 
 }
 
+.icon{
+  padding: 10px;
+ 
+}
+.dates{
+  position: relative;
+    padding-bottom: 16px;
+    z-index: 1002;
+}
+.dates-item{
+  height: 40px;
+    margin-top: 8px;
+    overflow: hidden;
+    display: block;
+    color: #3c4043;
+    pointer-events: auto;
+    white-space: normal;
+}
+.icons1{
+  visibility: visible;
+    position: absolute;
+    height: 29px;
+    padding: 8px 0 0 25px;
+    z-index: 4;
+    left: 0;
+    width: 24px;
+    display: block;
+    color: #3c4043;
+}
+.icon1{
+  background-image: url(../../assets/img/start_location.png);
+    background-size: 18px 18px;
+    background-position-x: 3px;
+    position: relative;
+    left: -1px;
+    top: 14px;
+    margin-top: 2px;
+    margin-bottom: 1px;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+}
+// .stop-scrolling {
+//   height: 100%;
+//   overflow: hidden;
+// }
+.icon2{
+  background-image: url(../../assets/img/route_3dots.png);
+    background-size: 24px 24px;
+    top: 7px;
+    left: -1px;
+    height: 32px;
+    position: relative;
+    background-repeat: no-repeat;
+    width: 24px;
+}
+.icon3{
+  background-image: url(../../assets/img/place_outline.png);
+  background-size: 18px 18px;
+  background-position-x: 3px;
+  position: relative;
+  left: -1px;
+  top: 14px;
+  margin-top: 2px;
+  margin-bottom: 1px;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+}
+.date1{
+  background-clip: padding-box;
+  width: auto;
+  border: none;
+  position: relative;
+  outline: none;
+  margin: 0;
+  transition-property: none;
+  height: 40px;
+  padding: 0 0 0 72px;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.input-date1{
+  padding: 8px 0;
+  position: relative;
+}
+.contour-date1{
+  position: absolute;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid #80868b;
+    border-radius: 8px;
+    top: 0;
+    right: 64px;
+    left: 64px;
+    z-index: -1;
+    color: #3c4043;
+    display: block;
+}
 
 
-
-
-
+// .field{
+//   display: block !important;
+//   position: relative !important;
+//   flex: auto !important;
+//   min-width: 0 !important;
+//   width: fit-content  !important;
+//   padding: 0 0 !important;
+//   border-top: 0 solid transparent !important;
+// }
+.mat-form-field-infix {
+  display: block !important;
+  position: relative !important;
+  flex: auto !important;
+  min-width: 0 !important;
+  width: fit-content  !important;
+  padding: 0 0 !important;
+  border-top: 0 solid transparent !important;
+}
 
 ul.layer-list {
   list-style: none;

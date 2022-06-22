@@ -32,14 +32,18 @@
                            <mat-list>
 
     <mat-list-item>
-      <mat-select placeholder="groupe par " [(ngModel)]="groupingColumn" name="item" (ngModelChange)="buildDataSource()">
+      <mat-select placeholder="Regroupés par Unité Mobile" [(ngModel)]="groupingColumn" name="item" (ngModelChange)="buildDataSource()">
+        <!-- display all options except for Action -->
+        <div  *ngFor="let item of displayedColumns">
+            <mat-option *ngIf="item!='Action'" [value]="item">
+              Regroupés par {{item}}
+            </mat-option>
 
-        <mat-option *ngFor="let item of displayedColumns" [value]="item">
-          {{item}}
-        </mat-option>
+        </div>
       </mat-select>
     </mat-list-item>
   </mat-list>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- mobile unit Column -->
@@ -71,7 +75,7 @@
     </td>
   </ng-container>
   
-  <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> 
 
   <!-- Group header cells-->
@@ -292,13 +296,13 @@
                 <div class="col-md-6">
                 <mat-label>Date debut</mat-label>
                 <mat-form-field>
-                  <input matInput type="datetime-local" ngModel="{{editAffectation?.dateDebut}} " name="dateDebut" id="dateDebut">
+                  <input matInput type="datetime-local" [ngModel]="editAffectation?.dateDebut | date:'yyyy-MM-ddTHH:mm' " name="dateDebut" id="dateDebut">
                 </mat-form-field>
                 </div>
                <div class="col-md-6">
                 <mat-label>Date Fin</mat-label>
                 <mat-form-field>
-                  <input matInput type="datetime-local" ngModel="{{editAffectation?.dateFin}} " name="dateFin" id="dateFin">
+                  <input matInput type="datetime-local" [ngModel]="editAffectation?.dateFin | date:'yyyy-MM-ddTHH:mm' " name="dateFin" id="dateFin">
                 </mat-form-field>
                 </div>
               </div>

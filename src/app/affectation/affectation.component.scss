@@ -7,9 +7,6 @@ table {
     background-color: rgba(211, 211, 211, 0.349);
   }
   
-  .clickable{
-    background-color: rgba(211, 211, 211, 0.349);
-}
 
   .modal-body
 {
@@ -130,4 +127,17 @@ h4 {
   border-radius:.7rem;
   
 }
-
+th.mat-header-cell {
+  color: rgb(104 85 211);
+  font-weight: 500;
+  font-size: 14px;
+}
+.clickable {
+  background-color: rgba(240, 240, 240, 0.64);
+}
+td.mat-cell {
+  color: rgb(0 0 0);
+}
+span.mat-select-placeholder {
+  color: rgb(0 0 0);
+}

@@ -10,9 +10,10 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { ImageComponent } from './image/image.component';
 import { MapLeafletComponent } from './map-leaflet/map-leaflet.component';
 import { BrowserModule } from '@angular/platform-browser';
-
-
-
+import { LoginComponent } from './login/login.component';
+import * as bootstrap from "bootstrap";
+import { NO_ERRORS_SCHEMA }      from '@angular/core'; //
+import * as $ from "jquery";
 
 
 @NgModule({
@@ -31,12 +32,14 @@ import { BrowserModule } from '@angular/platform-browser';
     AppComponent,
     AdminLayoutComponent,
     ImageComponent,
+    
 
 
     
     
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas:      [ NO_ERRORS_SCHEMA ] // add this line
 })
 export class AppModule { }

@@ -1,7 +1,10 @@
-<div id="map" class="map-container" leaflet >
+
+<div  scroll="no" id="map" class="map-container" leaflet >
 
   
 </div>
+
+
 
 <div class="row">
 <div id="side-menu" class="leaflet-sidebar">
@@ -19,7 +22,8 @@
         <div class=" tab-content leaflet-sidebar-content">
             <div  role="tabpanel" class="leaflet-sidebar-pane fade active in show " id="home">
                 <h1 class="leaflet-sidebar-header">
-                  Unités mobiles
+                  Unités mobiles 
+                  <i id="icon-close-menu" (click)="closeSideMenu()"class="fa fa-angle-left position-absolute end-0 icon clickable"></i>
          </h1>
 
       
@@ -54,12 +58,13 @@
               <ul *ngIf="vehicules && vehicules.length != 0" class="task-items" id="list">
                 
                 <!-- List Item -->
-                <li *ngFor="vehicule of vehicules; ; let i = index" class="item type1 " (click)="onClickListElement(vehicules[i],latestEventDataofAllVehicules)">
-                  <div class="task col-md-12">
+                <div *ngFor="vehicule of vehicules; let i = index">
+                <li  *ngIf="vehicules[i] != null" class="item type1 " (click)="onClickListElement(vehicules[i],latestEventDataofAllVehicules)">
+                  <div *ngIf="vehicules[i] != null" class="task col-md-12">
                   <img  class="image col-md-3" [src]="makeImageUrl(vehicules[i])">
                     
                     <div class="col-md-9">
-                      <div class="name col-md-12" > {{vehicules[i].serialNumber}} {{vehicules[i].model}} </div>
+                      <div class="name col-md-12" > {{vehicules[i]?.serialNumber}} {{vehicules[i]?.model}} </div>
 
                       <div class="status col-md-12">
                         <!-- <div class="icon off"> </div> -->
@@ -79,6 +84,7 @@
             
                
                 </li>
+              </div>
 
                   
             
@@ -258,8 +264,35 @@
 
 
 <div id="detail-menu" class="details-sidebar">
+  <h1 class="leaflet-sidebar-header">
+    <i class="fa fa-angle-left position-absolute end-0 icon clickable" (click)="closeDetailMenu()"></i>
+</h1>
   <form #detailForm="ngForm" (ngSubmit)="receive(detailForm)">
-    <div class="col-md-12">
+
+    <div class="dates">
+            <div class="dates-item">
+                  <div class="icons1">
+                    <div class="icon1"></div>
+                    <div class="icon2"></div>
+                  </div>
+                  <div class="date1">
+                      <mat-form-field>
+                        <input matInput type="datetime-local"  value="2000-01-01T00:00" ngModel required name="dateDebut" id="dateDebut">
+                        </mat-form-field>
+                  </div>
+            </div>
+            <div class="dates-item">
+              <div class="icons1">
+                <div class="icon3"></div>
+              </div>
+              <div class="date1">
+                  <mat-form-field>
+                    <input matInput type="datetime-local" ngModel required name="dateFin" id="dateFin">
+                    </mat-form-field>
+              </div>
+        </div>
+    </div>
+    <!-- <div class="col-md-12">
       <mat-label>Date debut</mat-label>
       <mat-form-field>
         <input matInput type="datetime-local" ngModel required name="dateDebut" id="dateDebut">
@@ -271,10 +304,10 @@
         <mat-form-field>
           <input matInput type="datetime-local" ngModel required name="dateFin" id="dateFin">
         </mat-form-field>
-        </div>
+        </div> -->
 
         
-        <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>1">
+       <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>=1">
           <mat-form-field>
           
             <mat-label>GPS</mat-label>
@@ -285,6 +318,9 @@
             </mat-select>  
             </mat-form-field>
           </div>
+          <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length<1">
+            <h4>pas de device ==> pas de trajet</h4>
+            </div>
 
     
 

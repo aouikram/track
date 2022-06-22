@@ -1,3 +1,4 @@
+<div *ngIf="authService.isAdmin()">
 <div class="main-content" id="main-container">  
   
 <!--list vehicules-->
@@ -356,7 +357,7 @@
                               <div class =" row col-md-12">
                                 <div class="col-md-3">
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel type="text" name="lastOdometre"  id="lastOdometre" placeholder="Dernier odomètre">
+                                    <input  matInput ngModel type="number" min=0 step="0.01" name="lastOdometre"  id="lastOdometre" placeholder="Dernier odomètre">
                                   </mat-form-field>
                                 </div>
 
@@ -391,19 +392,19 @@
                                     </div>
                                     <div class="col-md-2">
                                         <mat-form-field class="example-full-width">
-                                            <input matInput ngModel type="text" name="fuelCapacity"  id="fuelCapacity" placeholder="Capacité de carburant" >
+                                            <input matInput type="number" min=0 step="0.01" ngModel  name="fuelCapacity"  id="fuelCapacity" placeholder="Capacité de carburant" >
                                           </mat-form-field>
                                         </div>
 
                                         <div class="col-md-2">
                                             <mat-form-field class="example-full-width">
-                                                <input  matInput ngModel type="text" name="maximumSpeed"  id="maximumSpeed" placeholder="Vitesse maximale">
+                                                <input  matInput type="number" min=0 step="0.01" ngModel  name="maximumSpeed"  id="maximumSpeed" placeholder="Vitesse maximale">
                                               </mat-form-field>
                                         </div>
 
                                         <div class="col-md-2">
                                             <mat-form-field class="example-full-width">
-                                                <input  matInput ngModel type="text" name="fuelConsumption"  id="fuelConsumption" placeholder="Consommation de carburant">
+                                                <input  matInput ngModel type="number" min=0 step="0.01"  name="fuelConsumption"  id="fuelConsumption" placeholder="Consommation de carburant">
                                               </mat-form-field>
                                         </div>
 
@@ -415,7 +416,7 @@
 
                                         <div class="col-md-2">
                                             <mat-form-field class="example-full-width">
-                                                <input  matInput ngModel type="text" name="power"  id="power" placeholder="Puissance  ">
+                                                <input  matInput ngModel type="number" min=0 step="0.01" name="power"  id="power" placeholder="Puissance  ">
                                               </mat-form-field>
                                         </div>
                                        
@@ -432,7 +433,7 @@
                         <div class="row col-md-12">
 
                            <div class="col-md-6">
-                            <p>Sélectionner un boitier GPS parmi les appareils disponibles :</p>
+                            <p *ngIf="availableDevices.length != 0">Sélectionner un boitier GPS parmi les appareils disponibles :</p>
                             
                             <div *ngFor="let device of availableDevices">
                               <div class="row">
@@ -512,7 +513,8 @@
                             <div class="col-md-3">
                                 
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel type="text" name="modelYear"  id="modelYear" placeholder="Année du modèle">
+                                    <!-- one or more digits containing at least one non-zero ^[0-9]*[1-9][0-9]*$ -->
+                                    <input  matInput ngModel type="text"  pattern="^[0-9]*[1-9][0-9]*$" name="modelYear"  id="modelYear" placeholder="Année du modèle">
                                   </mat-form-field>
                             </div>
                             <div class="col-md-3">
@@ -523,7 +525,7 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel type="number" name="numberOfSeats"  id="numberOfSeats" placeholder="Nombre de sièges">
+                                    <input  matInput ngModel type="text" pattern="^\+?(0|[1-9]\d*)$" name="numberOfSeats"  id="numberOfSeats" placeholder="Nombre de sièges">
                                   </mat-form-field>
                             </div>
 
@@ -533,7 +535,7 @@
                           <div class =" row col-md-12">
                             <div class="col-md-3">
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel type="number" name="numberOfDoors"  id="numberOfDoors" placeholder="Nombre de portes">
+                                    <input  matInput ngModel type="text" pattern="^\+?(0|[1-9]\d*)$" name="numberOfDoors"  id="numberOfDoors" placeholder="Nombre de portes">
                                   </mat-form-field>
                             </div>
 
@@ -643,12 +645,18 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel="{{editVehicule?.immatriculationDate}}" type="date" value="2022-01-01" name="immatriculationDate"  id="immatriculationDate" placeholder="Date d'immatriculation">
+                                    <input  matInput 
+                                   
+                                    [ngModel]="editVehicule?.immatriculationDate | date: 'yyyy-MM-dd'" 
+                                    type="date"
+                                     name="immatriculationDate"
+                                       id="immatriculationDate" 
+                                       placeholder="Date d'immatriculation">
                                   </mat-form-field>
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field class="example-full-width">
-                                    <input  matInput ngModel="{{editVehicule?.cancellationDate}}"  type="date"  value="2022-01-01" name="cancellationDate"  id="cancellationDate" placeholder="Date d'annulation">
+                                    <input  matInput [ngModel]="editVehicule?.cancellationDate | date: 'yyyy-MM-dd'"   type="date"  value="2022-01-01" name="cancellationDate"  id="cancellationDate" placeholder="Date d'annulation">
                                   </mat-form-field>
                             </div>
                         </div>
@@ -703,6 +711,9 @@
                             <p>Sélectionner un boitier GPS parmi les appareils disponibles :</p>
                             
                             <div *ngFor="let device of availableDevices">
+                                <!-- display device if it's not in addedDevices -->
+                                <div *ngIf="!checkIfAdded(device)">
+                                   
                               <div class="row">
                                   <div class="col-md-1">
                                     <input type="checkbox" name="devices"
@@ -714,6 +725,7 @@
                                     </div>
                                 
                                 </div> 
+                            </div>
                             </div>
 
 
@@ -852,7 +864,7 @@
                
              </div>
              <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer le véhicule {{deleteVehicule?.vehiculeId}}  avec le numéro de châssis {{deleteVehicule?.serialNumber}} ?</p>
+                <p>Êtes-vous sûr de vouloir supprimer l'unité mobile {{deleteVehicule?.vehiculeId}}  avec le numéro de châssis {{deleteVehicule?.serialNumber}} ?</p>
                 <div class="col-md-12 buttons">
                  
                    <button (click)="onDeleteVehicule(deleteVehicule!.vehiculeId)" class="btn btn1 btn-danger mr-auto" data-dismiss="modal">Oui</button>
@@ -876,6 +888,85 @@
              </div>
              
              <div class="modal-body">
+<!--*********************************************************************-->
+<section class="lis-bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            
+        
+        <div class="row">
+            <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="price-table">
+                    <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                        <article class="article">
+                            <div class="col-md-3" class="article__content">
+                               
+                            </div>
+                        </article>
+                    </div>
+                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                        <ul class="list-unstyled lis-line-height-3">
+                            <li> <b><b>Identification:</b></b>   {{viewVehicule?.vehiculeId}}</li>
+                            <li><b><b>Fabricant</b></b>   {{viewVehicule?.manufacturer}}</li>
+                            <li><b><b></b></b>   </li>
+                            <li><b><b> Modèle:</b></b>   {{viewVehicule?.model}}</li>
+                            <li><b><b>Plaque d'immatriculation:</b></b>   {{viewVehicule?.licensePlate}}</li>
+                            <li><b><b>Numéro de châssis:</b></b>  {{viewVehicule?.serialNumber}} </li>
+                            <ul class="list-unstyled lis-line-height-3" *ngFor="let vehiculeDevice of viewVehicule?.devices">
+                            <li ><b><b>Boitier GPS:</b></b>   {{vehiculeDevice?.deviceName}} {{vehiculeDevice?.deviceIMEI}}</li>
+                            </ul>
+                            <ul *ngIf="viewVehicule?.devices.length == 0">
+                                <li><b><b>Boitier GPS:</b></b>   Aucun boitier GPS affecté</li>
+                                </ul>
+
+                        </ul> 
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<section class="lis-bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            
+        
+        <div class="row">
+            <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                <div class="price-table">
+                    <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                        <article class="article">
+                            <div class="col-md-3" class="article__content">
+                                <h6>Modèle</h6>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                        <ul class="list-unstyled lis-line-height-3">
+                            <li> <b><b>Type d'équipement: </b></b>  {{viewVehicule?.equipmentType}}</li>
+                            <li><b><b>Année du modèle:</b></b>  {{viewVehicule?.modelYear}}</li>
+                            <li><b><b>Couleur:</b></b>   {{viewVehicule?.color}}</li>
+                            <li><b><b>Nombre de sièges</b></b>   Nombre de sièges: {{viewVehicule?.numberOfSeats}}</li>
+                            <li><b><b>Nombre de portes: </b></b>  {{viewVehicule?.numberOfDoors}}</li>
+                           
+                        </ul> 
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!--*********************************************************************-->
+
+<!--
+                
                    <div class="row col-md-12">
                        <div class="row col-md-4 engine">
                         <table>
@@ -896,7 +987,7 @@
                             </tr>
                             
                         </table>
-                       <!-- <div class="col-md-2">
+                        <div class="col-md-2">
                            <p>Identification: {{viewVehicule?.vehiculeId}} </p>
                         
                        </div>
@@ -909,9 +1000,9 @@
                      <div class="col-md-3">
                          <p >Plaque d'immatriculation: {{viewVehicule?.licensePlate}}</p>
                           </div> -->
-   
+   <!--
                        </div>
-
+                    -->
 
                           <!-- <div class="row">
                            <div class="col-md-5">
@@ -924,7 +1015,7 @@
                           </div>
                      </div> -->
                      
-                        <div class=" col-md-4 engine">
+                        <!--<div class=" col-md-4 engine">
                            
                          <table>
                           
@@ -950,7 +1041,7 @@
                                    </td>
                                </tr>
                                <!-- display <tr> if vehicule.devices is empty -->
-                                   <tr *ngIf="viewVehicule?.devices.length == 0">
+                                <!--   <tr *ngIf="viewVehicule?.devices.length == 0">
                                        <td>
                                            <p >Aucun boitier GPS affecté</p>
                                        </td>
@@ -958,10 +1049,11 @@
                           
                            </div>
                       </div>
-                     
+                    -->
                     
                   
-              
+                   
+                    
                   <div class="row col-md-12">
                    <div class="row col-md-4 engine">
                         <table>
@@ -1066,5 +1158,5 @@
        </div>
      </div>
    
-         
+</div>
        

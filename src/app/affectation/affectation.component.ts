@@ -35,6 +35,7 @@ export class AffectationComponent implements OnInit{
     deleteAffectation: Affectation;
     currentAffectationVehicule : String ;
     currentAffectationConducteur : String ;
+  groupByColumns: string[];
 
   constructor(private affectationService: AffectationService ) { }
 
@@ -310,8 +311,8 @@ export class AffectationComponent implements OnInit{
     this.displayedColumns = Object.keys(data[0]);
 
     console.log(Object.keys(data[0]));
-    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin'];
-    this.columns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Actions'];
+     this.groupByColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Action'];
+    this.displayedColumns = ['UniteMobile', 'Conducteur', 'DateDebut', 'DateFin','Action']; 
     this.initialData = this.newInputData;
     return true;
         }

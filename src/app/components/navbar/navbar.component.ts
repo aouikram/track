@@ -3,6 +3,7 @@ import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { AuthenticationService } from 'app/services/authentication.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,12 +17,14 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    // constructor(location: Location,  private element: ElementRef, private router: Router) {
+    constructor(location: Location,  private element: ElementRef, private router: Router, public authService:AuthenticationService ) {
       this.location = location;
           this.sidebarVisible = false;
     }
 
     ngOnInit(){
+      this.authService.loadUser();
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
@@ -127,5 +130,9 @@ export class NavbarComponent implements OnInit {
           }
       }
       return 'Dashboard';
+    }
+    onLogout(){
+      this.authService.logout();
+      this.router.navigateByUrl('/login');
     }
 }
