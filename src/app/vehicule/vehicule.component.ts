@@ -30,7 +30,7 @@ export class VehiculeComponent implements OnInit{
   device:Device;
   page: number = 1;
   count: number = 0;
-  tableSize: number = 4;
+  tableSize: number = 9;
   tableSizes: any = [3, 6, 9, 12];
 
 

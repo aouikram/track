@@ -24,7 +24,7 @@ export class DeviceComponent implements OnInit{
 
   page: number = 1;
   count: number = 0;
-  tableSize: number = 4;
+  tableSize: number = 14;
   tableSizes: any = [3, 6, 9, 12];
 
 

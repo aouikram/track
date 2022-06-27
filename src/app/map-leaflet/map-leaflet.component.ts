@@ -10,7 +10,7 @@ import { NgForm } from '@angular/forms';
 import { identity } from 'rxjs';
 import * as E from 'leaflet';
 import 'leaflet-routing-machine';
-import 'leaflet-bing-layer';
+
 
 @Component({
   selector: 'app-map-leaflet',
