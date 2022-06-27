@@ -668,3 +668,115 @@ ul.layer-list {
 .main-panel .header {
    margin-bottom: 0px; 
 }
+
+   
+
+// .div-gps{
+//   padding: 0 24px 0;
+//   color: rgba(0,0,0,0.87);
+//   -webkit-box-flex: 0;
+//   -webkit-flex: none;
+//   flex: none;
+//   line-height: 1.5em;
+//  
+//   font-family: Roboto, 'Noto Naskh Arabic UI', Arial, sans-serif;
+// }
+.gps-p{
+  padding: 0  0 6px 24px;
+  flex: none;
+  text-align: left;
+  line-height: 1.5em;
+  -webkit-box-flex: 0;
+    -webkit-flex: none;
+  color: #3C4043;
+  margin-right: 4px;
+  font-family: Roboto,var(--noto-ff),Arial,sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.25rem;
+    list-style: none;
+}
+.message{
+  color: #dd3434;
+}
+.speed-legend-card{
+  list-style: none;
+  font: 14px/normal 'Roboto',Helvetica,Sans-Serif;
+  color: #666;
+  font-family: 'Roboto',Arial,Helvetica,Sans-Serif !important;
+    font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.module-root{
+  padding-left: 0;
+  padding: 10px 8px 0 12px;
+  // border-bottom: #f5f5f5 solid 4px;
+  display: block;
+
+}
+.module-title{
+  font-family: 'Segoe UI','San Francisco',Helvetica,Arial,Sans-Serif;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+.legend-table{
+ display: block;
+    margin-bottom: 12px;
+    font-family: 'Segoe UI','San Francisco',Helvetica,Arial,Sans-Serif;
+    // padding-left: 4px;
+
+}
+.tableRow{
+  display: table-row;
+}
+.tableCell{
+  display: table-cell;
+    vertical-align: middle;
+    color: #333;
+}
+.tableCell:first-child div {
+  height: 46px;
+  width: 30px;
+  margin-right: 8px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  -ms-high-contrast-adjust: none;
+}
+.speed-60 {
+  background-image: url(../../assets/img/speed-60.PNG);
+  background-repeat: no-repeat;
+}
+
+.speed-0 {
+  background-image: url(../../assets/img/speed-0.PNG);
+  background-repeat: no-repeat;
+}
+.speed-80 {
+  background-image: url(../../assets/img/speed-80.PNG);
+  background-repeat: no-repeat;
+}
+.speed-105 {
+  background-image: url(../../assets/img/speed-105.PNG);
+  background-repeat: no-repeat;
+}
+.speed-120 {
+  background-image: url(../../assets/img/speed-120.PNG);
+  background-repeat: no-repeat;
+}
+.speed120 {
+  background-image: url(../../assets/img/speed+120.PNG);
+  background-repeat: no-repeat;
+}
+

@@ -252,6 +252,110 @@
                 </li>
               </ul>
             </div>
+
+            <header class="header">
+              <h2 class="header-title">Légende de la carte</h2>
+              </header>
+              <div class="speed-legend-card">
+                <div class="module-root">
+                 
+                  <div class="legend-table">
+                    <table role="presentation">
+                      <tbody>
+                        <tr>
+                          <td>
+                                 <div class="tableRow">
+                                      <div class="tableCell">
+                                            <div class="speed-0"></div>
+                                      </div>
+
+                                      <div class="tableCell">
+                                               0 km/h
+                                      </div>
+
+                                 </div>
+                          </td>
+
+                          <td>
+                            <div class="tableRow">
+                                 <div class="tableCell">
+                                       <div class="speed-60"></div>
+                                 </div>
+
+                                 <div class="tableCell">
+                                          1-60 km/h
+                                 </div>
+
+                            </div>
+                     </td>
+                         
+                        </tr>
+
+                        <tr>
+                          <td>
+                                 <div class="tableRow">
+                                      <div class="tableCell">
+                                            <div class="speed-80"></div>
+                                      </div>
+
+                                      <div class="tableCell">
+                                               61-80 km/h
+                                      </div>
+
+                                 </div>
+                          </td>
+
+                          <td>
+                            <div class="tableRow">
+                                 <div class="tableCell">
+                                       <div class="speed-105"></div>
+                                 </div>
+
+                                 <div class="tableCell">
+                                          81-105 km/h
+                                 </div>
+
+                            </div>
+                     </td>
+                         
+                        </tr>
+
+                        <tr>
+                          <td>
+                                 <div class="tableRow">
+                                      <div class="tableCell">
+                                            <div class="speed-120"></div>
+                                      </div>
+
+                                      <div class="tableCell">
+                                               106-120 km/h
+                                      </div>
+
+                                 </div>
+                          </td>
+
+                          <td>
+                            <div class="tableRow">
+                                 <div class="tableCell">
+                                       <div class="speed120"></div>
+                                 </div>
+
+                                 <div class="tableCell">
+                                          121 >> km/h
+                                 </div>
+
+                            </div>
+                     </td>
+                         
+                        </tr>
+                      </tbody>
+
+                    </table>
+
+                  </div>
+              </div>
+
+              </div>
             </div>
 
           
@@ -267,6 +371,9 @@
   <h1 class="leaflet-sidebar-header">
     <i class="fa fa-angle-left position-absolute end-0 icon clickable" (click)="closeDetailMenu()"></i>
 </h1>
+<header class="header">
+  <h2 class ="header-title">Afficher les trajets</h2>
+ </header>
   <form #detailForm="ngForm" (ngSubmit)="receive(detailForm)">
 
     <div class="dates">
@@ -276,7 +383,8 @@
                     <div class="icon2"></div>
                   </div>
                   <div class="date1">
-                      <mat-form-field>
+                      <mat-form-field matTooltip="Choisissez une date de début"
+                    >
                         <input matInput type="datetime-local"  value="2000-01-01T00:00" ngModel required name="dateDebut" id="dateDebut">
                         </mat-form-field>
                   </div>
@@ -286,7 +394,8 @@
                 <div class="icon3"></div>
               </div>
               <div class="date1">
-                  <mat-form-field>
+                  <mat-form-field matTooltip="Choisissez une date de fin"
+                 >
                     <input matInput type="datetime-local" ngModel required name="dateFin" id="dateFin">
                     </mat-form-field>
               </div>
@@ -306,25 +415,41 @@
         </mat-form-field>
         </div> -->
 
+      
+               
+                    <p *ngIf="clickedVehicule?.devices?.length == 1" class="gps-p">
+                      les données proviennent du gps : {{clickedVehicule?.devices[0].deviceIMEI}} {{clickedVehicule?.devices[0].deviceName}}
+                    </p>
+
+
+                     
+               
+      
+
         
-       <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length>=1">
-          <mat-form-field>
+       <div class="gps-p" *ngIf="clickedVehicule?.devices?.length>1">
+          <mat-form-field >
           
-            <mat-label>GPS</mat-label>
-            <mat-select  placeholder="select gps" ngModel matInput name="deviceId" id="deviceId" required>
+            <mat-label>Choisissez le dispositif GPS</mat-label>
+            <mat-select  placeholder=" Choisissez le dispositif GPS" ngModel matInput name="deviceId" id="deviceId">
                   <ng-container *ngFor="let device of clickedVehicule?.devices">
                     <mat-option [value]="device.deviceId">{{device.deviceIMEI}} {{device.deviceName}}</mat-option>
                   </ng-container>
             </mat-select>  
             </mat-form-field>
           </div>
-          <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length<1">
+
+          <!-- <div class="col-md-12" *ngIf="clickedVehicule?.devices?.length<1">
             <h4>pas de device ==> pas de trajet</h4>
+            </div> -->
+
+            <div class="gps-p message">
+              {{this.message}}
             </div>
 
     
 
-          <button  [disabled]="detailForm.invalid" type="submit" data-dismiss="modal" (click)="receive(detailForm)" class="btn btn-success mr-auto" >Sauvegarder</button>
+          <button  [disabled]="detailForm.invalid" type="submit" (click)="receive(detailForm)" class="btn btn-info btn-sm float-right" >Afficher</button>
 
 
   </form>

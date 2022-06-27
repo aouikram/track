@@ -49,6 +49,7 @@ export class MapLeafletComponent  implements   AfterViewInit {
   tomtomMapSatellite: any;
 
   i : number;
+  message: string;
 
   constructor(private eventDataService : EventDataService , private http: HttpClient) { }
 
@@ -98,13 +99,14 @@ export class MapLeafletComponent  implements   AfterViewInit {
 
 // on click element list change the array eventData  loaded on the map , to an array of events of the clicked vehicule , and open the detail menu
    public onClickListElement(vehicule: Vehicule,  eventData: EventData[]): void {
-     console.log("clicked");
+  
+     this.message="";
     this.openDetailMenu();
     this.clickedVehicule = vehicule;
     this.eventData = this.getLatestEventDataOfVehicule(vehicule,eventData);
     this.map.off();
     this.map.remove();
-    this.loadMap("default");
+    this.loadMap("click");
     
 
   }
@@ -137,14 +139,21 @@ export class MapLeafletComponent  implements   AfterViewInit {
   }
 
   public receive(detailForm : NgForm): void {
-    console.log(detailForm.form.controls);
-   console.log(Date.parse(detailForm.form.controls.dateDebut.value)/1000);
-   console.log(Date.parse(detailForm.form.controls.dateFin.value)/1000);
-   console.log(this.clickedVehicule);
-   console.log(detailForm.form.controls.deviceId.value);
-   this.eventDatadates=this.getEventDataBeetwenDates(detailForm.form.controls.deviceId.value,Date.parse(detailForm.form.controls.dateDebut.value)/1000,Date.parse(detailForm.form.controls.dateFin.value)/1000);
-   console.log(this.eventDatadates);
+    var deviceId: number;
+
+    this.message="";
+
+    if(detailForm.form.controls.deviceId == null || detailForm.form.controls.deviceId?.value == ""){
+      deviceId = this.clickedVehicule.devices[0].deviceId;
+    }
+    else {
+      deviceId = detailForm.form.controls.deviceId.value;
+    }
+    console.log(deviceId);
+   this.eventDatadates=this.getEventDataBeetwenDates(deviceId,Date.parse(detailForm.form.controls.dateDebut.value)/1000,Date.parse(detailForm.form.controls.dateFin.value)/1000);
+ 
   }
+
 public getEventDataBeetwenDates(id:number,timestamp1:number,timestamp2:number): EventData[] {
   
   this.eventDataService.getEventDataBeetwenDates(id,timestamp1,timestamp2).subscribe(
@@ -172,6 +181,9 @@ public subscribe1(eventDatadates : EventData[]) {
     this.map.off();
     this.map.remove();
     this.loadMap("itenerary");
+  }
+  else {
+    this.message = "aucun trajet trouvé "
   }
 
 }
@@ -238,13 +250,13 @@ public closeDetailMenu(): void {
     var degree = eventData.heading;
     var closestDegree = this.degrees[0];
     closestDestinationIcon = this.icons[0];
-    console.log(closestDestinationIcon);
+
 
     for (var i = 0; i < this.degrees.length; i++) {
       if (Math.abs(this.degrees[i] - degree) < Math.abs(closestDegree - degree)) {
         closestDegree = this.degrees[i];
         closestDestinationIcon = this.icons[i];
-        console.log(closestDestinationIcon);
+
       
       }
       
@@ -266,9 +278,9 @@ public closeDetailMenu(): void {
     var icon = L.icon({
 
       iconUrl: 'https://api.geoapify.com/v1/icon/?type=material&color=%'+color+'&size=small'+destinationIcon+'&scaleFactor=2&apiKey=10009fb840984ed0b026de075f9be71d',
-      popupAnchor: [13, 0],
-       //iconSize: [50, 70],
-      iconAnchor: [15.5, 42]
+      // popupAnchor: [13, 0],
+      iconSize: [35, 55],
+      // iconAnchor: [15.5, 42]
     });
     return icon;
   }
@@ -548,13 +560,24 @@ else if(mapType == "tomtomMap"){
 private loadMap(mode : string): void {
      let self = this;
 
+     if(mode=="default"){
+      this.map = new L.Map('map', {
+        center: [this.eventData[0].latitude, this.eventData[0].longitude],
+        zoom: 5,
+        fullscreenControl: true,
+        fullscreenControlOptions: {position: 'topleft'}
+    
+      });
+     }
+  else {
     this.map = new L.Map('map', {
       center: [this.eventData[0].latitude, this.eventData[0].longitude],
-      zoom: 6,
+      zoom: 15,
       fullscreenControl: true,
       fullscreenControlOptions: {position: 'topleft'}
   
     });
+  }
 
     // zoom and fullscreen position (top right)
     this.map.zoomControl.setPosition('topright');
