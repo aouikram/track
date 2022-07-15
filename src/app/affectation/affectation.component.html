@@ -106,7 +106,7 @@
                </div>          
            </div>
 </div>
-     
+   
 <!-- view affectation modal -->
 <div class="modal fade col-md-12" id="viewAffectationModal" tabindex="-1" role="dialog" aria-labelledby="affectationViewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
@@ -115,7 +115,7 @@
            <h5 class="modal-title titleView" id="updateAffectationModalLabel">Affectation </h5> 
         </div>
         <div class="modal-body">
-          <div class="row block">
+          <!-- <div class="row block">
               <div class="row">
               
               <div class="col-md-4">
@@ -131,14 +131,140 @@
               </div>
                 
            
-            </div>
-           
+            </div> -->
+            <div class="row col-md-12">
+              <div class="row col-md-6">
+            <section class="lis-bg-light">
+              <div class="container">
+                  <div class="row justify-content-center">
+                      
+                  
+                  <div class="row">
+                      <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                          <div class="price-table">
+                              <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                                  <article class="article">
+                                      <div class="col-md-3" class="article__content">
+                                          <h6></h6>
+                                      </div>
+                                  </article>
+                              </div>
+                              <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                                  <ul class="list-unstyled lis-line-height-3">
+                                      <li> <b><b>Identification: </b></b>  {{viewAffectation?.affectationId}} </li>
+                                      <li><b><b>Numéro de châssis:</b></b>  {{viewAffectation?.vehicule.serialNumber}}</li>
+                                      <li><b><b>Conducteur :</b></b>  {{viewAffectation?.conducteur.nom}} {{viewAffectation?.conducteur.prenom}}}</li>
+                                     
+                                  </ul> 
+                                  
+                              
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </section>
   
+          <section class="lis-bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    
+                
+                <div class="row">
+                    <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                        <div class="price-table">
+                            <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                                <article class="article">
+                                    <div class="col-md-3" class="article__content">
+                                        <h6>Unité mobile {{viewAffectation?.vehicule.manufacturer}} {{viewAffectation?.vehicule.model}}</h6>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                                <ul class="list-unstyled lis-line-height-3">
+                                    <li> <b><b>Unité mobile: </b></b>  {{viewAffectation?.vehicule.manufacturer}} {{viewAffectation?.vehicule.model}} </li>
+                                    <li><b><b>Nombre IMEI:</b></b>  {{viewAffectation?.vehicule.numberIMEI}}</li>
+                                    <li><b><b>Plaque d'immatriculation:</b></b>  {{viewAffectation?.vehicule.licensePlate}}</li>
+                                    <li><b><b>Type de carburant:</b></b>  {{viewAffectation?.vehicule.fuelType}}</li>
+                                    <li><b><b>Identification:</b></b>  {{viewAffectation?.vehicule.vehiculeId}}</li>
+                                   
+                                </ul> 
+                                
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+              </div>
+        <div class="row col-md-6">
+        <section class="lis-bg-light">
+          <div class="container">
+              <div class="row justify-content-center">
+                  
+              
+              <div class="row">
+                  <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                      <div class="price-table">
+                          <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                              <article class="article">
+                                  <div class="col-md-3" class="article__content">
+                                      <h6>Conducteur {{viewAffectation?.conducteur.nom}} {{viewAffectation?.conducteur.prenom}}</h6>
+                                  </div>
+                              </article>
+                          </div>
+                          <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                              <ul class="list-unstyled lis-line-height-3">
+                                  <li> <b><b>Identification: </b></b>  {{viewAffectation?.conducteur.equipmentType}}</li>
+                                  <li><b><b>Telephone</b></b>  {{viewAffectation?.conducteur.numTel}}</li>
+                                  <li><b><b>Email:</b></b>  {{viewAffectation?.conducteur.contactEmail}}</li>
+                                  <li><b><b>Categorie Permis:</b></b>  {{viewAffectation?.conducteur.categoriePermis}}</li>
+                                  <li><b><b>Sexe:</b></b>  {{viewAffectation?.conducteur.gender}}</li>
+                                 
+                              </ul> 
+                              
+                          
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+      </section>
+      <section class="lis-bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                
             
-           
-         
-     
-         <div class="row col-md-12">
+            <div class="row">
+                <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                    <div class="price-table">
+                        <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                            <article class="article">
+                                <div class="col-md-3" class="article__content">
+                                    <h6>Affectation</h6>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                            <ul class="list-unstyled lis-line-height-3">
+                                <li> <b><b>Date début: </b></b>  {{viewAffectation?.dateDebut | date : 'medium'}}</li>
+                                <li><b><b>Date fin: </b></b>  {{viewAffectation?.dateFin | date : 'medium'}}</li>
+                            </ul> 
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+      </section>
+    </div>
+         <!-- <div class="row col-md-12">
           <div class="row col-md-4 engine">
                <table>
                    <tr class="text-left"><h6>Unité mobile {{viewAffectation?.vehicule.manufacturer}} {{viewAffectation?.vehicule.model}}</h6></tr>
@@ -218,7 +344,7 @@
                  
               </table>  
           </div>
-</div>
+</div> -->
           <div class="modal-footer col-md-12">
              <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
                       </div>
@@ -231,7 +357,7 @@
         </div>
      </div>
   </div>
-
+</div>
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteAffectationModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -381,3 +507,5 @@
   </div>
   </div>
 </div>
+
+

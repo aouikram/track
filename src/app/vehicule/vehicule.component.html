@@ -889,6 +889,8 @@
              
              <div class="modal-body">
 <!--*********************************************************************-->
+<div class="row col-md-12">
+    <div class="row col-md-6">
 <section class="lis-bg-light">
     <div class="container">
         <div class="row justify-content-center">
@@ -904,7 +906,7 @@
                             </div>
                         </article>
                     </div>
-                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                    <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
                         <ul class="list-unstyled lis-line-height-3">
                             <li> <b><b>Identification:</b></b>   {{viewVehicule?.vehiculeId}}</li>
                             <li><b><b>Fabricant</b></b>   {{viewVehicule?.manufacturer}}</li>
@@ -938,13 +940,10 @@
             <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
                 <div class="price-table">
                     <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
-                        <article class="article">
-                            <div class="col-md-3" class="article__content">
-                                <h6>Modèle</h6>
-                            </div>
-                        </article>
+                        <h6><b>Modèle</b></h6>
                     </div>
-                    <div class="border border-top-0 lis-brd-light bg-white py-5 lis-rounded-bottom">
+                    <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                      
                         <ul class="list-unstyled lis-line-height-3">
                             <li> <b><b>Type d'équipement: </b></b>  {{viewVehicule?.equipmentType}}</li>
                             <li><b><b>Année du modèle:</b></b>  {{viewVehicule?.modelYear}}</li>
@@ -962,7 +961,7 @@
     </div>
     </div>
 </section>
-
+</div>
 <!--*********************************************************************-->
 
 <!--
@@ -1050,12 +1049,77 @@
                            </div>
                       </div>
                     -->
-                    
-                  
-                   
-                    
+                    <div class="row col-md-6">
+                    <section class="lis-bg-light">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                
+                            
+                            <div class="row">
+                                <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                                    <div class="price-table">
+                                        <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                                            <article class="article">
+                                                <div class="col-md-3" class="article__content">
+                                                    <h6>Moteur</h6>
+                                                </div>
+                                            </article>
+                                        </div>
+                                        <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                                            <ul class="list-unstyled lis-line-height-3">
+                                                <li> <b><b>Capacité de carburant: </b></b>  {{viewVehicule?.fuelCapacity}} </li>
+                                                <li><b><b>Vitesse maximale:</b></b>  {{viewVehicule?.maximumSpeed}}</li>
+                                                <li><b><b>Consommation de carburant:</b></b>  {{viewVehicule?.fuelConsumption}}</li>
+                                                <li><b><b>Type de carburant:</b></b>   {{viewVehicule?.fuelType}}</li>
+                                                <li><b><b>Puissance: </b></b>  {{viewVehicule?.power}}</li>
+                                               
+                                            </ul> 
+                                            
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                    <section class="lis-bg-light">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                
+                            
+                            <div class="row">
+                                <div class="col-12 wow fadeInUp mb-5  text-center" style="visibility: visible; animation-name: fadeInUp;">
+                                    <div class="price-table">
+                                        <div class="price-header lis-bg-light lis-rounded-top py-4 border border-bottom-0 lis-brd-light">
+                                            <article class="article">
+                                                <div class="col-md-3" class="article__content">
+                                                    <h6>Véhicule</h6>
+                                                </div>
+                                            </article>
+                                        </div>
+                                        <div class="border border-top-0 lis-brd-light bg-white py-2 lis-rounded-bottom">
+                                            <ul class="list-unstyled lis-line-height-3">
+                                                <li> <b><b>Lieu: </b></b>  {{viewVehicule?.location}} </li>
+                                                <li><b><b>Date d'immatriculation:</b></b>  {{viewVehicule?.immatriculation}}</li>
+                                                <li><b><b>Date d'annulation:</b></b>  {{viewVehicule?.cancellationDate}}</li>
+                                                <li><b><b>Dernier odomètre:</b></b>   {{viewVehicule?.lastOdometre}}</li>
+                                                <li><b><b>Nombre IMEI: </b></b>  {{viewVehicule?.numberIMEI}}</li>
+                                               
+                                            </ul> 
+                                            
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+             </div>
+</div>
                   <div class="row col-md-12">
-                   <div class="row col-md-4 engine">
+                   <!-- <div class="row col-md-4 engine">
                         <table>
                             <tr><h6>Moteur</h6></tr>
                             <tr>
@@ -1084,8 +1148,8 @@
                                </td>
                            </tr>
                         </table>
-                   </div>
-                   <div class=" col-md-4 engine" >
+                   </div> -->
+                   <!-- <div class=" col-md-4 engine" >
                        <table>
                            <tr><h6>Modèle</h6></tr>
                            <tr>
@@ -1115,9 +1179,9 @@
                                </td>
                            </tr>
                        </table>  
-                   </div>
+                   </div> -->
    
-                   <div class=" col-md-4 engine" >
+                   <!-- <div class=" col-md-4 engine" >
                        <table>
                            <tr><h6>Véhicule</h6></tr>
                            <tr>
@@ -1146,7 +1210,7 @@
                                </td>
                            </tr>
                        </table>  
-                   </div>
+                   </div> -->
    </div>
                    <div class="modal-footer col-md-12">
                       <button type="button" id="" data-dismiss="modal" class="btn btn-warning pull-right col-md-2">Fermer</button>
